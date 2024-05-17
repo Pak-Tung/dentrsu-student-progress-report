@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.button-wrapper .btn {
+  margin-bottom:10px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+
+.myDiv:hover {
+  cursor: pointer;
+  background-color:#b7b7b7;
+}
+
