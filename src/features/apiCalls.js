@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'http://localhost:3001' //'https://dentrsu-0b0ffade06fd.herokuapp.com';//
+const host = 'https://dentrsu-0b0ffade06fd.herokuapp.com';//'http://localhost:3001'; //
 
 export const getAllUsers = async () => {
     try {
