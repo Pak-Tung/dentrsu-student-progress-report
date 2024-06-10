@@ -15,12 +15,7 @@ function GoogleLogin() {
     return savedUser ? JSON.parse(savedUser) : {};
   });
 
-  const [userRole, setUserRole] = useState(() => {
-    const savedRole = Cookies.get("role");
-    console.log("Saved role:", savedRole);
-    return savedRole ? savedRole : "";
-  });
-
+  const [userRole, setUserRole] = useState(() => Cookies.get("role") || "");
   const [profile, setProfile] = useState(() => {
     const savedProfile = Cookies.get("user");
     return savedProfile ? JSON.parse(savedProfile) : {};
@@ -57,19 +52,15 @@ function GoogleLogin() {
             }
           );
 
-          console.log("Google user info response:", res.data);
-
           const users = await getAllUsers();
-          console.log("All users:", users);
-
           const userRecord = users.data.find((u) => u.email === res.data.email);
-          Cookies.set("user", JSON.stringify(res.data), { expires: 7 });
-          Cookies.set("role", userRecord.role, { expires: 7 });
-          localStorage.setItem("user", JSON.stringify(res.data));
-          localStorage.setItem("role", userRecord.role);
-          
 
           if (userRecord) {
+            Cookies.set("user", JSON.stringify(res.data), { expires: 7 });
+            Cookies.set("role", userRecord.role, { expires: 7 });
+            localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem("role", userRecord.role);
+
             setRole(userRecord.role);
             setProfile(res.data);
           } else {
@@ -88,7 +79,6 @@ function GoogleLogin() {
         }
       } else {
         console.log("User is not logged in or access token is missing.");
-        //logOut();
       }
     };
 
@@ -109,30 +99,16 @@ function GoogleLogin() {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "10vh",
-  };
-
-  const containerStyle2 = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "0vh",
   };
 
   return (
     <>
       {profile.email && userRole ? (
         <>
-          {role === ("student" || "Student") && <Profile key={profile.email} user={profile} />}
-          {role === ("instructor" || "Instructor") && (
-            <ProfileInstructor key={profile.email} user={profile} />
-          )}
-          {role === ("admin"||"Admin") && (
-            <ProfileAdmin key={profile.email} user={profile} />
-          )}
-          {role === ("root"||"Root") && (
-            <ProfileRoot key={profile.email} user={profile} />
-          )}
+          {role === ("student"||"Student") && <Profile key={profile.email} user={profile} />}
+          {role === ("instructor"||"Instructor") && <ProfileInstructor key={profile.email} user={profile} />}
+          {role === ("admin"||"Admin") && <ProfileAdmin key={profile.email} user={profile} />}
+          {role === ("root"||"Root") && <ProfileRoot key={profile.email} user={profile} />}
         </>
       ) : (
         <>
@@ -140,10 +116,10 @@ function GoogleLogin() {
             <h2>Online Requirements</h2>
           </div>
           <br />
-          <div style={containerStyle}>
+          <div style={{ ...containerStyle, height: "10vh" }}>
             <p>Please Sign in with "@rsu.ac.th" Account</p>
           </div>
-          <div style={containerStyle2}>
+          <div style={{ ...containerStyle, height: "0vh" }}>
             <button className="btn btn-primary" onClick={login}>
               Sign in
             </button>
