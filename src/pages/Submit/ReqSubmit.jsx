@@ -85,23 +85,6 @@ function ReqSubmit() {
                 <h4>{requirementLabel} Submission</h4>
               </Col>
             </Row>
-            {/* <div
-            className="justify-content-center"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              margin: 20,
-            }}
-          >
-            Student:{" "}
-            {student.studentId +
-              " " +
-              student.title +
-              " " +
-              student.studentName}
-          </div> */}
-
             <Row className="justify-content-center">
               <Col md={6} className="text-center">
                 <Form.Group controlId="divisionSelect">

@@ -13,9 +13,6 @@ import {
   Col,
   ListGroup,
   Badge,
-  Dropdown,
-  DropdownButton,
-  Modal,
 } from "react-bootstrap";
 import ModalCompReqApproval from "./ModalCompReqApproval";
 
@@ -59,46 +56,49 @@ function CompApproval() {
   const [pendingReqs, setPendingReqs] = useState([]);
   const [studentData, setStudentData] = useState({});
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getCompReqByInstructorEmail(userEmail);
-        const { error, data } = result;
-        console.log(result);
-        if (error) {
-          setError(error);
-        } else if (result) {
-          console.log("result", result);
-          const pendingFilter = result.filter((req) => req.isApproved === 0);
-          setPendingReqs(pendingFilter);
+  const fetchData = useCallback(async () => {
+    try {
+      const result = await getCompReqByInstructorEmail(userEmail);
+      const { error, data } = result;
+      console.log(result);
+      if (error) {
+        setError(error);
+      } else if (result) {
+        console.log("result", result);
+        const pendingFilter = result.filter((req) => req.isApproved === 0);
+        setPendingReqs(pendingFilter);
 
-          // Fetch student data for each request
-          const studentDataPromises = pendingFilter.map(async (req) => {
-            const studentResult = await getStudentByEmail(req.studentEmail);
-            return {
-              studentEmail: req.studentEmail,
-              studentName: studentResult[0]?.studentName || "Unknown",
-            };
-          });
+        // Fetch student data for each request
+        const studentDataPromises = pendingFilter.map(async (req) => {
+          const studentResult = await getStudentByEmail(req.studentEmail);
+          return {
+            studentEmail: req.studentEmail,
+            studentName: studentResult[0]?.studentName || "Unknown",
+          };
+        });
 
-          const studentDataArray = await Promise.all(studentDataPromises);
-          const studentDataMap = studentDataArray.reduce((acc, curr) => {
-            acc[curr.studentEmail] = curr.studentName;
-            return acc;
-          }, {});
+        const studentDataArray = await Promise.all(studentDataPromises);
+        const studentDataMap = studentDataArray.reduce((acc, curr) => {
+          acc[curr.studentEmail] = curr.studentName;
+          return acc;
+        }, {});
 
-          setStudentData(studentDataMap);
-        } else {
-          setError("No data available");
-        }
-      } catch (err) {
-        setError("Failed to fetch students");
-      } finally {
-        setLoading(false);
+        setStudentData(studentDataMap);
+      } else {
+        setError("No data available");
       }
-    };
-    fetchData();
+    } catch (err) {
+      setError("Failed to fetch students");
+    } finally {
+      setLoading(false);
+    }
   }, [userEmail]);
+
+  useEffect(() => {
+    if (userEmail) {
+    fetchData();
+    }
+  }, [userEmail, fetchData]);
 
   // State to hold the selected pending requirement for approval
   const [selectedReq, setSelectedReq] = useState(null);
@@ -115,7 +115,11 @@ function CompApproval() {
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    fetchData();
+    setShow(false);
+  }
+
   const handleShow = () => setShow(true);
 
   return (

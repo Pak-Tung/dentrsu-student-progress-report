@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
-import { Container, Row, Col, ListGroup, Spinner } from "react-bootstrap";
-import Cookies from "js-cookie";
+import { Container, Row, Col, ListGroup, Spinner, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getInstructorsByDivision } from "../../features/apiCalls";
 import ModalManageAdvisor from "./ModalManageAdvisor";
@@ -14,6 +13,7 @@ function DivisionAdvisor() {
 
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [show, setShow] = useState(false);
 
@@ -22,9 +22,10 @@ function DivisionAdvisor() {
       try {
         const result = await getInstructorsByDivision(division);
         setInstructors(result);
-        setLoading(false);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch instructors:", err);
+        setError("Failed to fetch instructors. Please try again later.");
+      } finally {
         setLoading(false);
       }
     };
@@ -53,23 +54,29 @@ function DivisionAdvisor() {
 
   const handleClose = () => {
     setShow(false);
-    
-  }
+  };
+
   const handleShow = () => setShow(true);
 
   return (
     <>
       <NavbarAdmin />
       <Container fluid="md">
-        <Row>
-          <Col className="d-flex justify-content-center mb-4">
+        <Row className="justify-content-center mb-4">
+          <Col className="text-center">
             <h4 className="mb-4">{fullNameDivision(division)} Advisor</h4>
           </Col>
         </Row>
         {loading ? (
-          <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-          </Spinner>
+          <Row className="justify-content-center">
+            <Spinner animation="border" role="status">
+              <span className="sr-only">Loading...</span>
+            </Spinner>
+          </Row>
+        ) : error ? (
+          <Row className="justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </Row>
         ) : (
           <ListGroup>
             {instructors.map((instructor, index) => (
@@ -87,7 +94,7 @@ function DivisionAdvisor() {
                   </Col>
                   <Col md={2}>
                     <p>
-                      Teamleader: {"  "}
+                      Teamleader:{" "}
                       <strong>
                         M{instructor.floor}
                         {instructor.bay}

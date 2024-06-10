@@ -85,6 +85,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
       setSelectedInstructor(divisionReq.instructorEmail);
       setUnitRSU(divisionReq.req_RSU > 0 ? divisionReq.unit_RSU : "");
       setUnitDC(divisionReq.req_DC > 0 ? divisionReq.unit_DC : "");
+      setValidated(false);
     }
   }, [divisionReq, userEmail]);
 
@@ -178,7 +179,8 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
         if (response.affectedRows === 1) {
           alert("Form submitted successfully!");
           localStorage.setItem("selectedDivision", division);
-          window.location.reload();
+          //window.location.reload();
+          handleClose();
         }
       } catch (error) {
         console.error("Error submitting form:", error);

@@ -94,8 +94,6 @@ const SubmissionForm = ({ division }) => {
           getInstructorsByDivision(division),
           getStudentByEmail(userEmail)
         ]);
-
-
         setOptions(reqResponse);
         setOptionsInstructor(instructorResponse);
 
@@ -107,7 +105,7 @@ const SubmissionForm = ({ division }) => {
     };
     fetchData();
   }, [division, userEmail]);
-
+  
   useEffect(() => {
     if (divisionInstructor) {
       const instructor = optionsInstructor.find(
@@ -168,6 +166,7 @@ const SubmissionForm = ({ division }) => {
         const response = await insertDivisionReq(updatedFormData, division);
         if (response.insertId > 0 && response.affectedRows > 0) {
           alert("Form submitted successfully!");
+          
           window.location.reload();
         }
       } catch (error) {
@@ -338,3 +337,6 @@ const SubmissionForm = ({ division }) => {
 }
 
 export default SubmissionForm;
+
+
+

@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
 import { Container, Row, Col, Form, Button, ListGroup, Spinner, InputGroup, Badge } from "react-bootstrap";
-import Cookies from "js-cookie";
 import { getDivReqById, updateDivReqById } from "../../features/apiCalls";
 
 function EditApprovedReq() {
-  const [user, setUser] = useState(() => {
-    const savedUser = Cookies.get("user");
-    return savedUser ? JSON.parse(savedUser) : {};
-  });
-
   const [division, setDivision] = useState(() => {
     const savedDivision = localStorage.getItem("division");
     return savedDivision ? JSON.parse(savedDivision) : "";
   });
 
-  const userEmail = user.email;
   const [idInput, setIdInput] = useState("");
   const [reqData, setReqData] = useState([]);
   const [loading, setLoading] = useState(false);

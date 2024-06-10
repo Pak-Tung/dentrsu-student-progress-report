@@ -135,26 +135,26 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
     }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-    } else {
-      try {
-        console.log("form data", JSON.stringify(formData));
-        const response = await updateCompReqById(compReq.id, formData);
-        console.log("responseAPI", response);
-        if (response.affectedRows === 1) {
-          alert("Form submitted successfully!");
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
-    }
-    setValidated(true);
-  };
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   const form = event.currentTarget;
+  //   if (form.checkValidity() === false) {
+  //     event.stopPropagation();
+  //   } else {
+  //     try {
+  //       console.log("form data", JSON.stringify(formData));
+  //       const response = await updateCompReqById(compReq.id, formData);
+  //       console.log("responseAPI", response);
+  //       if (response.affectedRows === 1) {
+  //         alert("Form submitted successfully!");
+  //         window.location.reload();
+  //       }
+  //     } catch (error) {
+  //       console.error("Error submitting form:", error);
+  //     }
+  //   }
+  //   setValidated(true);
+  // };
 
   const handleApprove = async (event) => {
     event.preventDefault();
@@ -168,7 +168,8 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
       console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form approved successfully!");
-        window.location.reload();
+        //window.location.reload();
+        handleClose();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -187,7 +188,8 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
       console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form sent back for revision!");
-        window.location.reload();
+        //window.location.reload();
+        handleClose();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -201,7 +203,7 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
       </Modal.Header>
       <Modal.Body>
         {compReq && (
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated}>
             <Container fluid>
               <Row className="justify-content-center">
                 <Col>

@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   getAllDivisions,
@@ -68,9 +68,20 @@ function ModalEditInstructor({ show, handleClose, instructor }) {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
+    let updatedValue = value;
+    updatedValue = name === "bay" ? value.toUpperCase() : value;
+
+    if (name === "teamleader" && value === "0") {
+      setFormData((prevState) => ({
+        ...prevState,
+        floor: 0,
+        bay: "",
+      }));
+    }
+
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: updatedValue,
     }));
   };
 
@@ -209,6 +220,7 @@ function ModalEditInstructor({ show, handleClose, instructor }) {
                       placeholder="Enter floor"
                       onInput={handleInput}
                       value={formData.floor}
+                      readOnly={formData.teamleader === 0}
                     />
                   </InputGroup>
                 </Col>
@@ -221,6 +233,7 @@ function ModalEditInstructor({ show, handleClose, instructor }) {
                       placeholder="Enter bay"
                       onInput={handleInput}
                       value={formData.bay}
+                      readOnly={formData.teamleader === 0}
                     />
                   </InputGroup>
                 </Col>

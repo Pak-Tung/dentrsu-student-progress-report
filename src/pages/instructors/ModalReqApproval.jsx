@@ -1,10 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
 import Cookies from "js-cookie";
-import InputGroup from "react-bootstrap/InputGroup";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { getReqByDivision, updateDivReqById } from "../../features/apiCalls";
 
 function ModalReqApproval({
@@ -30,16 +26,6 @@ function ModalReqApproval({
       if (error) {
         console.log(error);
       } else {
-        const df = {
-          id: 0,
-          division: "division",
-          type: "Select Type of Work",
-          req_RSU: 0,
-          req_DC: 0,
-          unit_RSU: "unit_RSU",
-          unit_DC: "unit_DC",
-        };
-        //response.unshift(df);
         setOptions(response);
       }
     };
@@ -72,21 +58,21 @@ function ModalReqApproval({
       console.log("divisionReq", divisionReq);
       setFormData({
         studentEmail: userEmail,
-        bookNo: divisionReq.bookNo,
-        pageNo: divisionReq.pageNo,
-        type: divisionReq.type,
-        area: divisionReq.area,
-        req_RSU: divisionReq.req_RSU,
-        req_DC: divisionReq.req_DC,
-        HN: divisionReq.HN,
-        patientName: divisionReq.patientName,
+        bookNo: divisionReq.bookNo || "",
+        pageNo: divisionReq.pageNo || "",
+        type: divisionReq.type || "",
+        area: divisionReq.area || "",
+        req_RSU: divisionReq.req_RSU || 0,
+        req_DC: divisionReq.req_DC || 0,
+        HN: divisionReq.HN || "",
+        patientName: divisionReq.patientName || "",
         isApproved: 0,
-        instructorEmail: divisionReq.instructorEmail,
+        instructorEmail: divisionReq.instructorEmail || "",
         approvedDate: addSevenHoursToISOString(new Date().toISOString()),
-        id: divisionReq.id,
-        unit_RSU: divisionReq.unit_RSU,
-        unit_DC: divisionReq.unit_DC,
-        note: divisionReq.note,
+        id: divisionReq.id || 0,
+        unit_RSU: divisionReq.unit_RSU || "",
+        unit_DC: divisionReq.unit_DC || "",
+        note: divisionReq.note || "",
       });
       setSelectedOption(divisionReq.type);
 
@@ -103,7 +89,7 @@ function ModalReqApproval({
 
   const handleChange = (event) => {
     const selected = event.target.value;
-    setSelectedOption(event.target.value);
+    setSelectedOption(selected);
     console.log("options", options);
 
     const item = options.find((d) => d.type === selected);
@@ -135,25 +121,6 @@ function ModalReqApproval({
     }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      console.log("form data", JSON.stringify(formData));
-      const response = await updateDivReqById(
-        divisionReq.id,
-        formData,
-        division
-      );
-      console.log("responseAPI", response);
-      if (response.affectedRows === 1) {
-        alert("Form submitted successfully!");
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
-
   const handleApprove = async (event) => {
     event.preventDefault();
     try {
@@ -167,7 +134,8 @@ function ModalReqApproval({
       console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form approved successfully!");
-        window.location.reload();
+        //window.location.reload();
+        handleClose();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -187,7 +155,8 @@ function ModalReqApproval({
       console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form sent back for revision!");
-        window.location.reload();
+        //window.location.reload();
+        handleClose();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -201,7 +170,7 @@ function ModalReqApproval({
       </Modal.Header>
       <Modal.Body>
         {divisionReq && (
-          <Form onSubmit={handleSubmit}>
+          <Form>
             <Container fluid>
               <Row className="justify-content-center">
                 <Col>
@@ -322,7 +291,6 @@ function ModalReqApproval({
                       HN
                     </InputGroup.Text>
                     <Form.Control
-                      //style={{ fontSize: '11pt' }}
                       placeholder="0000000"
                       aria-label="HN"
                       aria-describedby="HN"
@@ -342,7 +310,6 @@ function ModalReqApproval({
                       Pt Name
                     </InputGroup.Text>
                     <Form.Control
-                      //style={{ fontSize: '11pt' }}
                       placeholder="Name of Patient"
                       aria-label="patientName"
                       aria-describedby="patientName"
@@ -386,7 +353,7 @@ function ModalReqApproval({
                       aria-label="note"
                       aria-describedby="note"
                       name="note"
-                      value={formData.note}
+                      value={formData.note || ""}
                       onInput={handleInput}
                     />
                   </InputGroup>

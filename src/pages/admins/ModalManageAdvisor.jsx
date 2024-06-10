@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Modal,
   Container,
@@ -33,20 +33,21 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
     instructorEmail: instructor.instructorEmail,
   });
 
+  const divisionMap = useMemo(() => ({
+    oper: "Operative",
+    endo: "Endodontic",
+    perio: "Periodontic",
+    prosth: "Prosthodontic",
+    diag: "Diagnostic",
+    radio: "Radiology",
+    sur: "Oral Surgery",
+    pedo: "Pediatric Dentistry",
+    ortho: "Orthodontic",
+  }), []);
+
   const fullNameDivision = useCallback((division) => {
-    const divisionMap = {
-      oper: "Operative",
-      endo: "Endodontic",
-      perio: "Periodontic",
-      prosth: "Prosthodontic",
-      diag: "Diagnostic",
-      radio: "Radiology",
-      sur: "Oral Surgery",
-      pedo: "Pediatric Dentistry",
-      ortho: "Orthodontic",
-    };
     return divisionMap[division] || "";
-  }, []);
+  }, [divisionMap]);
 
   useEffect(() => {
     const fetchStudentsData = async () => {
@@ -79,20 +80,21 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
+      instructorEmail: instructor.instructorEmail,
     }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("formData update", formData);
     try {
       const result = await updateStudentDivInstructorByDivInstructorEmail(
         formData.studentId,
         formData
       );
-      console.log("result", result);
       if (result.data.affectedRows === 1) {
         alert("Successfully added advisee");
-        setRefresh(!refresh); // Toggle refresh state to re-fetch students
+        setRefresh((prev) => !prev); // Toggle refresh state to re-fetch students
       } else {
         throw new Error("Failed to update student data");
       }
@@ -111,10 +113,9 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
           instructorEmail: "",
         }
       );
-      console.log("result", result);
       if (result.data.affectedRows === 1) {
         alert("Successfully removed advisee");
-        setRefresh(!refresh); // Toggle refresh state to re-fetch students
+        setRefresh((prev) => !prev); // Toggle refresh state to re-fetch students
       } else {
         throw new Error("Failed to update student data");
       }
@@ -123,135 +124,99 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
     }
   };
 
-  if (loading) {
-    return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Manage {fullNameDivision(division)} Advisor</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Container className="d-flex justify-content-center">
-            <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
-          </Container>
-        </Modal.Body>
-      </Modal>
-    );
-  }
-
-  if (error) {
-    return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Manage {fullNameDivision(division)} Advisor</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Container>
-            <Alert variant="danger" className="text-center">
-              {error}
-            </Alert>
-          </Container>
-        </Modal.Body>
-      </Modal>
-    );
-  }
-
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Manage {fullNameDivision(division)} Advisor</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Container>
-          <Row>
-            <Col className="d-flex justify-content-center">
-              <h4>Current Advisees of {instructor.instructorName}</h4>
-            </Col>
-          </Row>
-          <br />
-          <ListGroup>
-            {students.length === 0 ? (
-              <ListGroup.Item className="text-center">
-                No Assigned Student
-              </ListGroup.Item>
-            ) : (
-              students.map((student) => (
-                <div key={student.studentId}>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col md={2}>
-                        <Image
-                          src={student.image}
-                          roundedCircle
-                          fluid
-                          width="75"
-                          height="75"
-                          alt={`${student.studentName}'s profile`}
-                        />
-                      </Col>
-                      <Col>
-                        <strong>Student ID:</strong> {student.studentId} <br />
-                        <strong>Name:</strong> {student.studentName}
-                      </Col>
-                      <Col>
-                        <strong>Year:</strong>{" "}
-                        {calculateStudentYear(student.startClinicYear)} <br />
-                        <strong>Bay:</strong> M{student.floor}
-                        {student.bay}
-                        {student.unitNumber} <br />
-                      </Col>
-                      <Col>
-                        <Button variant="danger" onClick={() => handleRemove(student)}>Remove</Button>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <br />
-                </div>
-              ))
-            )}
-          </ListGroup>
-          <Form onSubmit={handleSubmit}>
+        {loading ? (
+          <Container className="d-flex justify-content-center">
+            <Spinner animation="border" role="status">
+              <span className="sr-only">Loading...</span>
+            </Spinner>
+          </Container>
+        ) : error ? (
+          <Container>
+            <Alert variant="danger" className="text-center">
+              {error}
+            </Alert>
+          </Container>
+        ) : (
+          <Container>
             <Row>
               <Col className="d-flex justify-content-center">
-                <InputGroup className="mb-3">
-                  <InputGroup.Text id="instructorEmail">
-                    Advisor Email
-                  </InputGroup.Text>
-                  <Form.Control
-                    type="email"
-                    name="instructorEmail"
-                    placeholder="Enter advisor email"
-                    onInput={handleInput}
-                    value={formData.instructorEmail}
-                    aria-describedby="instructorEmail"
-                  />
-                </InputGroup>
+                <h4>Current Advisees of {instructor.instructorName}</h4>
               </Col>
             </Row>
-            <Row>
-              <Col md={8}>
-                <InputGroup className="mb-3">
-                  <InputGroup.Text id="studentId">Student ID</InputGroup.Text>
-                  <Form.Control
-                    type="number"
-                    name="studentId"
-                    placeholder="Enter student ID"
-                    onInput={handleInput}
-                    required
-                    aria-describedby="studentId"
-                  />
-                </InputGroup>
-              </Col>
-              <Col className="d-flex justify-content-center">
-                <Button type="submit">Add Advisee</Button>
-              </Col>
-            </Row>
-          </Form>
-        </Container>
+            <br />
+            <ListGroup>
+              {students.length === 0 ? (
+                <ListGroup.Item className="text-center">
+                  No Assigned Student
+                </ListGroup.Item>
+              ) : (
+                students.map((student) => (
+                  <div key={student.studentId}>
+                    <ListGroup.Item>
+                      <Row>
+                        <Col md={2}>
+                          <Image
+                            src={student.image}
+                            roundedCircle
+                            fluid
+                            width="75"
+                            height="75"
+                            alt={`${student.studentName}'s profile`}
+                          />
+                        </Col>
+                        <Col>
+                          <strong>Student ID:</strong> {student.studentId} <br />
+                          <strong>Name:</strong> {student.studentName}
+                        </Col>
+                        <Col>
+                          <strong>Year:</strong>{" "}
+                          {calculateStudentYear(student.startClinicYear)} <br />
+                          <strong>Bay:</strong> M{student.floor}
+                          {student.bay}
+                          {student.unitNumber} <br />
+                        </Col>
+                        <Col className="d-flex justify-content-end">
+                          <Button variant="danger" onClick={() => handleRemove(student)}>Remove</Button>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                    <br />
+                  </div>
+                ))
+              )}
+            </ListGroup>
+            <Form onSubmit={handleSubmit}>
+              <Row>
+                <Col md={8}>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text id="studentId">Student ID</InputGroup.Text>
+                    <Form.Control
+                      type="number"
+                      name="studentId"
+                      placeholder="Enter student ID"
+                      onInput={handleInput}
+                      required
+                      aria-describedby="studentId"
+                    />
+                  </InputGroup>
+                </Col>
+                <Col className="d-flex justify-content-center">
+                  <Button type="submit">Add Advisee</Button>
+                </Col>
+              </Row>
+            </Form>
+          </Container>
+        )}
       </Modal.Body>
     </Modal>
   );
 }
 
 export default ModalManageAdvisor;
+

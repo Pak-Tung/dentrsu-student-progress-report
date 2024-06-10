@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { insertStudent } from "../../features/apiCalls";
+import { insertStudent, getInstructorsByTeamleaderRole } from "../../features/apiCalls";
 import {
   Container,
   Row,
@@ -26,7 +26,7 @@ function ModalAddNewStudent({ show, handleClose }) {
       image: "",
       teamLeaderId: 0,
       permission: "student",
-      teamLeaderEmail: "",
+      teamleaderEmail: "",
       operInstructorEmail: "",
       endoInstructorEmail: "",
       perioInstructorEmail: "",
@@ -37,12 +37,32 @@ function ModalAddNewStudent({ show, handleClose }) {
       orthoInstructorEmail: "",
       pedoInstructorEmail: "",
     });
+
+    const [optionsInstructors, setOptionsInstructors] = useState([]);
+    const [selectedInstructor, setSelectedInstructor] = useState("");
+
+    useEffect(() => {
+      const fetchInstructors = async () => {
+        try {
+          const roleId = 1;
+          const response = await getInstructorsByTeamleaderRole(roleId);
+          setOptionsInstructors(response);
+        } catch (err) {
+          console.error("Failed to fetch instructors:", err);
+        }
+      };
+      fetchInstructors();
+    }, []);
+
+
+
   
     const handleInput = (event) => {
       const { name, value } = event.target;
+      const updatedValue = name === "bay" ? value.toUpperCase() : value;
       setFormData((prevState) => ({
         ...prevState,
-        [name]: value,
+        [name]: updatedValue,
       }));
     };
   
@@ -64,6 +84,24 @@ function ModalAddNewStudent({ show, handleClose }) {
         console.log(err);
       }
     };
+
+    // Handle instructor selection change
+  const handleChangeInstructor = (event) => {
+    const selectedEmail = event.target.value;
+    setSelectedInstructor(selectedEmail);
+
+    const instructor = optionsInstructors.find(
+      (instructor) => instructor.instructorEmail === selectedEmail
+    );
+
+    if (instructor) {
+      setFormData((prevState) => ({
+        ...prevState,
+        teamleaderEmail: instructor.instructorEmail,
+        teamLeaderId: instructor.id,
+      }));
+    }
+  };
 
 
   return (
@@ -188,6 +226,28 @@ function ModalAddNewStudent({ show, handleClose }) {
               </InputGroup>
             </Col>
           </Row>
+          <Row>
+              <Col>
+                <InputGroup className="mb-3">
+                  <InputGroup.Text id="teamleader">Team Leader</InputGroup.Text>
+                  <Form.Select
+                    name="instructorEmail"
+                    value={selectedInstructor}
+                    onChange={handleChangeInstructor}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select Team Leader
+                    </option>
+                    {optionsInstructors.map((option) => (
+                      <option key={option.id} value={option.instructorEmail}>
+                        {option.instructorName}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </InputGroup>
+              </Col>
+            </Row>
           <Row>
             <Col>
               <Button variant="outline-dark" type="submit">

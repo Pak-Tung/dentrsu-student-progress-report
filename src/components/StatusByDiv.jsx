@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getDivReqByStudentEmail } from "../features/apiCalls";
 import "../App.css";
 import Cookies from "js-cookie";
@@ -19,8 +19,9 @@ function StatusByDiv(division) {
   const userEmail = user.email;
 
   const [divisionReq, setDivisionReq] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
+
+  const fetchData = useCallback(async () => {
+    try {
       const result = await getDivReqByStudentEmail(userEmail, division.division);
       const { error } = result;
       console.log("result", result);
@@ -29,9 +30,14 @@ function StatusByDiv(division) {
       } else {
         setDivisionReq(result);
       }
-    };
+    } catch (error) {
+      console.error("Failed to fetch division requirements:", error);
+    }
+  }, [userEmail, division.division]);
+
+  useEffect(() => {
     fetchData();
-  }, [userEmail]);
+  }, [fetchData]);
 
   const approvalStatusOptions = [
     { label: "All", value: null },
@@ -71,7 +77,11 @@ function StatusByDiv(division) {
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    fetchData();
+    setShow(false);
+  }
+
   const handleShow = () => setShow(true);
 
   const [smShow, setSmShow] = useState(false);

@@ -87,6 +87,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
       });
       setSelectedOption(compReq.complexity || "");
       setSelectedInstructor(compReq.instructorEmail || "");
+      setValidated(false);
     }
   }, [compReq, userEmail]);
 
@@ -130,7 +131,8 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
         const response = await updateCompReqById(compReq.id, formData);
         if (response.affectedRows === 1) {
           alert("Form submitted successfully!");
-          window.location.reload();
+          //window.location.reload();
+          handleClose();
         }
       } catch (error) {
         console.error("Error submitting form:", error);
