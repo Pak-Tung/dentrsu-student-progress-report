@@ -11,3 +11,46 @@
 h3 {
     color: #6c757d;
 }
+
+.custom-width {
+    width: 50%;
+    margin: 0 auto; /* Center the dropdown within the parent */
+  }
+
+.custom-select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .custom-select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+  }
+  
+  .student-info {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .mt-4 {
+    margin-top: 2rem;
+  }
+  
+  .mt-3 {
+    margin-top: 1rem;
+  }
+  
+  .mt-2 {
+    margin-top: 0.5rem;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  
