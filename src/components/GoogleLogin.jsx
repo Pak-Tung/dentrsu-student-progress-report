@@ -92,6 +92,7 @@ function GoogleLogin() {
   const logOut = useCallback(() => {
     googleLogout();
     setUser({});
+    setUserRole("");
     Cookies.remove("user");
     Cookies.remove("role");
     localStorage.removeItem("user");
@@ -112,13 +113,13 @@ function GoogleLogin() {
           <p>Loading...</p>
         </div>
       ) : (
-        user.email && userRole ? (
+        profile.email && userRole ? (
           <>
             {console.log("user:", user)}
-            {role === "student" && <Profile key={user.email} user={user} />}
-            {role === "instructor" && <ProfileInstructor key={user.email} user={user} />}
-            {role === "admin" && <ProfileAdmin key={user.email} user={user} />}
-            {role === "root" && <ProfileRoot key={user.email} user={user} />}
+            {role === "student" && <Profile key={profile.email} user={profile} />}
+            {role === "instructor" && <ProfileInstructor key={profile.email} user={profile} />}
+            {role === "admin" && <ProfileAdmin key={profile.email} user={profile} />}
+            {role === "root" && <ProfileRoot key={profile.email} user={profile} />}
           </>
         ) : (
           <>

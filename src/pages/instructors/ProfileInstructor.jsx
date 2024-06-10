@@ -47,6 +47,9 @@ function ProfileInstructor() {
     googleLogout();
     setUser({});
     Cookies.remove('user');
+    Cookies.remove("role");
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
   }, []);
 
   if (!userEmail) {

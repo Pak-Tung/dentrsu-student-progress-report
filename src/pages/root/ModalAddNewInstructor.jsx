@@ -25,6 +25,10 @@ function ModalAddNewInstructor({ show, handleClose }) {
 
   const handleChangeDivision = (event) => {
     setSelectedDivision(event.target.value);
+    setFormData((prevState) => ({
+      ...prevState,
+      division: event.target.value,
+    }));  
   };
 
   const [formData, setFormData] = useState({
@@ -41,9 +45,10 @@ function ModalAddNewInstructor({ show, handleClose }) {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
+    const updatedValue = name === "bay" ? value.toUpperCase() : value;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: updatedValue,
     }));
   };
 
@@ -59,7 +64,7 @@ function ModalAddNewInstructor({ show, handleClose }) {
       console.log("responseAPI", response);
       if (response.name === "AxiosError") {
         alert(response.request.responseText);
-        window.location.reload(); 
+        //window.location.reload(); 
       } else if (response.data.affectedRows === 1) {
         alert("Add New Instructor successfully!");
         handleClose();

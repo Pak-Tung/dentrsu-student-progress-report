@@ -36,6 +36,10 @@ function ModalEditInstructor({ show, handleClose, instructor }) {
 
   const handleChangeDivision = (event) => {
     setSelectedDivision(event.target.value);
+    setFormData((prevState) => ({
+      ...prevState,
+      division: event.target.value,
+    }));  
   };
 
   const [formData, setFormData] = useState({
@@ -191,6 +195,29 @@ function ModalEditInstructor({ show, handleClose, instructor }) {
                       value={formData.instructorName}
                     />
                   </InputGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group
+                    controlId="Form.SelectInstructor"
+                    className="mb-3"
+                  >
+                    <Form.Label>Choose advisor to assign</Form.Label>
+                    <Form.Select
+                      name="instructorEmail"
+                      value={selectedDivision}
+                      onChange={handleChangeDivision}
+                      required
+                    >
+                      <option value="">Select division</option>
+                      {divisionOptions.map((option) => (
+                        <option key={option.id} value={option.shortName}>
+                          {option.fullName}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
                 </Col>
               </Row>
 
