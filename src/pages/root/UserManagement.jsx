@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {
   getAllUsers,
   insertUser,
-  updateUserById,
 } from "../../features/apiCalls";
 import NavbarRoot from "./NavbarRoot";
 import {
@@ -37,10 +36,10 @@ function UserManagement() {
   const [selectedUserRole, setSelectedUserRole] = useState("Select User Type");
 
   const userRoles = [
-    { id: 1, role: "Admin" },
-    { id: 2, role: "Instructor" },
-    { id: 3, role: "Student" },
-    { id: 4, role: "Root" },
+    { id: 1, role: "admin" },
+    { id: 2, role: "instructor" },
+    { id: 3, role: "student" },
+    { id: 4, role: "root" },
   ];
 
   useEffect(() => {
@@ -94,12 +93,12 @@ function UserManagement() {
           });
           setSelectedUserRole("Select User Type"); // Reset dropdown
           setValidated(false); // Reset validation state
-          if (formData.role === "Student") {
+          if (formData.role === "student") {
             handleShow(); // Assuming this opens the modal
           } else if (
-            formData.role === "Instructor" ||
-            formData.role === "Admin" ||
-            formData.role === "Root"
+            formData.role === "instructor" ||
+            formData.role === "admin" ||
+            formData.role === "root"
           ) {
             handleShowInstructor(); // Assuming this opens the modal
           } else {
@@ -132,7 +131,7 @@ function UserManagement() {
   const [selectedUser, setSelectedUser] = useState({});
 
   const handleEditUser = async (user) => {
-    console.log("user", user);
+    //console.log("user", user);
     setSelectedUser(user);
     setShowEditUser(true);
   };

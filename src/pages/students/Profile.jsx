@@ -105,7 +105,7 @@ function Profile() {
         <div className="d-flex justify-content-center mb-4">
           <img
             src={userPicture}
-            alt={`${userName}'s profile`}
+            alt={`profile`}
             className="rounded-circle"
             width="100"
             height="100"
