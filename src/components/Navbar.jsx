@@ -28,7 +28,7 @@ function NavbarStudent() {
       className="navbar navbar-expand-lg navbar-light bg-light"
     >
       <Navbar.Brand href="/">
-        Instructor: {user.email ? user.email : "User.email@rsu.ac.th"}
+        STUDENT: {user.email ? user.email : "User.email@rsu.ac.th"}
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

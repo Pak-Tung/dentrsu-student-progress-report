@@ -27,7 +27,7 @@ function NavbarAdmin() {
       className="navbar navbar-expand-lg navbar-light bg-light"
     >
       <Navbar.Brand href="/">
-        Admin: {user.email ? user.email : "User.email@rsu.ac.th"}
+        ADMIN: {user.email ? user.email : "User.email@rsu.ac.th"}
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

@@ -54,7 +54,7 @@ function ProfileRoot() {
         <Row className="justify-content-center">
           <Col>
             <div className="d-flex justify-content-center mb-4">
-              <h2>Welcome Back!</h2>
+              <h2>Welcome Back Root!</h2>
             </div>
             <div className="d-flex justify-content-center mb-4">
               <img
@@ -69,16 +69,13 @@ function ProfileRoot() {
               <h3>{userName}</h3>
             </div>
             <div className="d-flex justify-content-center mb-4">
-              <h5>Please Select Role to Login</h5>
+              <h5>If you don't want to be 'Root', please select 'Role' to log in</h5>
             </div>
           </Col>
         </Row>
         <Row className="d-flex justify-content-center">
           <Col className="d-flex justify-content-center">
             <div className="d-grid gap-2">
-              <Button variant="secondary" size="lg" onClick={() => handleSelectRole("root")}>
-                ROOT
-              </Button>
               <Button variant="secondary" size="lg" onClick={() => handleSelectRole("admin")}>
                 ADMIN
               </Button>

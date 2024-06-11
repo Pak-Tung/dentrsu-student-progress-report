@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -79,7 +79,7 @@ function GoogleLogin() {
         } catch (err) {
           console.error("Error fetching user profile:", err);
           if (err.response && err.response.status === 401) {
-            console.error("Authentication error. Please log in again.");
+            alert("Authentication error. Please log in again.");
             Cookies.remove("user");
             Cookies.remove("role");
             window.location.reload();
@@ -94,17 +94,6 @@ function GoogleLogin() {
 
     fetchUserProfile();
   }, [user]);
-
-  const logOut = useCallback(() => {
-    googleLogout();
-    setUser({});
-    setUserRole("");
-    Cookies.remove("user");
-    Cookies.remove("role");
-    localStorage.removeItem("user");
-    localStorage.removeItem("role");
-    localStorage.removeItem("division");
-  }, []);
 
   const containerStyle = {
     display: "flex",
