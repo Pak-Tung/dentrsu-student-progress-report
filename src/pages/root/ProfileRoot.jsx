@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -16,10 +16,15 @@ function ProfileRoot() {
     return savedUser ? JSON.parse(savedUser) : {};
   });
 
-  const [role, setRole] = useState(() => {
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
     const savedRole = localStorage.getItem("role");
-    return savedRole ? savedRole : "";
-  });
+    if (savedRole) {
+      setRole(savedRole);
+    }
+  }, []);
+
 
   const userName = user.name;
   const userPicture = user.picture;
@@ -41,7 +46,7 @@ function ProfileRoot() {
   if (role === "instructor") {
     return <ProfileInstructor />; // Render ProfileInstructor component if role is 'instructor'
   } else if (role === "admin" && !show) {
-    //console.log("Role is admin and show is false");
+    console.log("Role is admin and show is false");
     return <ProfileAdmin />; // Render ProfileAdmin component if role is 'admin' and modal is not shown
   } else if (role === "student") {
     return <Profile />; // Render Profile component if role is 'student'
@@ -69,7 +74,8 @@ function ProfileRoot() {
               <h3>{userName}</h3>
             </div>
             <div className="d-flex justify-content-center mb-4">
-              <h5>If you don't want to be 'Root', please select 'Role' to log in</h5>
+              <h5>If you don't want to be 'Root',</h5>
+              <h5> please select 'Role' to log in</h5>
             </div>
           </Col>
         </Row>

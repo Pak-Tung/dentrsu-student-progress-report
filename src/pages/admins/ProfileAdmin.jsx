@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import GoogleLogin from "../../components/GoogleLogin";
 import { googleLogout } from "@react-oauth/google";
 import { getInstructorByEmail } from "../../features/apiCalls";
+import { useNavigate } from "react-router-dom";
 
 function ProfileAdmin() {
   const [user, setUser] = useState(() => {
@@ -17,6 +18,7 @@ function ProfileAdmin() {
   const userPicture = user.picture;
 
   const [instructor, setInstructor] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userEmail) {
@@ -53,7 +55,8 @@ function ProfileAdmin() {
     localStorage.removeItem("division");
     googleLogout();
     setUser({});
-  }, []);
+    navigate('/');
+  }, [navigate]);
 
   if (!userEmail) {
     return <GoogleLogin />;
