@@ -89,6 +89,7 @@ function ModalEditInstructor({ show, handleClose, instructor }) {
     }));
   };
 
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;

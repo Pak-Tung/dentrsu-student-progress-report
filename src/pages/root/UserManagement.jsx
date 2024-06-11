@@ -2,7 +2,6 @@ import { React, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   getAllUsers,
-  insertUser,
 } from "../../features/apiCalls";
 import NavbarRoot from "./NavbarRoot";
 import {
@@ -78,19 +77,6 @@ function UserManagement() {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      try {
-        const response = await insertUser(formData);
-        console.log("responseAPI", response);
-        if (response.name === "AxiosError") {
-          alert(response.request.responseText);
-          window.location.reload();
-        } else if (response.data.affectedRows === 1) {
-          alert("Add New User successfully!");
-          // Clear the form after successful submission
-          setFormData({
-            email: "",
-            role: "",
-          });
           setSelectedUserRole("Select User Type"); // Reset dropdown
           setValidated(false); // Reset validation state
           if (formData.role === "student") {
@@ -101,15 +87,7 @@ function UserManagement() {
             formData.role === "root"
           ) {
             handleShowInstructor(); // Assuming this opens the modal
-          } else {
-            window.location.reload();
-          }
-        } else {
-          alert("Something went wrong.");
-        }
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
+          } else {alert("Something went wrong.");}
     }
     setValidated(true);
   };
@@ -126,7 +104,6 @@ function UserManagement() {
   };
   const handleShow = () => setShow(true);
   const handleShowInstructor = () => setShowInstructor(true);
-  const handleShowEditUser = () => setShowEditUser(true);
 
   const [selectedUser, setSelectedUser] = useState({});
 
@@ -233,8 +210,8 @@ function UserManagement() {
           </>
         )}
       </Container>
-      <ModalAddNewStudent show={show} handleClose={handleClose} />
-      <ModalAddNewInstructor show={showInstructor} handleClose={handleClose} />
+      <ModalAddNewStudent show={show} handleClose={handleClose} email={formData.email}/>
+      <ModalAddNewInstructor show={showInstructor} handleClose={handleClose} email={formData.email} role={formData.role}/>
       {selectedUser && (
         <ModalEditUser
           show={showEditUser}

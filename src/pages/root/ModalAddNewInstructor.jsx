@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { insertInstructor, getAllDivisions } from "../../features/apiCalls";
+import { insertInstructor, getAllDivisions, insertUser } from "../../features/apiCalls";
 import { Container, Row, Col, Button, InputGroup, Form, Modal, } from "react-bootstrap";
 
-function ModalAddNewInstructor({ show, handleClose }) {
+function ModalAddNewInstructor({ show, handleClose, email, role }) {
   const [validated, setValidated] = useState(false);
 
   const [divisionOptions, setDivisionOptions] = useState([]);
@@ -43,6 +43,20 @@ function ModalAddNewInstructor({ show, handleClose }) {
     bay: "",
   });
 
+  const [userFormDate, setUserFormData] = useState({
+    email: "",
+    role: "",
+  });
+
+  useEffect(() => {
+    if (email && role) {
+      setUserFormData({
+        email: email,
+        role: role,
+      });
+    }
+  }, [email, role]);
+
   const handleInput = (event) => {
     const { name, value } = event.target;
     const updatedValue = name === "bay" ? value.toUpperCase() : value;
@@ -60,6 +74,9 @@ function ModalAddNewInstructor({ show, handleClose }) {
     }
     setValidated(true);
     try {
+      const responseUser = await insertUser(userFormDate);
+      console.log("responseUser", responseUser);
+
       const response = await insertInstructor(formData);
       console.log("responseAPI", response);
       if (response.name === "AxiosError") {
@@ -101,7 +118,8 @@ function ModalAddNewInstructor({ show, handleClose }) {
                       name="instructorEmail"
                       placeholder="Enter email"
                       onInput={handleInput}
-                      required
+                      value={email}
+                      readOnly
                     />
                   </InputGroup>
                 </Col>
