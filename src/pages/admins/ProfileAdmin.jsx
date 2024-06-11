@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import NavbarAdmin from './NavbarAdmin';
+import NavbarAdmin from "./NavbarAdmin";
 import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
 import GoogleLogin from "../../components/GoogleLogin";
-import { googleLogout } from '@react-oauth/google';
+import { googleLogout } from "@react-oauth/google";
 import { getInstructorByEmail } from "../../features/apiCalls";
-
 
 function ProfileAdmin() {
   const [user, setUser] = useState(() => {
@@ -28,8 +27,11 @@ function ProfileAdmin() {
             console.log(result.error);
           } else if (result[0]) {
             setInstructor(result[0]);
-            Cookies.set('instructor', result[0], { expires: 7 });
-            localStorage.setItem('division', JSON.stringify(result[0].division));
+            Cookies.set("instructor", result[0], { expires: 7 });
+            localStorage.setItem(
+              "division",
+              JSON.stringify(result[0].division)
+            );
           } else {
             console.log("Instructor data is undefined");
           }
@@ -40,21 +42,23 @@ function ProfileAdmin() {
       fetchInstructorData();
     }
   }, [userEmail]);
-  
-
 
   const logOut = useCallback(() => {
+    Cookies.remove("user");
+    Cookies.remove("role");
+    Cookies.remove("instructor");
+    localStorage.removeItem("user");
+    localStorage.removeItem("instructor");
+    localStorage.removeItem("role");
+    localStorage.removeItem("division");
     googleLogout();
     setUser({});
-    Cookies.remove('user');
-    Cookies.remove("role");
-    localStorage.removeItem("user");
-    localStorage.removeItem("role");
   }, []);
 
   if (!userEmail) {
     return <GoogleLogin />;
   }
+
   return (
     <>
       <NavbarAdmin />
@@ -72,27 +76,28 @@ function ProfileAdmin() {
           />
         </div>
         <div className="d-flex justify-content-center">
-        <div className="card" style={{ width: "18rem" }}>
-              <div className="card-header text-center">
-                <h5 className="card-title">{userName}</h5>
-                <p className="card-text">Email: {userEmail}</p>
-              </div>
-              <ul className="list-group list-group-flush">
-              <li className="list-group-item">Division: {instructor.division}</li>
-              </ul>
-              <div className="card-footer">
-                <div className="d-grid gap-2 col-12 mx-auto">
-                  <button className="btn btn-outline-danger" onClick={logOut}>
-                    Log out
-                  </button>
-                </div>
+          <div className="card" style={{ width: "18rem" }}>
+            <div className="card-header text-center">
+              <h5 className="card-title">{userName}</h5>
+              <p className="card-text">Email: {userEmail}</p>
+            </div>
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item">
+                Division: {instructor.division}
+              </li>
+            </ul>
+            <div className="card-footer">
+              <div className="d-grid gap-2 col-12 mx-auto">
+                <button className="btn btn-outline-danger" onClick={logOut}>
+                  Log out
+                </button>
               </div>
             </div>
-
+          </div>
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default ProfileAdmin
+export default ProfileAdmin;

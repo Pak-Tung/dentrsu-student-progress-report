@@ -25,6 +25,8 @@ import EditInstructors from "./pages/root/EditInstructors";
 import EditStudents from "./pages/root/EditStudents";
 import CheckStatus from "./pages/students/CheckStatus";
 import RequestComplete from "./pages/instructors/RequestComplete";
+import ProfileAdmin from "./pages/admins/ProfileAdmin";
+//import SelectRoleAdmin from "./pages/admins/selectRoleAdmin";
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
         <Route path="/memberInTeam" element={<MemberInTeam />} />
         <Route path="/divisionAdvisee" element={<DivisionAdvisee />} />
         <Route path="/minReq" element={<MinimumReq />} />
+        <Route path="/profileAdmin" element={<ProfileAdmin />} />
+
 
         <Route path="/reqApprovedEdit" element={<EditApprovedReq />} />
         <Route path="/editReqOfDivision" element={<EditDivisionReq />} />
@@ -56,6 +60,7 @@ function App() {
         <Route path="/addUser" element={<UserManagement />} />
         <Route path="/editInstructors" element={<EditInstructors />} />
         <Route path="/editStudents" element={<EditStudents />} />
+        
         
         <Route path="/" element={<RoleLogin />} />
 

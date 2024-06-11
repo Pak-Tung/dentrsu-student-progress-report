@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Cookies from "js-cookie";
+import Navbar from "react-bootstrap/Navbar";
+import "../../Navbar.css";
 
 function NavbarRoot() {
   const [user, setUser] = useState(() => {
@@ -20,32 +22,27 @@ function NavbarRoot() {
   }, []);
 
   return (
-    <Nav
-      fill
-      variant="tabs"
-      className="navbar navbar-expand-lg navbar-light bg-light"
-    >
-      <Nav.Item className="ml-auto">
-        <Nav.Link disabled>
-          ROOT: {user.email ? user.email : "User.email@rsu.ac.th"}
-        </Nav.Link>
-      </Nav.Item>
-      <NavDropdown title="User Management" id="nav-userManagement">
-        <NavDropdown.Item href="/addUser"> User</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="/editInstructors">Instructors</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="/editStudents">Students</NavDropdown.Item>
-      </NavDropdown>
-      <NavDropdown title="Division Management" id="nav-divisionManagement">
-      <NavDropdown.Item href="/addDivision">Division</NavDropdown.Item>
-        {/* <NavDropdown.Divider />
-        <NavDropdown.Item href="/updateDivision">Edit Division</NavDropdown.Item> */}
-      </NavDropdown>
-      <Nav.Item>
-        <Nav.Link href="/">Profile</Nav.Link>
-      </Nav.Item>
-    </Nav>
+    <Navbar expand="md" className="navbar navbar-expand-lg navbar-light bg-light">
+      <Navbar.Brand href="/">ROOT: {user.email ? user.email : "User.email@rsu.ac.th"}</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="ml-auto w-100 justify-content-between">
+          <NavDropdown title="User Management" id="nav-userManagement" className="flex-fill">
+            <NavDropdown.Item href="/addUser">User</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/editInstructors">Instructors</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/editStudents">Students</NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown title="Division Management" id="nav-divisionManagement" className="flex-fill">
+            <NavDropdown.Item href="/addDivision">Division</NavDropdown.Item>
+          </NavDropdown>
+          <Nav.Item className="flex-fill">
+            <Nav.Link href="/">Profile</Nav.Link>
+          </Nav.Item>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 }
 

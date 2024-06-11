@@ -1,0 +1,9 @@
+.navbar-nav {
+    flex-grow: 1;
+  }
+  
+  .navbar-nav .nav-item,
+  .navbar-nav .nav-dropdown {
+    flex: 1;
+    text-align: center;
+  }

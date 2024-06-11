@@ -6,8 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Profile from "../pages/students/Profile";
 import { getAllUsers } from "../features/apiCalls";
 import ProfileInstructor from "../pages/instructors/ProfileInstructor";
-import ProfileAdmin from "../pages/admins/ProfileAdmin";
 import ProfileRoot from "../pages/root/ProfileRoot";
+import SelectRoleAdmin from "../pages/admins/SelectRoleAdmin";
 
 function GoogleLogin() {
   const [user, setUser] = useState(() => {
@@ -58,15 +58,21 @@ function GoogleLogin() {
           const userRecord = users.data.find((u) => u.email === res.data.email);
 
           if (userRecord) {
+
+
             Cookies.set("user", JSON.stringify(res.data), { expires: 7 });
             Cookies.set("role", userRecord.role, { expires: 7 });
             localStorage.setItem("user", JSON.stringify(res.data));
             localStorage.setItem("role", userRecord.role);
 
+            userRecord.role === 'admin'?localStorage.setItem("role", "pre-admin"):localStorage.setItem("role", userRecord.role);
+            userRecord.role === 'admin'?Cookies.set("role", "pre-admin"):Cookies.set("role", userRecord.role);
+
             setRole(userRecord.role);
             setProfile(res.data);
-
+            setUserRole(userRecord.role);
             window.location.reload();
+            
           } else {
             alert("User role not found!!");
           }
@@ -118,7 +124,7 @@ function GoogleLogin() {
             {console.log("user:", user)}
             {role === "student" && <Profile key={profile.email} user={profile} />}
             {role === "instructor" && <ProfileInstructor key={profile.email} user={profile} />}
-            {role === "admin" && <ProfileAdmin key={profile.email} user={profile} />}
+            {role === "pre-admin" && <SelectRoleAdmin />}
             {role === "root" && <ProfileRoot key={profile.email} user={profile} />}
           </>
         ) : (
