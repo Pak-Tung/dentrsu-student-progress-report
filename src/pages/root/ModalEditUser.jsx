@@ -12,7 +12,7 @@ import {
 import { updateUserById } from "../../features/apiCalls";
 
 function ModalEditUser({ show, handleClose, user }) {
-  console.log("user", user);
+  //console.log("user", user);
   const [validated, setValidated] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -48,9 +48,9 @@ function ModalEditUser({ show, handleClose, user }) {
     setValidated(true);
     try {
       const response = await updateUserById(user.id, formData);
-      console.log("user.id", user.id);
-      console.log("formData", formData);
-      console.log("responseAPI", response);
+      //console.log("user.id", user.id);
+      //console.log("formData", formData);
+      //console.log("responseAPI", response);
       if (response.data.affectedRows === 1) {
         alert("Edit User successfully!");
         handleClose();

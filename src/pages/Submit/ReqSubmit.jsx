@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getStudentByEmail, getAllDivisions } from "../../features/apiCalls";
 import Cookies from "js-cookie";
-import GoogleLogin from "../../components/GoogleLogin";
 import Navbar from "../../components/Navbar";
 import SubmissionForm from "./SubmissionForm";
 import { Form, Container, Row, Col } from "react-bootstrap";
 import "../../pages/CustomStyles.css";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function ReqSubmit() {
   if (Cookies.get("user") === undefined) {
@@ -15,7 +15,8 @@ function ReqSubmit() {
     console.log("User email", Cookies.get("user"));
   }
 
-  const user = JSON.parse(Cookies.get("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
+  //const user = JSON.parse(Cookies.get("user"));
   console.log("User in Profile", user);
   const userEmail = user.email;
   console.log("UserEmail", userEmail);
@@ -118,7 +119,8 @@ function ReqSubmit() {
       ) : (
         <>
           <div>
-            <GoogleLogin />
+            {/* <GoogleLogin /> */}
+            <LoginByEmail />
           </div>
         </>
       )}

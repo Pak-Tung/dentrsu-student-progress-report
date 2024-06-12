@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookies from "js-cookie";
-import GoogleLogin from "../../components/GoogleLogin";
+import LoginByEmail from "../../components/LoginByEmail";
 import Navbar from "../../components/Navbar";
 import "../../pages/CustomStyles.css";
 import CompForm from "./CompForm";
@@ -38,7 +38,7 @@ function CompSubmit() {
         </>
       ) : (
         <div>
-          <GoogleLogin />
+          <LoginByEmail />
         </div>
       )}
     </>

@@ -7,3 +7,9 @@
     flex: 1;
     text-align: center;
   }
+
+  .containerStyle {
+      display: "flex";
+      justify-content: "center";
+      align-items: "center";
+  }

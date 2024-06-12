@@ -1,10 +1,12 @@
-import GoogleLogin from '../components/GoogleLogin';
+//import GoogleLogin from '../components/GoogleLogin';
 import React from 'react';
+import LoginByEmail from '../components/LoginByEmail';
 
 function RoleLogin() {
   return (
     <div>
-      <GoogleLogin />
+      {/* <GoogleLogin /> */}
+      <LoginByEmail />
     </div>
   );
 }

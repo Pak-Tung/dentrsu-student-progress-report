@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getStudentByEmail, getAllDivisions } from "../../features/apiCalls";
 import Cookies from "js-cookie";
-import GoogleLogin from "../../components/GoogleLogin";
 import Navbar from "../../components/Navbar";
 import StatusByDiv from "../../components/StatusByDiv";
 import { Form, Container, Row, Col } from "react-bootstrap";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function ReqStatus() {
   const [user, setUser] = useState(() => {
@@ -111,7 +111,7 @@ function ReqStatus() {
           </div>
         </>
       ) : (
-        <GoogleLogin />
+        <LoginByEmail />
       )}
     </>
   );

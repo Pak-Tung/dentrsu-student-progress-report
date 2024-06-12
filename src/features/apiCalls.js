@@ -2,6 +2,16 @@ import axios from 'axios';
 
 const host = 'https://dentrsu-0b0ffade06fd.herokuapp.com';//'http://localhost:3001'; //
 
+export const getJwtToken = async (user) => {
+    try {
+        const response = await axios.post(`${ host }/api/students/create-token`, user);
+        return response;
+    } catch (error) {
+        return error;
+    }
+};
+
+
 export const getAllUsers = async () => {
     try {
         const response = await axios.get(`${ host }/api/students/api/users`);
@@ -69,7 +79,7 @@ export const deleteStudent = async (studentId) => {
 export const getReqByDivision = async (division) => {
     try {
         const response = await axios.get(`${ host }/api/students/reqs/${division}`);
-        console.log("responseAPI", response);
+        //console.log("responseAPI", response);
         return response.data;
     } catch (error) {
         return error;
@@ -156,6 +166,7 @@ export const updateOperReqById = async (id, req) => {
 export const getAllDivisions = async () => {
     try {
         const response = await axios.get(`${ host }/api/students/divisions/division`);
+        //console.log("responseAPI", response);
         return response.data;
     } catch (error) {
         return error;
@@ -339,7 +350,7 @@ export const getDivReqByInstructorEmail = async (instructorEmail, division) => {
             break;
     }
     try {
-        console.log("division in API", division);
+        //console.log("division in API", division);
         const response = await axios.get(`${ host }/api/students/reqs/${division}/instructorEmail/${instructorEmail}`);
         //"/reqs/operReq/instructorEmail/:instructorEmail"
         return response.data;
@@ -376,7 +387,7 @@ export const getInstructorsByTeamleaderRole = async (roleId) => {
 };
 
 export const insertCompletedCase = async (compCase) => {
-    console.log("compCase", compCase);
+    //console.log("compCase", compCase);
     try {
         const response = await axios.post(`${ host }/api/students/reqs/c/compcases`, compCase);
         return response.data;
@@ -544,7 +555,7 @@ export const updateInstructorByInstructorId = async (id, instructor) => {
 };
 
 export const updateRequestByStudentEmail = async (studentEmail, request) => {
-    console.log("request", request);
+    //console.log("request", request);
     try {
         const response = await axios.put(`${ host }/api/students/update/requests/studentEmail/${studentEmail}`, request);
         return response.data;
@@ -554,7 +565,7 @@ export const updateRequestByStudentEmail = async (studentEmail, request) => {
 };
 
 export const updateStatusByStudentEmail = async (studentEmail, status) => {
-    console.log("status", status);
+    //console.log("status", status);
     try {
         const response = await axios.put(`${ host }/api/students/update/status/studentEmail/${studentEmail}`, status);
         return response.data;

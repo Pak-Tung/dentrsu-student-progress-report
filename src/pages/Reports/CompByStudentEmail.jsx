@@ -3,8 +3,8 @@ import {
   getStudentByEmail,
   getCompcaseReqByStudentEmail,
 } from "../../features/apiCalls";
-import GoogleLogin from "../../components/GoogleLogin";
 import { Container, Row, Col, ListGroup, Badge } from "react-bootstrap";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function CompByStudentEmail({ studentEmail }) {
   console.log("studentEmailComp", studentEmail);
@@ -88,7 +88,7 @@ function CompByStudentEmail({ studentEmail }) {
           <br />
         </Container>
       ) : (
-        <GoogleLogin />
+        <LoginByEmail />
       )}
     </>
   );

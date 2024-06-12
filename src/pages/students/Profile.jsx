@@ -3,19 +3,16 @@ import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getStudentByEmail } from "../../features/apiCalls";
 import { getTeamLeaderById } from "../../features/apiTL";
-import GoogleLogin from "../../components/GoogleLogin";
-import { googleLogout } from "@react-oauth/google";
+import LoginByEmail from "../../components/LoginByEmail";
 import Navbar from "../../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
   Col,
-  ListGroup,
   Badge,
-  Dropdown,
-  DropdownButton,
-  Modal,
 } from "react-bootstrap";
+
 
 function Profile() {
   const [user, setUser] = useState(() => {
@@ -79,17 +76,24 @@ function Profile() {
     }
   }, [student.teamLeaderId]);
 
+  const navigate = useNavigate();
   const logOut = useCallback(() => {
-    googleLogout();
-    setUser({});
     Cookies.remove("user");
     Cookies.remove("role");
+    Cookies.remove("instructor");
     localStorage.removeItem("user");
+    localStorage.removeItem("instructor");
     localStorage.removeItem("role");
-  }, []);
+    localStorage.removeItem("division");
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+    setUser({});
+    navigate('/');
+    window.location.reload();
+  }, [navigate]);
 
   if (!userEmail) {
-    return <GoogleLogin />;
+    return <LoginByEmail />;
   }
 
   const calculateStudentYear = (startClinicYear) => {
@@ -107,8 +111,9 @@ function Profile() {
         </div>
         <div className="d-flex justify-content-center mb-4">
           <img
-            src={userPicture}
-            alt={`profile`}
+            // src={userPicture}
+            src={'/images/student.png'}
+            alt={'Profile'}
             className="rounded-circle"
             width="100"
             height="100"

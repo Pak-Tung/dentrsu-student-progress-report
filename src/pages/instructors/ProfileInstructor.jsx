@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
-import GoogleLogin from "../../components/GoogleLogin";
-import { googleLogout } from '@react-oauth/google';
+import LoginByEmail from "../../components/LoginByEmail";
 import { getInstructorByEmail } from "../../features/apiCalls";
+import { useNavigate } from "react-router-dom";
 
 function ProfileInstructor() {
   const [user, setUser] = useState(() => {
@@ -42,19 +42,26 @@ function ProfileInstructor() {
   }, [userEmail]);
   
 
-
+  const navigate = useNavigate();
   const logOut = useCallback(() => {
-    googleLogout();
-    setUser({});
-    Cookies.remove('user');
+    Cookies.remove("user");
     Cookies.remove("role");
+    Cookies.remove("instructor");
     localStorage.removeItem("user");
+    localStorage.removeItem("instructor");
     localStorage.removeItem("role");
-  }, []);
+    localStorage.removeItem("division");
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+    setUser({});
+    navigate('/');
+    window.location.reload();
+  }, [navigate]);
 
   if (!userEmail) {
-    return <GoogleLogin />;
+    return <LoginByEmail />;
   }
+
   return (
     <>
       <NavbarInstructor />
@@ -64,11 +71,12 @@ function ProfileInstructor() {
         </div>
         <div className="d-flex justify-content-center mb-4">
           <img
-            src={userPicture}
-            alt={`${userName}'s profile`}
+            // src={userPicture}
+            src={'/images/instructor.jpg'}
+            alt={`Profile`}
             className="rounded-circle"
-            width="100"
-            height="100"
+            width="200"
+            height="200"
           />
         </div>
         <div className="d-flex justify-content-center">

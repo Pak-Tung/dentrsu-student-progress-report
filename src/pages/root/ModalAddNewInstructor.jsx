@@ -21,6 +21,7 @@ function ModalAddNewInstructor({ show, handleClose, email, role }) {
     fetchData();
   }, []);
 
+
   const [selectedDivision, setSelectedDivision] = useState("");
 
   const handleChangeDivision = (event) => {
@@ -54,6 +55,10 @@ function ModalAddNewInstructor({ show, handleClose, email, role }) {
         email: email,
         role: role,
       });
+      setFormData((prevState) => ({
+        ...prevState,
+        instructorEmail: email,
+      }));
     }
   }, [email, role]);
 

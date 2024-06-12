@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
 import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
-import GoogleLogin from "../../components/GoogleLogin";
-import { googleLogout } from "@react-oauth/google";
+import LoginByEmail from "../../components/LoginByEmail";
 import { getInstructorByEmail } from "../../features/apiCalls";
 import { useNavigate } from "react-router-dom";
 
@@ -53,13 +52,15 @@ function ProfileAdmin() {
     localStorage.removeItem("instructor");
     localStorage.removeItem("role");
     localStorage.removeItem("division");
-    googleLogout();
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
     setUser({});
     navigate('/');
+    window.location.reload();
   }, [navigate]);
 
   if (!userEmail) {
-    return <GoogleLogin />;
+    return <LoginByEmail />;
   }
 
   return (
@@ -71,11 +72,12 @@ function ProfileAdmin() {
         </div>
         <div className="d-flex justify-content-center mb-4">
           <img
-            src={userPicture}
-            alt={`${userName}'s profile`}
+            // src={userPicture}
+            src={'/images/admin.jpg'}
+            alt={`Profile`}
             className="rounded-circle"
-            width="100"
-            height="100"
+            width="180"
+            height="180"
           />
         </div>
         <div className="d-flex justify-content-center">

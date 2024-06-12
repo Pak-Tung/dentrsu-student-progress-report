@@ -9,6 +9,7 @@ import ProfileInstructor from "../pages/instructors/ProfileInstructor";
 import ProfileRoot from "../pages/root/ProfileRoot";
 import SelectRoleAdmin from "../pages/admins/SelectRoleAdmin";
 
+
 function GoogleLogin() {
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
@@ -99,6 +100,7 @@ function GoogleLogin() {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    height: "100vh",
   };
 
   return (
@@ -129,6 +131,8 @@ function GoogleLogin() {
               <button className="btn btn-primary" onClick={login}>
                 Sign in
               </button>
+              <br />
+
             </div>
           </>
         )

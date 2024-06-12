@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import GoogleLogin from "../../components/GoogleLogin";
 import { getCompcaseReqByStudentEmail } from "../../features/apiCalls";
 import Cookies from "js-cookie";
 import { Container, Row, Col, ListGroup, Badge, Modal } from "react-bootstrap";
@@ -7,6 +6,7 @@ import Navbar from "../../components/Navbar";
 import ModalUpdateComp from "./ModalUpdateComp";
 import "../../pages/CustomStyles.css";
 import "../../App.css";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function CompStatus() {
   const user = JSON.parse(Cookies.get("user"));
@@ -104,7 +104,7 @@ function CompStatus() {
           </Modal>
         </>
       ) : (
-        <GoogleLogin />
+        <LoginByEmail />
       )}
     </>
   );

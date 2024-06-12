@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getStudentByEmail, getAllDivisions } from "../../features/apiCalls";
 import Cookies from "js-cookie";
-import GoogleLogin from "../../components/GoogleLogin";
 import Navbar from "../../components/Navbar";
 import {
   Container,
@@ -11,6 +10,7 @@ import {
   DropdownButton,
 } from "react-bootstrap";
 import SumByDiv from "./SumByDiv";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function Overview() {
   // Initialize user data from cookies
@@ -147,7 +147,7 @@ function Overview() {
       ) : (
         <>
           <div>
-            <GoogleLogin />
+          <LoginByEmail />
           </div>
         </>
       )}

@@ -21,7 +21,7 @@ function ModalAddNewStudent({ show, handleClose, email }) {
     studentId: 0,
     title: "",
     studentName: "",
-    studentEmail: "",
+    studentEmail: email,
     startClinicYear: "",
     floor: 0,
     bay: "",
@@ -69,6 +69,10 @@ function ModalAddNewStudent({ show, handleClose, email }) {
         email: email,
         role: "student",
       });
+      setFormData((prevState) => ({
+        ...prevState,
+        studentEmail: email,
+      }));
     }
   }, [email]);
 

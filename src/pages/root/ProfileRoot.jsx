@@ -9,6 +9,7 @@ import ProfileAdmin from "../admins/ProfileAdmin";
 import Profile from "../students/Profile";
 import NavbarRoot from "./NavbarRoot";
 import ModalSetAdminDiv from "./ModalSetAdminDiv";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function ProfileRoot() {
   const [user, setUser] = useState(() => {
@@ -52,6 +53,10 @@ function ProfileRoot() {
     return <Profile />; // Render Profile component if role is 'student'
   }
 
+  if (!userEmail) {
+    return <LoginByEmail />;
+  }
+
   return (
     <>
       <NavbarRoot />
@@ -63,19 +68,19 @@ function ProfileRoot() {
             </div>
             <div className="d-flex justify-content-center mb-4">
               <img
-                src={userPicture}
-                alt={`${userName}'s profile`}
+                // src={userPicture}
+                src={'/images/root.jpg'}
+                alt={`Profile`}
                 className="rounded-circle"
-                width="100"
-                height="100"
+                width="180"
+                height="180"
               />
             </div>
             <div className="d-flex justify-content-center mb-4">
               <h3>{userName}</h3>
             </div>
             <div className="d-flex justify-content-center mb-4">
-              <h5>If you don't want to be 'Root',</h5>
-              <h5> please select 'Role' to log in</h5>
+              <h5>If you don't want to be 'Root';</h5>
             </div>
           </Col>
         </Row>

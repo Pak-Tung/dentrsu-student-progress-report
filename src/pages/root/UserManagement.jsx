@@ -1,8 +1,6 @@
 import { React, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  getAllUsers,
-} from "../../features/apiCalls";
+import { getAllUsers } from "../../features/apiCalls";
 import NavbarRoot from "./NavbarRoot";
 import {
   Container,
@@ -77,17 +75,19 @@ function UserManagement() {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-          setSelectedUserRole("Select User Type"); // Reset dropdown
-          setValidated(false); // Reset validation state
-          if (formData.role === "student") {
-            handleShow(); // Assuming this opens the modal
-          } else if (
-            formData.role === "instructor" ||
-            formData.role === "admin" ||
-            formData.role === "root"
-          ) {
-            handleShowInstructor(); // Assuming this opens the modal
-          } else {alert("Something went wrong.");}
+      setSelectedUserRole("Select User Type"); // Reset dropdown
+      setValidated(false); // Reset validation state
+      if (formData.role === "student") {
+        handleShow(); // Assuming this opens the modal
+      } else if (
+        formData.role === "instructor" ||
+        formData.role === "admin" ||
+        formData.role === "root"
+      ) {
+        handleShowInstructor(); // Assuming this opens the modal
+      } else {
+        alert("Something went wrong.");
+      }
     }
     setValidated(true);
   };
@@ -116,6 +116,50 @@ function UserManagement() {
   return (
     <>
       <NavbarRoot />
+      <br />
+      <Container fluid="md">
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Row className="d-flex justify-content-center">
+            <Col md={6}>
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="email">User Email:</InputGroup.Text>
+                <Form.Control
+                  type="email"
+                  placeholder={inputEmail}
+                  aria-label="email"
+                  aria-describedby="email"
+                  name="email"
+                  required
+                  onInput={handleInput}
+                />
+              </InputGroup>
+            </Col>
+            <Col md={4}>
+              <DropdownButton
+                variant="outline-dark"
+                id="dropdown-basic-button"
+                title={selectedUserRole}
+                onSelect={handleSelectUserRole}
+              >
+                <Dropdown.Item eventKey="Select User Type">
+                  Select User Type
+                </Dropdown.Item>
+                {userRoles.map((userRole) => (
+                  <Dropdown.Item key={userRole.id} eventKey={userRole.role}>
+                    {userRole.role}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
+            </Col>
+            <Col md={2}>
+              <Button variant="outline-dark" type="submit">
+                Add User
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </Container>
+      <br />
       <Container fluid="md">
         <div className="d-flex justify-content-center mb-4">
           <h4>All Users</h4>
@@ -162,56 +206,20 @@ function UserManagement() {
               ))}
             </ListGroup>
             <br />
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-              <Container fluid="md">
-                <Row className="d-flex justify-content-center">
-                  <Col md={4}>
-                    <InputGroup className="mb-3">
-                      <InputGroup.Text id="email">User Email:</InputGroup.Text>
-                      <Form.Control
-                        type="email"
-                        placeholder={inputEmail}
-                        aria-label="email"
-                        aria-describedby="email"
-                        name="email"
-                        required
-                        onInput={handleInput}
-                      />
-                    </InputGroup>
-                  </Col>
-                  <Col md={4}>
-                    <DropdownButton
-                      variant="outline-dark"
-                      id="dropdown-basic-button"
-                      title={selectedUserRole}
-                      onSelect={handleSelectUserRole}
-                    >
-                      <Dropdown.Item eventKey="Select User Type">
-                        Select User Type
-                      </Dropdown.Item>
-                      {userRoles.map((userRole) => (
-                        <Dropdown.Item
-                          key={userRole.id}
-                          eventKey={userRole.role}
-                        >
-                          {userRole.role}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-                  </Col>
-                  <Col md={4}>
-                    <Button variant="outline-dark" type="submit">
-                      Add User
-                    </Button>
-                  </Col>
-                </Row>
-              </Container>
-            </Form>
           </>
         )}
       </Container>
-      <ModalAddNewStudent show={show} handleClose={handleClose} email={formData.email}/>
-      <ModalAddNewInstructor show={showInstructor} handleClose={handleClose} email={formData.email} role={formData.role}/>
+      <ModalAddNewStudent
+        show={show}
+        handleClose={handleClose}
+        email={formData.email}
+      />
+      <ModalAddNewInstructor
+        show={showInstructor}
+        handleClose={handleClose}
+        email={formData.email}
+        role={formData.role}
+      />
       {selectedUser && (
         <ModalEditUser
           show={showEditUser}

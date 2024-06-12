@@ -4,9 +4,9 @@ import {
   getCompcaseReqByStudentEmail,
 } from "../../features/apiCalls";
 import Cookies from "js-cookie";
-import GoogleLogin from "../../components/GoogleLogin";
 import Navbar from "../../components/Navbar";
 import { Container, Row, Col, ListGroup, Badge } from "react-bootstrap";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function CompOverview() {
   // Initialize user data from cookies
@@ -109,7 +109,7 @@ function CompOverview() {
           </Container>
         </>
       ) : (
-        <GoogleLogin />
+        <LoginByEmail />
       )}
     </>
   );
