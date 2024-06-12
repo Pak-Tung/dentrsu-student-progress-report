@@ -16,9 +16,9 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getReqByDivision(division);
-      console.log("division", division);
+      //console.log("division", division);
       const { error } = response;
-      console.log("result", response);
+      //console.log("result", response);
       if (error) {
         console.log(error);
       } else {
@@ -92,7 +92,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
   const handleChange = (event) => {
     const selected = event.target.value;
     setSelectedOption(event.target.value);
-    console.log("options", options);
+    //console.log("options", options);
 
     const item = options.find((d) => d.type === selected);
 
@@ -128,7 +128,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
     const fetchData = async () => {
       const response = await getInstructorsByDivision(division);
       const { error } = response;
-      console.log("result", response);
+      //console.log("result", response);
       if (error) {
         console.log(error);
       } else {
@@ -169,13 +169,13 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
           unit_RSU: unitRSU,
           unit_DC: unitDC,
         };
-        console.log("form data", JSON.stringify(updatedFormData));
+        //console.log("form data", JSON.stringify(updatedFormData));
         const response = await updateDivReqById(
           divisionReq.id,
           updatedFormData,
           division
         );
-        console.log("responseAPI", response);
+        //console.log("responseAPI", response);
         if (response.affectedRows === 1) {
           alert("Form submitted successfully!");
           localStorage.setItem("selectedDivision", division);

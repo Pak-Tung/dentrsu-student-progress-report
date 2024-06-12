@@ -42,7 +42,7 @@ function DivisionAdvisee() {
     const fetchInstructorsData = async () => {
       try {
         const result = await getAllInstructors();
-        console.log("result", result);
+        //console.log("result", result);
         setInstructors(result);
       } catch (err) {
         setError("Failed to fetch instructors");

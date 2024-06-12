@@ -20,7 +20,7 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
     const fetchData = async () => {
       const response = await getCompcasesDetails();
       const { error } = response;
-      console.log("result", response);
+      //console.log("result", response);
       if (error) {
         console.log(error);
       } else {
@@ -81,7 +81,7 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setSelectedOption(value);
-    console.log("options", options);
+   // console.log("options", options);
 
     const item = options.find((d) => d.type === value);
 
@@ -104,7 +104,7 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
     const fetchData = async () => {
       const response = await getInstructorsByTeamleaderRole(1);
       const { error } = response;
-      console.log("result", response);
+      //console.log("result", response);
       if (error) {
         console.log(error);
       } else {
@@ -135,37 +135,16 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
     }));
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   const form = event.currentTarget;
-  //   if (form.checkValidity() === false) {
-  //     event.stopPropagation();
-  //   } else {
-  //     try {
-  //       console.log("form data", JSON.stringify(formData));
-  //       const response = await updateCompReqById(compReq.id, formData);
-  //       console.log("responseAPI", response);
-  //       if (response.affectedRows === 1) {
-  //         alert("Form submitted successfully!");
-  //         window.location.reload();
-  //       }
-  //     } catch (error) {
-  //       console.error("Error submitting form:", error);
-  //     }
-  //   }
-  //   setValidated(true);
-  // };
-
   const handleApprove = async (event) => {
     event.preventDefault();
     try {
       const updatedFormData = { ...formData, isApproved: 1 };
-      console.log("form data", JSON.stringify(updatedFormData));
+      //console.log("form data", JSON.stringify(updatedFormData));
       const response = await updateCompReqById(
         compReq.id,
         updatedFormData
       );
-      console.log("responseAPI", response);
+      //console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form approved successfully!");
         //window.location.reload();
@@ -180,12 +159,12 @@ function ModalCompReqApproval({ show, handleClose, compReq, studentName }) {
     event.preventDefault();
     try {
       const updatedFormData = { ...formData, isApproved: -1 };
-      console.log("form data", JSON.stringify(updatedFormData));
+      //console.log("form data", JSON.stringify(updatedFormData));
       const response = await updateCompReqById(
         compReq.id,
         updatedFormData
       );
-      console.log("responseAPI", response);
+      //console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form sent back for revision!");
         //window.location.reload();

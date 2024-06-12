@@ -30,7 +30,7 @@ function SelectRoleAdmin() {
   const handleSelectRole = (selectedRole) => {
     localStorage.setItem("role", selectedRole);
     setRole(selectedRole);
-    console.log("Selected Role:", selectedRole);
+    //console.log("Selected Role:", selectedRole);
   };
 
   const { name: userName, picture: userPicture } = user;

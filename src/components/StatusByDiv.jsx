@@ -24,7 +24,7 @@ function StatusByDiv(division) {
     try {
       const result = await getDivReqByStudentEmail(userEmail, division.division);
       const { error } = result;
-      console.log("result", result);
+      //console.log("result", result);
       if (error) {
         console.log(error);
       } else {

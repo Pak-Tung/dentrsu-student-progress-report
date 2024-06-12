@@ -136,9 +136,9 @@ function CompForm() {
       alert("Instructor Email cannot be empty.");
     } else {
       try {
-        console.log("form data", JSON.stringify(formData));
+        //console.log("form data", JSON.stringify(formData));
         const response = await insertCompletedCase(formData);
-        console.log("responseAPI", response);
+        //console.log("responseAPI", response);
         if (response.insertId > 0 && response.affectedRows > 0) {
           //await sendEmailToInstructor(formData);
           alert("Form submitted successfully!");

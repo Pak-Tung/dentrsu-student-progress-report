@@ -86,7 +86,7 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("formData update", formData);
+    //console.log("formData update", formData);
     try {
       const result = await updateStudentDivInstructorByDivInstructorEmail(
         formData.studentId,

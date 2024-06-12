@@ -11,7 +11,7 @@ function CompSubmit() {
   if (Cookies.get("user") === undefined) {
     Cookies.set("user", JSON.stringify({}));
   } else {
-    console.log("User email", Cookies.get("user"));
+    //console.log("User email", Cookies.get("user"));
   }
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;

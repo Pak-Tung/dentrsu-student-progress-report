@@ -47,7 +47,7 @@ function ProfileRoot() {
   if (role === "instructor") {
     return <ProfileInstructor />; // Render ProfileInstructor component if role is 'instructor'
   } else if (role === "admin" && !show) {
-    console.log("Role is admin and show is false");
+    //console.log("Role is admin and show is false");
     return <ProfileAdmin />; // Render ProfileAdmin component if role is 'admin' and modal is not shown
   } else if (role === "student") {
     return <Profile />; // Render Profile component if role is 'student'

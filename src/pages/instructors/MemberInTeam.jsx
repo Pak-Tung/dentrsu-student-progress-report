@@ -20,7 +20,7 @@ function MemberInTeam() {
     const fetchData = async () => {
       try {
         const result = await getStudentByTeamleaderEmail(userEmail);
-        console.log("result", result);
+        //console.log("result", result);
         setStudentData(result);
       } catch (err) {
         setError("Failed to fetch students");
@@ -39,7 +39,7 @@ function MemberInTeam() {
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const handleStudentSelect = async (student) => {
-    console.log("student", student);
+    //console.log("student", student);
     setSelectedStudent(student);
     handleShow();
   };

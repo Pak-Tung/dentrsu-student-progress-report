@@ -36,7 +36,7 @@ function CompApproval() {
       try {
         const result = await getInstructorByEmail(userEmail);
         const { error, data } = result;
-        console.log(result[0]);
+        //console.log(result[0]);
         if (error) {
           setError(error);
         } else if (result[0]) {
@@ -60,11 +60,11 @@ function CompApproval() {
     try {
       const result = await getCompReqByInstructorEmail(userEmail);
       const { error, data } = result;
-      console.log(result);
+      //console.log(result);
       if (error) {
         setError(error);
       } else if (result) {
-        console.log("result", result);
+        //console.log("result", result);
         const pendingFilter = result.filter((req) => req.isApproved === 0);
         setPendingReqs(pendingFilter);
 
@@ -108,8 +108,8 @@ function CompApproval() {
   const handlePendingReq = async (req, student) => {
     setSelectedReq(req);
     setSelectedStudent(student);
-    console.log("Selected Req", req);
-    console.log("Selected Student", student);
+    //console.log("Selected Req", req);
+    //console.log("Selected Student", student);
     handleShow();
   };
 

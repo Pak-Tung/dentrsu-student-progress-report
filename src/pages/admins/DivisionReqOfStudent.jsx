@@ -38,7 +38,7 @@ function DivisionReqOfStudent() {
     setError(null);
     try {
       const result = await getStudentById(idInput);
-      console.log("result", result.data[0]);
+      //console.log("result", result.data[0]);
       setStudentData(result.data[0]);
     } catch (err) {
       setError("Failed to fetch student data. Please try again later.");

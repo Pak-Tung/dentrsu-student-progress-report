@@ -7,7 +7,7 @@ import { Container, Row, Col, ListGroup, Badge } from "react-bootstrap";
 import LoginByEmail from "../../components/LoginByEmail";
 
 function CompByStudentEmail({ studentEmail }) {
-  console.log("studentEmailComp", studentEmail);
+  //console.log("studentEmailComp", studentEmail);
 
   const [student, setStudent] = useState({});
   const [compReq, setCompReq] = useState([]);

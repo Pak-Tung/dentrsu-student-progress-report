@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 
 function ModalEditDivReq({ show, handleClose, divReq }) {
-    console.log(divReq);
+    //console.log(divReq);
   const [division, setDivision] = useState(() => {
     const savedDivision = localStorage.getItem("division");
     return savedDivision ? JSON.parse(savedDivision) : "";
@@ -60,7 +60,7 @@ function ModalEditDivReq({ show, handleClose, divReq }) {
     setValidated(true);
     try {
       const result = await updateMinReqById(formData.id, formData);
-      console.log(result);
+      //console.log(result);
       if (result.affectedRows === 1) {
         alert("Successfully updated");
         handleClose();

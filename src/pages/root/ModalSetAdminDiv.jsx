@@ -21,7 +21,7 @@ function ModalSetAdminDiv({ show, handleClose, userEmail }) {
 
   const handleSelect = (division) => {
     setSelectedDivision(division);
-    console.log("selectedDivision set to:", division);
+    //console.log("selectedDivision set to:", division);
   };
 
   const handleSave = async () => {
@@ -35,7 +35,7 @@ function ModalSetAdminDiv({ show, handleClose, userEmail }) {
             userEmail,
             {division: selectedDivision}
           );
-          console.log("result", result);
+          //console.log("result", result);
           handleClose(); // Close the modal after successful update
         } catch (error) {
           console.error("Failed to update division:", error);

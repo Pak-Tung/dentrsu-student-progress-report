@@ -102,8 +102,8 @@ function ModalEditInstructor({ show, handleClose, instructor }) {
         formData.id,
         formData
       );
-      console.log("formData.id", formData.id);
-      console.log("responseAPI", response);
+      //console.log("formData.id", formData.id);
+      //console.log("responseAPI", response);
       if (response.data.affectedRows === 0) {
         alert("Edit Instructor failed!");
         window.location.reload();

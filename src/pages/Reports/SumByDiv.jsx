@@ -7,7 +7,7 @@ import {
 import { Container, Row, Col, Badge, ListGroup } from "react-bootstrap";
 
 function SumByDiv({ division }) {
-  console.log("division at SumByDiv", division);
+  //console.log("division at SumByDiv", division);
 
   // Ensure user data is stored in cookies
   if (Cookies.get("user") === undefined) {

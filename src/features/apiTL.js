@@ -41,7 +41,7 @@ export const getInstructorsByDivision = async (division) => {
 export const sendEmailToInstructor = async (formData) => {
     try {
       const response = await axios.post(`${ host }/api/students/sendEmailToInstructor`, formData);
-      console.log("Email sent to instructor:", response.data);
+      //console.log("Email sent to instructor:", response.data);
     } catch (error) {
       console.error("Error sending email to instructor:", error);
     }

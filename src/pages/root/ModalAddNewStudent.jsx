@@ -94,10 +94,10 @@ function ModalAddNewStudent({ show, handleClose, email }) {
     setValidated(true);
     try {
       const responseUser = await insertUser(userFormDate);
-      console.log("responseUser", responseUser);
+      //console.log("responseUser", responseUser);
 
       const response = await insertStudent(formData);
-      console.log("responseAPI", response);
+      //console.log("responseAPI", response);
       if (response.data.affectedRows === 1) {
         alert("Add New Student successfully!");
         handleClose();

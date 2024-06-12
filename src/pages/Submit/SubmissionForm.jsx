@@ -162,7 +162,7 @@ const SubmissionForm = ({ division }) => {
           unit_RSU: unitRSU,
           unit_DC: unitDC,
         };
-        console.log('updatedFormData', updatedFormData);
+        //console.log('updatedFormData', updatedFormData);
         const response = await insertDivisionReq(updatedFormData, division);
         if (response.insertId > 0 && response.affectedRows > 0) {
           alert("Form submitted successfully!");

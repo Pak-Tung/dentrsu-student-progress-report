@@ -12,14 +12,14 @@ function ReqSubmit() {
   if (Cookies.get("user") === undefined) {
     Cookies.set("user", JSON.stringify({}));
   } else {
-    console.log("User email", Cookies.get("user"));
+    //console.log("User email", Cookies.get("user"));
   }
 
   const user = JSON.parse(localStorage.getItem("user"));
   //const user = JSON.parse(Cookies.get("user"));
-  console.log("User in Profile", user);
+  //console.log("User in Profile", user);
   const userEmail = user.email;
-  console.log("UserEmail", userEmail);
+  //console.log("UserEmail", userEmail);
 
   const [student, setStudent] = useState([]);
   const [divisions, setDivisions] = useState([]);
@@ -33,7 +33,7 @@ function ReqSubmit() {
       const result = await getStudentByEmail(userEmail);
       const { error } = result;
       const data = result[0];
-      console.log("result", result[0]);
+      //console.log("result", result[0]);
       if (error) {
         console.log(error);
       } else {
@@ -51,7 +51,7 @@ function ReqSubmit() {
   useEffect(() => {
     const fetchDivisions = async () => {
       const result = await getAllDivisions();
-      console.log("Divisions", result);
+      //console.log("Divisions", result);
       const { error } = result;
       if (error) {
         console.log(error);

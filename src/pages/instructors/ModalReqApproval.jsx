@@ -10,7 +10,7 @@ function ModalReqApproval({
   division,
   studentName,
 }) {
-  console.log("divisionInRA", division);
+  //console.log("divisionInRA", division);
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -22,7 +22,7 @@ function ModalReqApproval({
     const fetchData = async () => {
       const response = await getReqByDivision(division);
       const { error } = response;
-      console.log("resultMRA", response);
+      //console.log("resultMRA", response);
       if (error) {
         console.log(error);
       } else {
@@ -55,7 +55,7 @@ function ModalReqApproval({
 
   useEffect(() => {
     if (divisionReq) {
-      console.log("divisionReq", divisionReq);
+      //console.log("divisionReq", divisionReq);
       setFormData({
         studentEmail: userEmail,
         bookNo: divisionReq.bookNo || "",
@@ -90,7 +90,7 @@ function ModalReqApproval({
   const handleChange = (event) => {
     const selected = event.target.value;
     setSelectedOption(selected);
-    console.log("options", options);
+    //console.log("options", options);
 
     const item = options.find((d) => d.type === selected);
 
@@ -125,13 +125,13 @@ function ModalReqApproval({
     event.preventDefault();
     try {
       const updatedFormData = { ...formData, isApproved: 1 };
-      console.log("form data", JSON.stringify(updatedFormData));
+      //console.log("form data", JSON.stringify(updatedFormData));
       const response = await updateDivReqById(
         divisionReq.id,
         updatedFormData,
         division
       );
-      console.log("responseAPI", response);
+      //console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form approved successfully!");
         //window.location.reload();
@@ -146,13 +146,13 @@ function ModalReqApproval({
     event.preventDefault();
     try {
       const updatedFormData = { ...formData, isApproved: -1 };
-      console.log("form data", JSON.stringify(updatedFormData));
+      //console.log("form data", JSON.stringify(updatedFormData));
       const response = await updateDivReqById(
         divisionReq.id,
         updatedFormData,
         division
       );
-      console.log("responseAPI", response);
+      //console.log("responseAPI", response);
       if (response.affectedRows === 1) {
         alert("Form sent back for revision!");
         //window.location.reload();

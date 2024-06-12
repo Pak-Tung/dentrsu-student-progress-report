@@ -60,7 +60,7 @@ function DivisionAdvisee() {
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const handleStudentSelect = async (student) => {
-    console.log("student", student);
+    //console.log("student", student);
     setSelectedStudent(student);
     handleShow();
   };

@@ -43,7 +43,7 @@ function CompOverview() {
     const fetchData = async () => {
       const result = await getCompcaseReqByStudentEmail(userEmail);
       const { error } = result;
-      console.log("result", result);
+      //console.log("result", result);
       if (error) {
         console.log(error);
       } else {

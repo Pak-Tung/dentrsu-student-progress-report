@@ -7,8 +7,8 @@ import {
 import { Container, Row, Col, Badge, ListGroup } from "react-bootstrap";
 
 function SumByDivAndStudentEmail({ division, studentEmail }) {
-  console.log("division at SumByDiv", division);
-  console.log("studentEmail at SumByDiv", studentEmail);
+  //console.log("division at SumByDiv", division);
+  //console.log("studentEmail at SumByDiv", studentEmail);
  
   const userEmail = studentEmail;
 
