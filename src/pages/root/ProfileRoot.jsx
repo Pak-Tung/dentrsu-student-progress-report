@@ -28,11 +28,10 @@ function ProfileRoot() {
 
 
   const userName = user.name;
-  const userPicture = user.picture;
   const userEmail = user.email;
 
   const handleSelectRole = (selectedRole) => {
-    localStorage.setItem('role', selectedRole);
+    localStorage.setItem('role', JSON.stringify(selectedRole));
     setRole(selectedRole);
     if (selectedRole === "admin") {
       handleShow();

@@ -28,12 +28,12 @@ function SelectRoleAdmin() {
   }, []);
 
   const handleSelectRole = (selectedRole) => {
-    localStorage.setItem("role", selectedRole);
+    localStorage.setItem("role", JSON.stringify(selectedRole));
     setRole(selectedRole);
     //console.log("Selected Role:", selectedRole);
   };
 
-  const { name: userName, picture: userPicture } = user;
+  const { name: userName } = user;
 
   if (role === "instructor") {
     return <ProfileInstructor />;
@@ -54,8 +54,8 @@ function SelectRoleAdmin() {
       <Col md={4}></Col>
         <Col md={4} className="text-center">
           <img
-            src={userPicture}
-            alt={`${userName}'s profile`}
+            src={'/images/admin.jpg'}
+            alt={`Profile`}
             className="rounded-circle mb-4"
             width="100"
             height="100"

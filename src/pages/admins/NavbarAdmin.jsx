@@ -42,7 +42,11 @@ function NavbarAdmin() {
               Student Requirement
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Division Setting" id="nav-setting" className="flex-fill">
+          <NavDropdown
+            title="Division Setting"
+            id="nav-setting"
+            className="flex-fill"
+          >
             <NavDropdown.Item href="/editReqOfDivision">
               Requirement
             </NavDropdown.Item>
@@ -51,9 +55,11 @@ function NavbarAdmin() {
             <NavDropdown.Divider />
             <NavDropdown.Item href="/assignAdvisee">Advisee</NavDropdown.Item>
           </NavDropdown>
-          <Nav.Item className="flex-fill">
-            <Nav.Link href="/profileAdmin">Profile</Nav.Link>
-          </Nav.Item>
+          <NavDropdown title="Profile" id="nav-profile" className="flex-fill">
+            <NavDropdown.Item href="/">Select Role</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/profileAdmin">Profile</NavDropdown.Item>
+          </NavDropdown>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

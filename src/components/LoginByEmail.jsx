@@ -82,7 +82,6 @@ function LoginByEmail() {
             try {
               const instructor = await getInstructorByEmail(email);
               if (instructor) {
-                userRecord.role = "instructor";
                 userRecord.name = instructor[0].instructorName;
                 userRecord.division = instructor[0].division;
               }
@@ -96,10 +95,10 @@ function LoginByEmail() {
           }
 
           if (userRecord) {
-            Cookies.set("role", userRecord.role, { expires: 7 });
+            Cookies.set("role", JSON.stringify(userRecord.role), { expires: 7 });
             Cookies.set("user", JSON.stringify(userRecord), { expires: 7 });
 
-            localStorage.setItem("role", userRecord.role);
+            localStorage.setItem("role", JSON.stringify(userRecord.role));
             localStorage.setItem("user", JSON.stringify(userRecord));
 
             setUser(userRecord);
