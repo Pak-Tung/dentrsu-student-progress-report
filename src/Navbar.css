@@ -13,3 +13,19 @@
       justify-content: "center";
       align-items: "center";
   }
+
+  @media (max-width: 767px) {
+    .mb-2 {
+      margin-bottom: 10px;
+    }
+  
+    .dropdown-menu.show {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .myDiv {
+      margin-bottom: 10px;
+    }
+  }
+  

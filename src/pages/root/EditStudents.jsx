@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { getAllStudents, getAllInstructors } from "../../features/apiCalls";
 import "../../App.css";
+import "../../Navbar.css";
 import {
   Container,
   Row,
@@ -161,103 +162,115 @@ function EditStudents() {
           <Alert variant="danger">{error}</Alert>
         ) : (
           <>
-            <div
-              className="justify-content-center"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: 20,
-              }}
-            >
-              <DropdownButton
-                id="teamleader-dropdown"
-                title={
-                  selectedTeamleader !== null
-                    ? teamleaderOptions.find(
-                        (option) => option.value === selectedTeamleader
-                      )?.label
-                    : "Select Team Leader"
-                }
-                variant="dark"
-                className="me-2"
+            <Row className="d-flex justify-content-center">
+              <div
+                className="justify-content-center"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  margin: 20,
+                }}
               >
-                {teamleaderOptions.map((option) => (
-                  <Dropdown.Item
-                    key={option.value}
-                    active={selectedTeamleader === option.value}
-                    onClick={() => setSelectedTeamleader(option.value)}
+                <Col xs={12} sm={6} md={3} className="mb-2">
+                  <DropdownButton
+                    id="teamleader-dropdown"
+                    title={
+                      selectedTeamleader !== null
+                        ? teamleaderOptions.find(
+                            (option) => option.value === selectedTeamleader
+                          )?.label
+                        : "Select Team Leader"
+                    }
+                    variant="dark"
+                    className="me-2"
                   >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-              <DropdownButton
-                id="year-dropdown"
-                title={
-                  selectedYear !== null
-                    ? yearOptions.find(
-                        (option) => option.value === selectedYear
-                      )?.label
-                    : "Select Year"
-                }
-                variant="dark"
-                className="me-2"
-              >
-                {yearOptions.map((option) => (
-                  <Dropdown.Item
-                    key={option.value}
-                    active={selectedYear === option.value}
-                    onClick={() => setSelectedYear(option.value)}
+                    {teamleaderOptions.map((option) => (
+                      <Dropdown.Item
+                        key={option.value}
+                        active={selectedTeamleader === option.value}
+                        onClick={() => setSelectedTeamleader(option.value)}
+                      >
+                        {option.label}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                </Col>
+                <Col xs={12} sm={6} md={3} className="mb-2">
+                  <DropdownButton
+                    id="year-dropdown"
+                    title={
+                      selectedYear !== null
+                        ? yearOptions.find(
+                            (option) => option.value === selectedYear
+                          )?.label
+                        : "Select Year"
+                    }
+                    variant="dark"
+                    className="me-2"
                   >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-              <DropdownButton
-                id="floor-dropdown"
-                title={
-                  selectedFloor !== null
-                    ? floorOptions.find(
-                        (option) => option.value === selectedFloor
-                      )?.label
-                    : "Select Floor"
-                }
-                variant="dark"
-                className="me-2"
-              >
-                {floorOptions.map((option) => (
-                  <Dropdown.Item
-                    key={option.value}
-                    active={selectedFloor === option.value}
-                    onClick={() => setSelectedFloor(option.value)}
+                    {yearOptions.map((option) => (
+                      <Dropdown.Item
+                        key={option.value}
+                        active={selectedYear === option.value}
+                        onClick={() => setSelectedYear(option.value)}
+                      >
+                        {option.label}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                </Col>
+                <Col xs={12} sm={6} md={3} className="mb-2">
+                  <DropdownButton
+                    id="floor-dropdown"
+                    title={
+                      selectedFloor !== null
+                        ? floorOptions.find(
+                            (option) => option.value === selectedFloor
+                          )?.label
+                        : "Select Floor"
+                    }
+                    variant="dark"
+                    className="me-2"
                   >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-              <DropdownButton
-                id="bay-dropdown"
-                title={
-                  selectedBay !== null
-                    ? bayOptions.find((option) => option.value === selectedBay)
-                        ?.label
-                    : "Select Bay"
-                }
-                variant="dark"
-                className="me-2"
-              >
-                {bayOptions.map((option) => (
-                  <Dropdown.Item
-                    key={option.value}
-                    active={selectedBay === option.value}
-                    onClick={() => setSelectedBay(option.value)}
+                    {floorOptions.map((option) => (
+                      <Dropdown.Item
+                        key={option.value}
+                        active={selectedFloor === option.value}
+                        onClick={() => setSelectedFloor(option.value)}
+                      >
+                        {option.label}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                </Col>
+                <Col xs={12} sm={6} md={3} className="mb-2">
+                  <DropdownButton
+                    id="bay-dropdown"
+                    title={
+                      selectedBay !== null
+                        ? bayOptions.find(
+                            (option) => option.value === selectedBay
+                          )?.label
+                        : "Select Bay"
+                    }
+                    variant="dark"
+                    className="me-2"
                   >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-            </div>
+                    {bayOptions.map((option) => (
+                      <Dropdown.Item
+                        key={option.value}
+                        active={selectedBay === option.value}
+                        onClick={() => setSelectedBay(option.value)}
+                      >
+                        {option.label}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                </Col>
+              </div>
+            </Row>
             <ListGroup>
               {filteredStudents.map((student) => (
                 <ListGroup.Item
@@ -266,21 +279,21 @@ function EditStudents() {
                   className="myDiv"
                 >
                   <Row>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                       <strong>ID:</strong> {student.studentId} <br />
                       <strong>Name:</strong> {student.title}{" "}
                       {student.studentName}
                     </Col>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                       <strong>Year:</strong>{" "}
                       {calculateStudentYear(student.startClinicYear)}th
                       <br />
                       <strong>Email:</strong> {student.studentEmail}
                     </Col>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                       <strong>Status:</strong> {student.status} <br />
                     </Col>
-                    <Col>
+                    <Col xs={12} sm={6} md={3}>
                       <strong>Team Leader:</strong>{" "}
                       {getInstructorName(student.teamleaderEmail)} <br />
                       <strong>Bay:</strong> {"M" + student.floor}

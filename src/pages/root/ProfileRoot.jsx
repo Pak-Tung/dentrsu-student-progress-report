@@ -69,7 +69,7 @@ function ProfileRoot() {
             <div className="d-flex justify-content-center mb-4">
               <img
                 // src={userPicture}
-                src={'/images/root.jpg'}
+                src={'/images/root.png'}
                 alt={`Profile`}
                 className="rounded-circle"
                 width="180"

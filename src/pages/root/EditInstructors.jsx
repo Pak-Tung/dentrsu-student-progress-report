@@ -1,16 +1,14 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { getAllInstructors, getAllDivisions } from "../../features/apiCalls";
+import { getAllInstructors } from "../../features/apiCalls";
 import "../../App.css";
-import Cookies from "js-cookie";
+import "../../Navbar.css";
 import {
   Container,
   Row,
   Col,
   ListGroup,
-  Badge,
   Dropdown,
   DropdownButton,
-  Modal,
   Alert,
   Spinner,
 } from "react-bootstrap";
@@ -94,39 +92,32 @@ function EditInstructors() {
           <Alert variant="danger">{error}</Alert>
         ) : (
           <>
-            <div
-              className="justify-content-center"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: 20,
-              }}
-            >
-              {/* Dropdown to select display group according to division */}
-              <DropdownButton
-                id="division-dropdown"
-                title={
-                  selectedDivision !== null
-                    ? divisionOptions.find(
-                        (option) => option.value === selectedDivision
-                      )?.label
-                    : "Select Division"
-                }
-                variant="dark"
-                className="me-2"
-              >
-                {divisionOptions.map((option) => (
-                  <Dropdown.Item
-                    key={option.value}
-                    active={selectedDivision === option.value}
-                    onClick={() => setSelectedDivision(option.value)}
-                  >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-            </div>
+            <Row className="d-flex justify-content-center">
+              <Col xs={12} sm={6} md={4} className="mb-2">
+                <DropdownButton
+                  id="division-dropdown"
+                  title={
+                    selectedDivision !== null
+                      ? divisionOptions.find(
+                          (option) => option.value === selectedDivision
+                        )?.label
+                      : "Select Division"
+                  }
+                  variant="dark"
+                  className="me-2"
+                >
+                  {divisionOptions.map((option) => (
+                    <Dropdown.Item
+                      key={option.value}
+                      active={selectedDivision === option.value}
+                      onClick={() => setSelectedDivision(option.value)}
+                    >
+                      {option.label}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
+              </Col>
+            </Row>
             <ListGroup>
               {instructors
                 .filter(
@@ -135,38 +126,37 @@ function EditInstructors() {
                     instructor.division === selectedDivision
                 )
                 .map((instructor) => (
-                  <div>
-                    <ListGroup.Item
-                      key={instructor.id}
-                      onClick={() => handleUpdateInstructor(instructor)}
-                      className="myDiv"
-                    >
-                      <Row>
-                        <Col>
-                          <strong>ID:</strong> {instructor.id} <br />
-                          <strong>Name:</strong> {instructor.title}{" "}
-                          {instructor.instructorName}
-                        </Col>
-                        <Col>
-                          <strong>Division:</strong> {fullNameDivision(instructor.division)}
-                          <br />
-                          <strong>Email:</strong> {instructor.instructorEmail}
-                        </Col>
-                        <Col>
-                          <strong>Role:</strong> {instructor.permission} <br />
-                          {instructor.teamleader === 1 && (
-                            <>
-                              <strong>Teamleader:</strong>{" "}
-                              {instructor.teamleader === 1
-                                ? "M" + instructor.floor + instructor.bay
-                                : "N/A"}{" "}
-                              <br />
-                            </>
-                          )}
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  </div>
+                  <ListGroup.Item
+                    key={instructor.id}
+                    onClick={() => handleUpdateInstructor(instructor)}
+                    className="myDiv"
+                  >
+                    <Row>
+                      <Col xs={12} sm={6} md={3}>
+                        <strong>ID:</strong> {instructor.id} <br />
+                        <strong>Name:</strong> {instructor.title}{" "}
+                        {instructor.instructorName}
+                      </Col>
+                      <Col xs={12} sm={6} md={3}>
+                        <strong>Division:</strong>{" "}
+                        {fullNameDivision(instructor.division)}
+                        <br />
+                        <strong>Email:</strong> {instructor.instructorEmail}
+                      </Col>
+                      <Col xs={12} sm={6} md={3}>
+                        <strong>Role:</strong> {instructor.permission} <br />
+                        {instructor.teamleader === 1 && (
+                          <>
+                            <strong>Teamleader:</strong>{" "}
+                            {instructor.teamleader === 1
+                              ? "M" + instructor.floor + instructor.bay
+                              : "N/A"}{" "}
+                            <br />
+                          </>
+                        )}
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
                 ))}
             </ListGroup>
             {selectedInstructor && (

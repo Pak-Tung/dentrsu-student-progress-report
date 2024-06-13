@@ -40,29 +40,23 @@ function AddDivision() {
             <ListGroup>
               <ListGroup.Item>
                 <Row>
-                  <Col md={3} className="text-center"> </Col>
                   <Col md={2} className="text-center">
                     <strong>Division ID</strong>
                   </Col>
-                  <Col md={2} className="text-center">
+                  <Col md={6} className="text-center">
                     <strong>Division Name</strong>
                   </Col>
-                  <Col md={2} className="text-center">
+                  <Col md={4} className="text-center">
                     <strong>Division Short_Name</strong>
-                  </Col>
-                  <Col md={3} className="text-center">
-                    <strong></strong>
                   </Col>
                 </Row>
               </ListGroup.Item>
               {divisions.map((division) => (
                 <ListGroup.Item key={division.id}>
                   <Row>
-                    <Col md={3} className="text-center"> </Col>
                     <Col md={2} className="text-center">{division.id}</Col>
-                    <Col md={2} className="text-center">{division.fullName}</Col>
-                    <Col md={2} className="text-center">{division.shortName}</Col>
-                    <Col md={3} className="text-center"></Col>
+                    <Col md={6} className="text-center">{division.fullName}</Col>
+                    <Col md={4} className="text-center">{division.shortName}</Col>
                     {/* <Col md={2}> <Button variant="outline-dark">Edit Division</Button></Col> */}
 
                   </Row>

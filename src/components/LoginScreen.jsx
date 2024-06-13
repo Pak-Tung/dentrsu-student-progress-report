@@ -9,13 +9,19 @@ function LoginScreen({ handleLoginSuccess }) {
     <Container>
       <Row className="d-flex justify-content-center">
         <Col className="text-center">
+        <h3>Comprehensive Dental Care Clinic</h3>
           <h2>Online Requirements</h2>
+        </Col>
+      </Row>
+      <Row className="d-flex justify-content-center">
+        <Col className="text-center">
+          <img src="/logo_png.png" alt="Logo" width="250" />
         </Col>
       </Row>
       <br />
       <Row className="d-flex justify-content-center">
         <Col className="text-center">
-          <p>Sign in with "@rsu.ac.th" Account</p>
+          <p>Only <b>"@rsu.ac.th"</b>  Account</p>
         </Col>
       </Row>
       <Row className="d-flex justify-content-center">
