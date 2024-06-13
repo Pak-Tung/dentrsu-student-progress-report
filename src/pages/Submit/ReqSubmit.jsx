@@ -12,14 +12,13 @@ function ReqSubmit() {
   if (Cookies.get("user") === undefined) {
     Cookies.set("user", JSON.stringify({}));
   } else {
-    //console.log("User email", Cookies.get("user"));
+
   }
 
   const user = JSON.parse(localStorage.getItem("user"));
-  //const user = JSON.parse(Cookies.get("user"));
-  //console.log("User in Profile", user);
+
   const userEmail = user.email;
-  //console.log("UserEmail", userEmail);
+
 
   const [student, setStudent] = useState([]);
   const [divisions, setDivisions] = useState([]);
