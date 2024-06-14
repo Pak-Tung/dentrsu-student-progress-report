@@ -7,7 +7,6 @@ import {
 import { Container, Row, Col, Badge, ListGroup } from "react-bootstrap";
 
 function SumByDiv({ division }) {
-  //console.log("division at SumByDiv", division);
 
   // Ensure user data is stored in cookies
   if (Cookies.get("user") === undefined) {
@@ -25,18 +24,18 @@ function SumByDiv({ division }) {
 
   // Set division title based on the division code
   useEffect(() => {
-    const divisionTitles = {
-      oper: "Operative",
-      endo: "Endodontic",
-      perio: "Periodontic",
-      prosth: "Prosthodontic",
-      diag: "Oral Diagnosis",
-      radio: "Oral Radiology",
-      sur: "Oral Surgery",
-      pedo: "Pediatric Dentistry",
-      ortho: "Orthodontic",
-    };
-    setDivTitle(divisionTitles[division] || "Unknown Division");
+      const divisionTitles = {
+        oper: "Operative",
+        endo: "Endodontic",
+        perio: "Periodontic",
+        prosth: "Prosthodontic",
+        diag: "Oral Diagnosis",
+        radio: "Oral Radiology",
+        sur: "Oral Surgery",
+        pedo: "Pediatric Dentistry",
+        ortho: "Orthodontic",
+      };
+      setDivTitle(divisionTitles[division] || "Unknown Division");
   }, [division]);
 
   // Fetch requirement data by student email and division
@@ -102,47 +101,51 @@ function SumByDiv({ division }) {
   };
 
   return (
-    <Container fluid="md">
-      <ListGroup>
-        <ListGroup.Item active>
-          <Row>
-            <Col>{divTitle} Requirement</Col>
-            <Col className="text-center">RSU Requirement</Col>
-            <Col className="text-center">Council Requirement</Col>
-          </Row>
-        </ListGroup.Item>
-
-        {getOrderedTypes().map((type) => {
-          const { req_RSU, req_DC } = aggregatedData[type] || {
-            req_RSU: 0,
-            req_DC: 0,
-          };
-          const min_RSU = displayMinValue(type, "req_RSU");
-          const min_DC = displayMinValue(type, "req_DC");
-          return (
-            <ListGroup.Item key={type}>
+    <>
+        <Container fluid="md">
+          <ListGroup>
+            <ListGroup.Item className="custom-list-item">
               <Row>
-                <Col>
-                  <h4>
-                    <Badge bg={getBadgeBg(req_RSU, req_DC, min_RSU, min_DC)}>
-                      {type}
-                    </Badge>
-                  </h4>
-                </Col>
-                <Col className="text-center">
-                  <b>{min_RSU !== null ? req_RSU : ""}</b>{" "}
-                  {min_RSU !== null ? "of " + min_RSU : ""}
-                </Col>
-                <Col className="text-center">
-                  <b>{min_DC !== null ? req_DC : ""}</b>{" "}
-                  {min_DC !== null ? "of " + min_DC : ""}
-                </Col>
+                <Col>{divTitle} Requirement</Col>
+                <Col className="text-center">RSU Requirement</Col>
+                <Col className="text-center">Council Requirement</Col>
               </Row>
             </ListGroup.Item>
-          );
-        })}
-      </ListGroup>
-    </Container>
+
+            {getOrderedTypes().map((type) => {
+              const { req_RSU, req_DC } = aggregatedData[type] || {
+                req_RSU: 0,
+                req_DC: 0,
+              };
+              const min_RSU = displayMinValue(type, "req_RSU");
+              const min_DC = displayMinValue(type, "req_DC");
+              return (
+                <ListGroup.Item key={type}>
+                  <Row>
+                    <Col>
+                      <h4>
+                        <Badge
+                          bg={getBadgeBg(req_RSU, req_DC, min_RSU, min_DC)}
+                        >
+                          {type}
+                        </Badge>
+                      </h4>
+                    </Col>
+                    <Col className="text-center">
+                      <b>{min_RSU !== null ? req_RSU : ""}</b>{" "}
+                      {min_RSU !== null ? "of " + min_RSU : ""}
+                    </Col>
+                    <Col className="text-center">
+                      <b>{min_DC !== null ? req_DC : ""}</b>{" "}
+                      {min_DC !== null ? "of " + min_DC : ""}
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+              );
+            })}
+          </ListGroup>
+        </Container>
+    </>
   );
 }
 

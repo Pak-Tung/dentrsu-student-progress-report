@@ -28,4 +28,16 @@
       margin-bottom: 10px;
     }
   }
+
+  .custom-list-item {
+    background-color: black !important;
+    color: white !important;
+  }
+
+  .center-loading {
+
+    position: absolute;
+    top: 30%;
+    left: 30%;
+  }
   

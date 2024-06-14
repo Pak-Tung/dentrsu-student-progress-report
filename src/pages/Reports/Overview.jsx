@@ -2,17 +2,37 @@ import React, { useState, useEffect } from "react";
 import { getStudentByEmail, getAllDivisions } from "../../features/apiCalls";
 import Cookies from "js-cookie";
 import Navbar from "../../components/Navbar";
-import {
-  Container,
-  Row,
-  Col,
-  Dropdown,
-  DropdownButton,
-} from "react-bootstrap";
+import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import SumByDiv from "./SumByDiv";
 import LoginByEmail from "../../components/LoginByEmail";
+import "../../Navbar.css";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function Overview() {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   // Initialize user data from cookies
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
@@ -29,21 +49,27 @@ function Overview() {
 
   // Fetch student data based on email
   useEffect(() => {
-    const fetchStudentData = async () => {
-      const result = await getStudentByEmail(userEmail);
-      const { error } = result;
-      const data = result[0];
-      if (error) {
-        console.log(error);
-      } else {
-        if (data) {
-          setStudent(data);
+    setTimeout(() => {
+      const fetchStudentData = async () => {
+        const result = await getStudentByEmail(userEmail);
+        const { error } = result;
+        const data = result[0];
+        if (error) {
+          console.log(error);
         } else {
-          console.log("Data is undefined");
+          if (data) {
+            setStudent(data);
+            setLoading(true);
+            setTimeout(() => {
+              setSuccess(true);
+            }, 1200);
+          } else {
+            console.log("Data is undefined");
+          }
         }
-      }
-    };
-    fetchStudentData();
+      };
+      fetchStudentData();
+    }, 1500);
   }, [userEmail]);
 
   // Fetch all divisions data
@@ -111,43 +137,76 @@ function Overview() {
     <>
       {userEmail !== undefined ? (
         <>
-          <Navbar />
-          <br />
-          <Container fluid="md">
-            <Row className="d-flex justify-content-center">
-              <Col>
-                <div className="d-flex justify-content-center">
-                  <DropdownButton
-                    id="dropdown-basic-button"
-                    title={selectedDivisionName}
-                    onSelect={handleSelectDivision}
-                  >
-                    <Dropdown.Item eventKey="all">All Divisions</Dropdown.Item>
-                    {divisions.map((division) => (
-                      <Dropdown.Item
-                        key={division.id}
-                        eventKey={division.shortName}
+          {success ? (
+            <>
+              <Navbar />
+              <br />
+              <Container fluid="md">
+                <Row className="d-flex justify-content-center">
+                  <Col>
+                    <div className="d-flex justify-content-center">
+                      <DropdownButton
+                        variant="outline-dark"
+                        id="dropdown-basic-button"
+                        title={selectedDivisionName}
+                        onSelect={handleSelectDivision}
                       >
-                        {division.fullName}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                </div>
-              </Col>
-            </Row>
-            <br />
-            <Row className="d-flex justify-content-center">
-              <div className="d-flex justify-content-center">
-                {renderDivisionComponent()}
+                        <Dropdown.Item eventKey="all">
+                          All Divisions
+                        </Dropdown.Item>
+                        {divisions.map((division) => (
+                          <Dropdown.Item
+                            key={division.id}
+                            eventKey={division.shortName}
+                          >
+                            {division.fullName}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+                    </div>
+                  </Col>
+                </Row>
+                <br />
+                <Row className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center">
+                    {renderDivisionComponent()}
+                  </div>
+                </Row>
+                <br />
+              </Container>
+            </>
+          ) : (
+            <FadeIn>
+              <div>
+                {!loading ? (
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                ) : (
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions2}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                )}
               </div>
-            </Row>
-            <br />
-          </Container>
+            </FadeIn>
+          )}
         </>
       ) : (
         <>
           <div>
-          <LoginByEmail />
+            <LoginByEmail />
           </div>
         </>
       )}
