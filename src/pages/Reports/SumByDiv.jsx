@@ -4,9 +4,25 @@ import {
   getDivReqByStudentEmail,
   getReqByDivision,
 } from "../../features/apiCalls";
-import { Container, Row, Col, Badge, ListGroup } from "react-bootstrap";
+import { Container, Row, Col, Badge, ListGroup, Alert } from "react-bootstrap";
+
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function SumByDiv({ division }) {
+  const [loadingStudent, setLoadingStudent] = useState(true);
+  const [error, setError] = useState(null);
 
   // Ensure user data is stored in cookies
   if (Cookies.get("user") === undefined) {
@@ -41,12 +57,13 @@ function SumByDiv({ division }) {
   // Fetch requirement data by student email and division
   useEffect(() => {
     const fetchData = async () => {
+      try {
       const result = await getDivReqByStudentEmail(userEmail, division);
-      const { error } = result;
-      if (error) {
-        console.error(error);
-      } else {
-        setRqm(result);
+      setRqm(result);
+      } catch (error) {
+        setError("Error fetching data:", error);
+      } finally {
+        setLoadingStudent(false);
       }
     };
     fetchData();
@@ -55,12 +72,13 @@ function SumByDiv({ division }) {
   // Fetch minimum requirements data by division
   useEffect(() => {
     const fetchMinReqData = async () => {
+      try {
       const result = await getReqByDivision(division);
-      const { error } = result;
-      if (error) {
-        console.error(error);
-      } else {
-        setMinReq(result);
+      setMinReq(result);
+      } catch (error) {
+        setError("Error fetching data:", error);
+      } finally {
+        setLoadingStudent(false);
       }
     };
     fetchMinReqData();
@@ -112,7 +130,21 @@ function SumByDiv({ division }) {
               </Row>
             </ListGroup.Item>
 
-            {getOrderedTypes().map((type) => {
+            {loadingStudent ? (
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
+          ) : error ? (
+            <div className="d-flex justify-content-center">
+              <Alert variant="danger">{error}</Alert>
+            </div>
+          ) : getOrderedTypes().map((type) => {
               const { req_RSU, req_DC } = aggregatedData[type] || {
                 req_RSU: 0,
                 req_DC: 0,

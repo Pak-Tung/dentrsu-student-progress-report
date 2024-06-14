@@ -5,8 +5,24 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import LoginByEmail from "../../components/LoginByEmail";
 import { getInstructorByEmail } from "../../features/apiCalls";
 import { useNavigate } from "react-router-dom";
+import { Alert } from "react-bootstrap";
+import * as loadingData from "../../components/loading.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function ProfileAdmin() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
@@ -25,7 +41,7 @@ function ProfileAdmin() {
         try {
           const result = await getInstructorByEmail(userEmail);
           if (result.error) {
-            console.log(result.error);
+            setError(result.error);
           } else if (result[0]) {
             setInstructor(result[0]);
             Cookies.set("instructor", result[0], { expires: 7 });
@@ -34,10 +50,12 @@ function ProfileAdmin() {
               JSON.stringify(result[0].division)
             );
           } else {
-            console.log("Instructor data is undefined");
+            setError("Instructor data is undefined");
           }
         } catch (err) {
-          console.log("Failed to fetch instructor data");
+          setError("Failed to fetch instructor data");
+        } finally {
+          setLoading(false);
         }
       };
       fetchInstructorData();
@@ -55,7 +73,7 @@ function ProfileAdmin() {
     localStorage.removeItem("email");
     localStorage.removeItem("token");
     setUser({});
-    navigate('/');
+    navigate("/");
     window.location.reload();
   }, [navigate]);
 
@@ -70,36 +88,48 @@ function ProfileAdmin() {
         <div className="d-flex justify-content-center mb-4">
           <h2>Admin Profile</h2>
         </div>
-        <div className="d-flex justify-content-center mb-4">
-          <img
-            // src={userPicture}
-            src={'/images/admin.jpg'}
-            alt={`Profile`}
-            className="rounded-circle"
-            width="180"
-            height="180"
-          />
-        </div>
-        <div className="d-flex justify-content-center">
-          <div className="card" style={{ width: "18rem" }}>
-            <div className="card-header text-center">
-              <h5 className="card-title">{userName}</h5>
-              <p className="card-text">Email: {userEmail}</p>
+        {loading ? (
+          <div className="d-flex justify-content-center">
+            <Lottie options={defaultOptions} height={120} width={120} />
+          </div>
+        ) : error ? (
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
+        ) : (
+          <>
+            <div className="d-flex justify-content-center mb-4">
+              <img
+                // src={userPicture}
+                src={"/images/admin.jpg"}
+                alt={`Profile`}
+                className="rounded-circle"
+                width="180"
+                height="180"
+              />
             </div>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">
-                Division: {instructor.division}
-              </li>
-            </ul>
-            <div className="card-footer">
-              <div className="d-grid gap-2 col-12 mx-auto">
-                <button className="btn btn-outline-danger" onClick={logOut}>
-                  Log out
-                </button>
+            <div className="d-flex justify-content-center">
+              <div className="card" style={{ width: "18rem" }}>
+                <div className="card-header text-center">
+                  <h5 className="card-title">{userName}</h5>
+                  <p className="card-text">Email: {userEmail}</p>
+                </div>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">
+                    Division: {instructor.division}
+                  </li>
+                </ul>
+                <div className="card-footer">
+                  <div className="d-grid gap-2 col-12 mx-auto">
+                    <button className="btn btn-outline-danger" onClick={logOut}>
+                      Log out
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </>
   );

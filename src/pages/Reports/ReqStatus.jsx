@@ -4,8 +4,21 @@ import { getStudentByEmail, getAllDivisions } from "../../features/apiCalls";
 import Cookies from "js-cookie";
 import Navbar from "../../components/Navbar";
 import StatusByDiv from "../../components/StatusByDiv";
-import { Form, Container, Row, Col } from "react-bootstrap";
+import { Form, Container, Row, Col, Alert } from "react-bootstrap";
 import LoginByEmail from "../../components/LoginByEmail";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function ReqStatus() {
   const [user, setUser] = useState(() => {
@@ -19,9 +32,11 @@ function ReqStatus() {
   const [selectedDivision, setSelectedDivision] = useState(() => {
     return localStorage.getItem("selectedDivision") || "oper";
   });
-  const [requirementLabel, setRequirementLabel] = useState("Operative Requirement");
+  const [requirementLabel, setRequirementLabel] = useState(
+    "Operative Requirement"
+  );
   const [loadingStudent, setLoadingStudent] = useState(true);
-  const [loadingDivisions, setLoadingDivisions] = useState(true); 
+  const [loadingDivisions, setLoadingDivisions] = useState(true);
 
   const [error, setError] = useState(null);
 
@@ -40,10 +55,9 @@ function ReqStatus() {
           }
         } catch (error) {
           setError("Error fetching student data:", error);
-        }finally {
+        } finally {
           setLoadingStudent(false);
         }
-
       }
     };
 
@@ -62,7 +76,7 @@ function ReqStatus() {
         }
       } catch (error) {
         setError("Error fetching divisions:", error);
-      }finally {
+      } finally {
         setLoadingDivisions(false);
       }
     };
@@ -118,19 +132,24 @@ function ReqStatus() {
             </Row>
           </Container>
           {loadingStudent ? (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border text-primary" role="status">
-              <span className="sr-only">Loading...</span>
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
+          ) : error ? (
+            <div className="d-flex justify-content-center">
+              <Alert variant="danger">{error}</Alert>
             </div>
-          </div>
-        ) : error ? (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        ) : (
-          <div className="d-flex justify-content-center">
-            <StatusByDiv division={selectedDivision} key={selectedDivision} />
-          </div>)}
+          ) : (
+            <div className="d-flex justify-content-center">
+              <StatusByDiv division={selectedDivision} key={selectedDivision} />
+            </div>
+          )}
         </>
       ) : (
         <LoginByEmail />

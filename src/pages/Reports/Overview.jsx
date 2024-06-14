@@ -49,7 +49,7 @@ function Overview() {
 
   // Fetch student data based on email
   useEffect(() => {
-    setTimeout(() => {
+
       const fetchStudentData = async () => {
         const result = await getStudentByEmail(userEmail);
         const { error } = result;
@@ -69,7 +69,7 @@ function Overview() {
         }
       };
       fetchStudentData();
-    }, 1500);
+
   }, [userEmail]);
 
   // Fetch all divisions data

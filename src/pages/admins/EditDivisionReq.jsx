@@ -1,10 +1,29 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
-import { Container, Row, Col, ListGroup, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Alert,
+} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getAllReqByDivision } from "../../features/apiCalls";
 import "../../App.css";
 import ModalEditDivReq from "./ModalEditDivReq";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function EditApprovedReq() {
   const [division, setDivision] = useState(() => {
@@ -60,7 +79,7 @@ function EditApprovedReq() {
   };
   const handleShow = () => setShow(true);
 
-  const handleSelect = async (req) => { 
+  const handleSelect = async (req) => {
     setSelectedReq(req);
     handleShow();
   };
@@ -74,11 +93,19 @@ function EditApprovedReq() {
           <h4>Minimum Requirement of {fullNameDivision(division)} Division</h4>
         </div>
         {loading ? (
-          <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-          </Spinner>
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         ) : error ? (
-          <div className="text-danger">{error}</div>
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
         ) : (
           <ListGroup>
             <ListGroup.Item>
@@ -104,7 +131,7 @@ function EditApprovedReq() {
               <ListGroup.Item
                 key={req.id}
                 className="myDiv"
-                onClick={()=>handleSelect(req)}
+                onClick={() => handleSelect(req)}
                 style={{ cursor: "pointer" }}
               >
                 <Row>
@@ -120,11 +147,11 @@ function EditApprovedReq() {
         )}
       </Container>
       {selectedReq && ( // Conditionally render the modal
-      <ModalEditDivReq
-        show={show}
-        handleClose={handleClose}
-        divReq={selectedReq}
-      />
+        <ModalEditDivReq
+          show={show}
+          handleClose={handleClose}
+          divReq={selectedReq}
+        />
       )}
     </>
   );

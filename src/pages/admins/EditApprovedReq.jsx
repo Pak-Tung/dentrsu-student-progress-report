@@ -1,7 +1,30 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
-import { Container, Row, Col, Form, Button, ListGroup, Spinner, InputGroup, Badge } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  ListGroup,
+  Alert,
+  InputGroup,
+  Badge,
+} from "react-bootstrap";
 import { getDivReqById, updateDivReqById } from "../../features/apiCalls";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function EditApprovedReq() {
   const [division, setDivision] = useState(() => {
@@ -21,7 +44,9 @@ function EditApprovedReq() {
       const result = await getDivReqById(idInput, division);
       setReqData(result);
     } catch (err) {
-      setError("Failed to fetch minimum requirement data. Please try again later.");
+      setError(
+        "Failed to fetch minimum requirement data. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
@@ -43,7 +68,9 @@ function EditApprovedReq() {
   };
 
   const sortedReqData = useMemo(() => {
-    return Array.isArray(reqData) ? reqData.sort((a, b) => a.id - b.id) : [reqData];
+    return Array.isArray(reqData)
+      ? reqData.sort((a, b) => a.id - b.id)
+      : [reqData];
   }, [reqData]);
 
   const handleSetStatus = async () => {
@@ -58,7 +85,9 @@ function EditApprovedReq() {
       await updateDivReqById(reqId, updatedReq, division);
       fetchData();
     } catch (err) {
-      setError("Failed to update the requirement status. Please try again later.");
+      setError(
+        "Failed to update the requirement status. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
@@ -92,13 +121,19 @@ function EditApprovedReq() {
         </Form>
 
         {loading ? (
-          <div className="d-flex justify-content-center">
-            <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
-          </div>
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         ) : error ? (
-          <div className="text-danger text-center">{error}</div>
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
         ) : reqData.length === 0 ? (
           <div className="text-center">No data available for the given ID.</div>
         ) : (

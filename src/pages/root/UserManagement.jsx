@@ -12,10 +12,24 @@ import {
   Dropdown,
   InputGroup,
   Form,
+  Alert,
 } from "react-bootstrap";
 import ModalAddNewStudent from "./ModalAddNewStudent";
 import ModalAddNewInstructor from "./ModalAddNewInstructor";
 import ModalEditUser from "./ModalEditUser";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
@@ -165,9 +179,19 @@ function UserManagement() {
           <h4>All Users</h4>
         </div>
         {loading ? (
-          <div>Loading...</div>
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         ) : error ? (
-          <div>{error}</div>
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
         ) : (
           <>
             <ListGroup>

@@ -1,9 +1,29 @@
 import React, { useState, useEffect, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
-import { Container, Row, Col, ListGroup, Spinner, Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getInstructorsByDivision } from "../../features/apiCalls";
 import ModalManageAdvisor from "./ModalManageAdvisor";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function DivisionAdvisor() {
   const [division, setDivision] = useState(() => {
@@ -68,11 +88,15 @@ function DivisionAdvisor() {
           </Col>
         </Row>
         {loading ? (
-          <Row className="justify-content-center">
-            <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
-          </Row>
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         ) : error ? (
           <Row className="justify-content-center">
             <Alert variant="danger">{error}</Alert>
@@ -89,7 +113,8 @@ function DivisionAdvisor() {
                   <Col md={3}></Col>
                   <Col md={4}>
                     <h5>
-                      {index + 1}. {instructor.title} {instructor.instructorName}
+                      {index + 1}. {instructor.title}{" "}
+                      {instructor.instructorName}
                     </h5>
                   </Col>
                   <Col md={2}>

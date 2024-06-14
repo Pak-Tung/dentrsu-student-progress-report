@@ -6,13 +6,29 @@ import { getTeamLeaderById } from "../../features/apiTL";
 import LoginByEmail from "../../components/LoginByEmail";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Badge,
-} from "react-bootstrap";
+import { Container, Row, Col, Badge } from "react-bootstrap";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
 
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function Profile() {
   const [user, setUser] = useState(() => {
@@ -26,54 +42,56 @@ function Profile() {
 
   const [student, setStudent] = useState({});
   const [teamLeader, setTeamLeader] = useState({});
-  const [loadingStudent, setLoadingStudent] = useState(true);
-  const [loadingTeamLeader, setLoadingTeamLeader] = useState(true);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (userEmail) {
-      const fetchStudentData = async () => {
-        setLoadingStudent(true);
+    const fetchStudentData = async () => {
+      if (userEmail) {
+        setLoading(true);
         try {
           const result = await getStudentByEmail(userEmail);
           if (result.error) {
             setError(result.error);
           } else if (result[0]) {
             setStudent(result[0]);
+            setSuccess(true);
           } else {
             setError("Student data is undefined");
           }
         } catch (err) {
           setError("Failed to fetch student data");
         } finally {
-          setLoadingStudent(false);
+          setLoading(false);
         }
-      };
-      fetchStudentData();
-    }
+      }
+    };
+    fetchStudentData();
   }, [userEmail]);
 
   useEffect(() => {
-    if (student.teamLeaderId) {
-      const fetchTeamLeaderData = async () => {
-        setLoadingTeamLeader(true);
+    const fetchTeamLeaderData = async () => {
+      if (student.teamLeaderId) {
+        setLoading(true);
         try {
           const res = await getTeamLeaderById(student.teamLeaderId);
           if (res.error) {
             setError(res.error);
           } else if (res[0]) {
             setTeamLeader(res[0]);
+            setSuccess(true);
           } else {
             setError("Team Leader data is undefined");
           }
         } catch (err) {
           setError("Failed to fetch team leader data");
         } finally {
-          setLoadingTeamLeader(false);
+          setLoading(false);
         }
-      };
-      fetchTeamLeaderData();
-    }
+      }
+    };
+    fetchTeamLeaderData();
   }, [student.teamLeaderId]);
 
   const navigate = useNavigate();
@@ -81,14 +99,9 @@ function Profile() {
     Cookies.remove("user");
     Cookies.remove("role");
     Cookies.remove("instructor");
-    localStorage.removeItem("user");
-    localStorage.removeItem("instructor");
-    localStorage.removeItem("role");
-    localStorage.removeItem("division");
-    localStorage.removeItem("email");
-    localStorage.removeItem("token");
+    localStorage.clear();
     setUser({});
-    navigate('/');
+    navigate("/");
     window.location.reload();
   }, [navigate]);
 
@@ -111,9 +124,8 @@ function Profile() {
         </div>
         <div className="d-flex justify-content-center mb-4">
           <img
-            // src={userPicture}
-            src={'/images/student_jpg.jpg'}
-            alt={'Profile'}
+            src={userPicture || "/images/student_jpg.jpg"}
+            alt="Profile"
             className="rounded-circle"
             width="100"
             height="100"
@@ -123,23 +135,16 @@ function Profile() {
           <Col className="d-flex justify-content-center mb-2">
             <Badge
               bg={student.status === "Complete" ? "success" : "danger"}
-              // pill
             >
               {student.status === "Complete" ? "Complete" : "Incomplete"}
             </Badge>
           </Col>
         </Row>
-        {loadingStudent || loadingTeamLeader ? (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border text-primary" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          </div>
-        ) : error ? (
+        {error ? (
           <div className="alert alert-danger" role="alert">
             {error}
           </div>
-        ) : (
+        ) : success ? (
           <div className="d-flex justify-content-center">
             <div className="card" style={{ width: "18rem" }}>
               <div className="card-header text-center">
@@ -171,6 +176,16 @@ function Profile() {
               </div>
             </div>
           </div>
+        ) : (
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         )}
       </div>
     </>

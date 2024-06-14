@@ -11,14 +11,29 @@ import {
   Dropdown,
   DropdownButton,
   Modal,
+  Alert,
 } from "react-bootstrap";
 import ModalUpdateReq from "./ModalUpdateReq";
+import * as loadingData from "../components/loading.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function StatusByDiv(division) {
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
   const [divisionReq, setDivisionReq] = useState([]);
+  const [loadingStudent, setLoadingStudent] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -26,12 +41,14 @@ function StatusByDiv(division) {
       const { error } = result;
       //console.log("result", result);
       if (error) {
-        console.log(error);
+        setError(error);
       } else {
         setDivisionReq(result);
       }
     } catch (error) {
-      console.error("Failed to fetch division requirements:", error);
+      setError("Failed to fetch division requirements:", error);
+    }finally {
+      setLoadingStudent(false);
     }
   }, [userEmail, division.division]);
 
@@ -146,7 +163,21 @@ function StatusByDiv(division) {
           </DropdownButton>
         </div>
         <ListGroup>
-          {divisionReq
+          {loadingStudent ? (
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
+          ) : error ? (
+            <div className="d-flex justify-content-center">
+              <Alert variant="danger">{error}</Alert>
+            </div>
+          ) : divisionReq
             .filter(
               (req) =>
                 (selectedApprovalStatus === null ||

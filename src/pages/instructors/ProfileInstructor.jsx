@@ -5,18 +5,33 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import LoginByEmail from "../../components/LoginByEmail";
 import { getInstructorByEmail } from "../../features/apiCalls";
 import { useNavigate } from "react-router-dom";
+import * as loadingData from "../../components/loading.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+import { Alert } from "react-bootstrap";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function ProfileInstructor() {
-  const [user, setUser] = useState(() => {
-    const savedUser = Cookies.get("user");
-    return savedUser ? JSON.parse(savedUser) : {};
-  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  const savedUser = Cookies.get("user");
+  const [user, setUser] = useState(savedUser ? JSON.parse(savedUser) : {});
+  console.log(user);
   const userEmail = user.email;
   const userName = user.name;
   const userPicture = user.picture;
 
-  const [instructor, setInstructor] = useState({});
+  const savedInstructor = localStorage.getItem("instructor");
+  const [instructor, setInstructor] = useState(savedInstructor ? JSON.parse(savedInstructor) : {});
 
   useEffect(() => {
     if (userEmail) {
@@ -24,23 +39,24 @@ function ProfileInstructor() {
         try {
           const result = await getInstructorByEmail(userEmail);
           if (result.error) {
-            console.log(result.error);
+            setError(result.error);
           } else if (result[0]) {
             setInstructor(result[0]);
-            Cookies.set('instructor', result[0], { expires: 7 });
-            localStorage.setItem('instructor', JSON.stringify(result[0]));
-            localStorage.setItem('division', result[0].division);
+            Cookies.set("instructor", JSON.stringify(result[0]), { expires: 7 });
+            localStorage.setItem("instructor", JSON.stringify(result[0]));
+            localStorage.setItem("division", result[0].division);
           } else {
-            console.log("Instructor data is undefined");
+            setError("Instructor data is undefined");
           }
         } catch (err) {
-          console.log("Failed to fetch instructor data");
+          setError("Failed to fetch instructor data");
+        } finally {
+          setLoading(false);
         }
       };
       fetchInstructorData();
     }
   }, [userEmail]);
-  
 
   const navigate = useNavigate();
   const logOut = useCallback(() => {
@@ -54,7 +70,7 @@ function ProfileInstructor() {
     localStorage.removeItem("email");
     localStorage.removeItem("token");
     setUser({});
-    navigate('/');
+    navigate("/");
     window.location.reload();
   }, [navigate]);
 
@@ -69,38 +85,53 @@ function ProfileInstructor() {
         <div className="d-flex justify-content-center mb-4">
           <h2>Instructor Profile</h2>
         </div>
-        <div className="d-flex justify-content-center mb-4">
-          <img
-            // src={userPicture}
-            src={'/images/instructor.jpg'}
-            alt={`Profile`}
-            className="rounded-circle"
-            width="200"
-            height="200"
-          />
-        </div>
-        <div className="d-flex justify-content-center">
-        <div className="card" style={{ width: "18rem" }}>
-              <div className="card-header text-center">
-                <h5 className="card-title">{userName}</h5>
-                <p className="card-text">Email: {userEmail}</p>
-              </div>
-              <ul className="list-group list-group-flush">
-              <li className="list-group-item">Division: {instructor.division}</li>
-              <li className="list-group-item text-center" style={{ backgroundColor: "#F7F7F7" }}><b>TeamLeader Role</b></li>
-              <li className="list-group-item">Floor: {instructor.floor}</li>
-              <li className="list-group-item">Bay: {instructor.bay}</li>
-              </ul>
-              <div className="card-footer">
-                <div className="d-grid gap-2 col-12 mx-auto">
-                  <button className="btn btn-outline-danger" onClick={logOut}>
-                    Log out
-                  </button>
+
+        {loading ? (
+          <div className="d-flex justify-content-center">
+            <Lottie options={defaultOptions} height={120} width={120} />
+          </div>
+        ) : error ? (
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
+        ) : (
+          <>
+            <div className="d-flex justify-content-center mb-4">
+              <img
+                src={userPicture || "/images/instructor.jpg"}
+                alt="Profile"
+                className="rounded-circle"
+                width="200"
+                height="200"
+              />
+            </div>
+            <div className="d-flex justify-content-center">
+              <div className="card" style={{ width: "18rem" }}>
+                <div className="card-header text-center">
+                  <h5 className="card-title">{userName}</h5>
+                  <p className="card-text">Email: {userEmail}</p>
+                </div>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">
+                    Division: {instructor.division}
+                  </li>
+                  <li className="list-group-item text-center bg-light">
+                    <b>Team Leader Role</b>
+                  </li>
+                  <li className="list-group-item">Floor: {instructor.floor}</li>
+                  <li className="list-group-item">Bay: {instructor.bay}</li>
+                </ul>
+                <div className="card-footer">
+                  <div className="d-grid gap-2 col-12 mx-auto">
+                    <button className="btn btn-outline-danger" onClick={logOut}>
+                      Log out
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-
-        </div>
+          </>
+        )}
       </div>
     </>
   );

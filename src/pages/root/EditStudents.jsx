@@ -14,6 +14,19 @@ import {
 } from "react-bootstrap";
 import ModalEditStudent from "./ModalEditStudent";
 import NavbarRoot from "./NavbarRoot";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function EditStudents() {
   const [students, setStudents] = useState([]);
@@ -155,11 +168,19 @@ function EditStudents() {
           </Col>
         </Row>
         {loading ? (
-          <div className="text-center">
-            <Spinner animation="border" />
-          </div>
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         ) : error ? (
-          <Alert variant="danger">{error}</Alert>
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
         ) : (
           <>
             <Row className="d-flex justify-content-center">
@@ -313,6 +334,7 @@ function EditStudents() {
           </>
         )}
       </Container>
+      <br />
     </>
   );
 }

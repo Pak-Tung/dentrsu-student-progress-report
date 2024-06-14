@@ -5,10 +5,25 @@ import {
 } from "../../features/apiCalls";
 import Cookies from "js-cookie";
 import Navbar from "../../components/Navbar";
-import { Container, Row, Col, ListGroup, Badge } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Badge, Alert } from "react-bootstrap";
 import LoginByEmail from "../../components/LoginByEmail";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function CompOverview() {
+  const [loadingStudent, setLoadingStudent] = useState(true);
+  const [error, setError] = useState(null);
   // Initialize user data from cookies
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
@@ -26,12 +41,12 @@ function CompOverview() {
       const { error } = result;
       const data = result[0];
       if (error) {
-        console.log(error);
+        setError(error);
       } else {
         if (data) {
           setStudent(data);
         } else {
-          console.log("Data is undefined");
+          setError("Data is undefined");
         }
       }
     };
@@ -43,11 +58,11 @@ function CompOverview() {
     const fetchData = async () => {
       const result = await getCompcaseReqByStudentEmail(userEmail);
       const { error } = result;
-      //console.log("result", result);
       if (error) {
-        console.log(error);
+        setError(error);
       } else {
         setCompReq(result);
+        setLoadingStudent(false);
       }
     };
     fetchData();
@@ -78,7 +93,25 @@ function CompOverview() {
                 <h2>Complete Case Status</h2>
               </Col>
             </Row>
-            {sortedCompReq.length > 0 ? (
+            {loadingStudent ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <div className="d-flex justify-content-center">
+                <Alert variant="danger">{error}</Alert>
+              </div>
+            ) : sortedCompReq.length > 0 ? (
               <ListGroup>
                 {sortedCompReq.map((req) => (
                   <div key={req.id}>
@@ -105,8 +138,8 @@ function CompOverview() {
                 <p>No Approved Complete Case to Display</p>
               </div>
             )}
-            <br />
           </Container>
+          <br />
         </>
       ) : (
         <LoginByEmail />

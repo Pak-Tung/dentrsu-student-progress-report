@@ -7,7 +7,19 @@ import {
   updateStatusByStudentEmail,
   updateRequestByStudentEmail,
 } from "../../features/apiCalls";
-import { Container, Row, Col, ListGroup, Badge, Button } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Badge, Button, Alert } from "react-bootstrap";
+import * as loadingData from "../../components/loading.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function RequestComplete() {
   const [user, setUser] = useState(() => {
@@ -64,13 +76,13 @@ function RequestComplete() {
           if (res.error) {
             console.error(res.error);
           } else {
-            const updatedStudentData = studentData.map((student) => {
-              if (student.studentEmail === studentEmail) {
-                return { ...student, request: 0 };
-              }
-              return student;
-            });
-            setStudentData(updatedStudentData);
+            setStudentData((prevData) =>
+              prevData.map((student) =>
+                student.studentEmail === studentEmail
+                  ? { ...student, request: 0, status: "Complete" }
+                  : student
+              )
+            );
           }
         }
       } catch (error) {
@@ -84,7 +96,21 @@ function RequestComplete() {
       <NavbarInstructor />
       <Container fluid="md">
         <h1>Requesting Complete Status</h1>
-        {requestStudent.length === 0 ? (
+        {loading ? (
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
+        ) : error ? (
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
+        ) : requestStudent.length === 0 ? (
           <div className="d-flex justify-content-center">
             <p>No student request for complete status approval.</p>
           </div>
@@ -93,8 +119,8 @@ function RequestComplete() {
             {requestStudent.map((student) => (
               <div key={student.studentId}>
                 <ListGroup.Item>
-                  <Badge bg={student.request === 1 ? "danger" : "success"} pill>
-                    {student.request === 1 ? "Requesting Complete Status" : ""}
+                  <Badge bg="danger" pill>
+                    Requesting Complete Status
                   </Badge>
                   <Row>
                     <Col>

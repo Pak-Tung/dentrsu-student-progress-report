@@ -11,6 +11,29 @@ import ProfileRoot from "../pages/root/ProfileRoot";
 import SelectRoleAdmin from "../pages/admins/SelectRoleAdmin";
 import Cookies from "js-cookie";
 import LoginScreen from "./LoginScreen";
+import * as loadingData from "./loading.json";
+import * as successData from "./success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+import { Container, Row } from "react-bootstrap";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 // Custom hook for managing local storage state
 function useLocalStorage(key, initialValue) {
@@ -44,6 +67,8 @@ function LoginByEmail() {
   const [role, setRole] = useLocalStorage("role", "");
   const [user, setUser] = useLocalStorage("user", {});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true); // Initially true to show the loading animation
+  const [success, setSuccess] = useState(false);
 
   const handleLoginSuccess = () => {
     setToken(localStorage.getItem("token"));
@@ -72,6 +97,7 @@ function LoginByEmail() {
             } catch (error) {
               console.error("Error fetching student profile:", error);
               alert("Student profile not found. Please contact administrator.");
+              setLoading(false);
               return;
             }
           } else if (
@@ -87,39 +113,45 @@ function LoginByEmail() {
               }
             } catch (error) {
               console.error("Error fetching instructor profile:", error);
-              alert(
-                "Instructor profile not found. Please contact administrator."
-              );
+              alert("Instructor profile not found. Please contact administrator.");
+              setLoading(false);
               return;
             }
           }
 
           if (userRecord) {
-            Cookies.set("role", JSON.stringify(userRecord.role), { expires: 7 });
-            Cookies.set("user", JSON.stringify(userRecord), { expires: 7 });
-
-            localStorage.setItem("role", JSON.stringify(userRecord.role));
-            localStorage.setItem("user", JSON.stringify(userRecord));
-
+            setCookiesAndLocalStorage(userRecord);
             setUser(userRecord);
             setRole(userRecord.role);
+            setSuccess(true);
+            setLoading(false);
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
           alert("User profile not found. Please contact administrator.");
+          setLoading(false);
         }
+      } else {
+        setLoading(false);
       }
     };
 
-    if (isLoggedIn) {
+    if (isLoggedIn || (email && token)) {
       fetchUserProfile();
+    } else {
+      setLoading(false);
     }
   }, [isLoggedIn, email, token]);
 
+  const setCookiesAndLocalStorage = (userRecord) => {
+    Cookies.set("role", JSON.stringify(userRecord.role), { expires: 7 });
+    Cookies.set("user", JSON.stringify(userRecord), { expires: 7 });
+
+    localStorage.setItem("role", JSON.stringify(userRecord.role));
+    localStorage.setItem("user", JSON.stringify(userRecord));
+  };
+
   const renderProfile = () => {
-    if (!user || !role) {
-      return <LoginScreen handleLoginSuccess={handleLoginSuccess} />;
-    }
     switch (role) {
       case "root":
         return <ProfileRoot />;
@@ -136,10 +168,43 @@ function LoginByEmail() {
 
   return (
     <>
-      {user && role ? renderProfile() : <LoginScreen handleLoginSuccess={handleLoginSuccess} />}
+      {user && role ? (
+        <>
+          {success ? (
+            renderProfile()
+          ) : (
+            <FadeIn>
+              <div>
+                {loading ? (
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                ) : (
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions2}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                )}
+              </div>
+            </FadeIn>
+          )}
+        </>
+      ) : (
+        <LoginScreen handleLoginSuccess={handleLoginSuccess} />
+      )}
     </>
   );
 }
 
 export default LoginByEmail;
-

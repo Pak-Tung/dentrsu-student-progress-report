@@ -16,7 +16,6 @@ import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 
-
 const LABELS = [
   "Operative",
   "Periodontic",
@@ -69,59 +68,49 @@ const CheckStatus = () => {
   const [student, setStudent] = useState({});
   const [completeReqsPercentage, setCompleteReqsPercentage] = useState({});
   const [compReq, setCompReq] = useState([]);
-
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const fetchStudentData = async () => {
-      const result = await getStudentByEmail(userEmail);
-      if (result.error) {
-        console.error(result.error);
-      } else {
-        const data = result[0];
-        if (data) {
-          setStudent(data);
-        } else {
-          console.error("Data is undefined");
+      if (userEmail) {
+        try {
+          const result = await getStudentByEmail(userEmail);
+          if (result.error) {
+            console.error(result.error);
+          } else {
+            const data = result[0];
+            if (data) {
+              setStudent(data);
+            } else {
+              console.error("Data is undefined");
+            }
+          }
+        } catch (err) {
+          console.error("Failed to fetch student data", err);
         }
       }
+      
     };
-    if (userEmail) fetchStudentData();
+
+    fetchStudentData();
   }, [userEmail]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const fetchCompleteReqsPercentage = async () => {
-        if (student.studentEmail) {
-          const result = await getCompleteReqsPercentageByDivision(
-            student.studentEmail
-          );
+    const fetchCompleteReqsPercentage = async () => {
+      if (student.studentEmail) {
+        try {
+          const result = await getCompleteReqsPercentageByDivision(student.studentEmail);
           setCompleteReqsPercentage(result);
-          setLoading(true);
-          setTimeout(() => {
-            setSuccess(true);
-          }, 1200);
+          
+        } catch (err) {
+          console.error("Failed to fetch completion requirements percentage", err);
         }
-      };
-      if (student.studentEmail) fetchCompleteReqsPercentage();
-    }, 1500);
+      }
+    };
+
+    fetchCompleteReqsPercentage();
   }, [student.studentEmail]);
-
-  const formatPercentage = (data) =>
-    data
-      ? ShortLabels.map((label) => Math.min(parseInt(data[label]) || 0, 100))
-      : [];
-
-  const percentageDC = formatPercentage(completeReqsPercentage.totalDivReq_DC);
-  const percentageRSU = formatPercentage(
-    completeReqsPercentage.totalDivReq_RSU
-  );
-
-  const checkAllDivReqCompleted = (data) => data.every((req) => req === 100);
-
-  const checkAllDivReqCompletedDC = checkAllDivReqCompleted(percentageDC);
-  const checkAllDivReqCompletedRSU = checkAllDivReqCompleted(percentageRSU);
 
   const fetchCompcaseReq = useCallback(async () => {
     if (student.studentEmail) {
@@ -131,10 +120,12 @@ const CheckStatus = () => {
           console.error(result.error);
         } else {
           setCompReq(result);
+          setSuccess(true);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching comp case requirements:", error);
       }
+      setLoading(false);
     }
   }, [student.studentEmail]);
 
@@ -142,35 +133,54 @@ const CheckStatus = () => {
     fetchCompcaseReq();
   }, [fetchCompcaseReq]);
 
-  const approvedCompReqCount = compReq.filter(
-    (req) => req.isApproved === 1
-  ).length;
+  const formatPercentage = (data) =>
+    data
+      ? ShortLabels.map((label) => Math.min(parseInt(data[label]) || 0, 100))
+      : [];
+
+  const percentageDC = formatPercentage(completeReqsPercentage.totalDivReq_DC);
+  const percentageRSU = formatPercentage(completeReqsPercentage.totalDivReq_RSU);
+
+  const checkAllDivReqCompleted = (data) => data.every((req) => req === 100);
+
+  const checkAllDivReqCompletedDC = checkAllDivReqCompleted(percentageDC);
+  const checkAllDivReqCompletedRSU = checkAllDivReqCompleted(percentageRSU);
+
+  const approvedCompReqCount = compReq.filter((req) => req.isApproved === 1).length;
   const checkCompleteCases = approvedCompReqCount >= 5;
 
   const handleRequest = async () => {
-    if (
-      checkAllDivReqCompletedDC &&
-      checkAllDivReqCompletedRSU &&
-      checkCompleteCases
-    ) {
-      const result = await updateRequestByStudentEmail(student.studentEmail, {
-        request: 1,
-      });
-      if (result.error) {
-        console.error(result.error);
-      } else {
-        console.log("Request Complete Status Updated");
+    if (checkAllDivReqCompletedDC && checkAllDivReqCompletedRSU && checkCompleteCases) {
+      try {
+        const result = await updateRequestByStudentEmail(student.studentEmail, {
+          request: 1,
+        });
+        if (result.error) {
+          console.error(result.error);
+        } else {
+          console.log("Request Complete Status Updated");
+        }
+      } catch (error) {
+        console.error("Error updating request status:", error);
       }
     } else {
-      alert(
-        "Please complete all requirements before requesting complete status"
-      );
+      alert("Please complete all requirements before requesting complete status");
     }
   };
 
   return (
     <>
-      {success ? (
+      {loading ? (
+        <FadeIn>
+          <div>
+            <Container>
+              <Row className="d-flex justify-content-center">
+                <Lottie options={defaultOptions} height={140} width={140} />
+              </Row>
+            </Container>
+          </div>
+        </FadeIn>
+      ) : success ? (
         <>
           <Navbar />
           <Container>
@@ -178,9 +188,7 @@ const CheckStatus = () => {
               <Col className="text-center" md={12}>
                 <h2>
                   {student.title + " " + student.studentName + " "}{" "}
-                  <Badge
-                    bg={student.status === "Complete" ? "success" : "danger"}
-                  >
+                  <Badge bg={student.status === "Complete" ? "success" : "danger"}>
                     {student.status === "Complete" ? "Complete" : "Incomplete"}
                   </Badge>
                 </h2>
@@ -225,19 +233,11 @@ const CheckStatus = () => {
       ) : (
         <FadeIn>
           <div>
-            {!loading ? (
-              <Container>
-                <Row className="d-flex justify-content-center">
-                   <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            ) : (
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions2} height={140} width={140} />
-                </Row>
-              </Container>
-            )}
+            <Container>
+              <Row className="d-flex justify-content-center">
+                <Lottie options={defaultOptions2} height={140} width={140} />
+              </Row>
+            </Container>
           </div>
         </FadeIn>
       )}

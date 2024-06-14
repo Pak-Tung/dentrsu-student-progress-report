@@ -9,12 +9,31 @@ import {
 } from "../../features/apiCalls";
 import {
   Container,
-  Row,
-  Col,
-  ListGroup,
-  Badge,
+  Row, Col, ListGroup, Badge, Alert,
 } from "react-bootstrap";
 import ModalCompReqApproval from "./ModalCompReqApproval";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function CompApproval() {
   const [user, setUser] = useState(() => {
@@ -23,52 +42,39 @@ function CompApproval() {
   });
   const userEmail = user.email;
 
-  const [instructor, setInstructor] = useState(() => {
-    const savedInstructor = Cookies.get("instructor");
-    return savedInstructor ? savedInstructor : {};
-  });
-
+  const [instructor, setInstructor] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getInstructorByEmail(userEmail);
-        const { error, data } = result;
-        //console.log(result[0]);
-        if (error) {
-          setError(error);
-        } else if (result[0]) {
-          setInstructor(result[0]);
-        } else {
-          setError("No data available");
-        }
-      } catch (err) {
-        setError("Failed to fetch students");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [userEmail]);
-
   const [pendingReqs, setPendingReqs] = useState([]);
   const [studentData, setStudentData] = useState({});
+  const [selectedReq, setSelectedReq] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [show, setShow] = useState(false);
 
-  const fetchData = useCallback(async () => {
+  const fetchInstructorData = useCallback(async () => {
+    try {
+      const result = await getInstructorByEmail(userEmail);
+      if (result.error) {
+        setError(result.error);
+      } else if (result[0]) {
+        setInstructor(result[0]);
+      } else {
+        setError("No data available");
+      }
+    } catch (err) {
+      setError("Failed to fetch instructor data");
+    }
+  }, [userEmail]);
+
+  const fetchRequests = useCallback(async () => {
     try {
       const result = await getCompReqByInstructorEmail(userEmail);
-      const { error, data } = result;
-      //console.log(result);
-      if (error) {
-        setError(error);
-      } else if (result) {
-        //console.log("result", result);
+      if (result.error) {
+        setError(result.error);
+      } else {
         const pendingFilter = result.filter((req) => req.isApproved === 0);
         setPendingReqs(pendingFilter);
 
-        // Fetch student data for each request
         const studentDataPromises = pendingFilter.map(async (req) => {
           const studentResult = await getStudentByEmail(req.studentEmail);
           return {
@@ -84,50 +90,56 @@ function CompApproval() {
         }, {});
 
         setStudentData(studentDataMap);
-      } else {
-        setError("No data available");
       }
     } catch (err) {
-      setError("Failed to fetch students");
+      setError("Failed to fetch requests");
     } finally {
       setLoading(false);
     }
   }, [userEmail]);
 
   useEffect(() => {
+    fetchInstructorData();
+  }, [fetchInstructorData]);
+
+  useEffect(() => {
     if (userEmail) {
-    fetchData();
+      fetchRequests();
     }
-  }, [userEmail, fetchData]);
+  }, [userEmail, fetchRequests]);
 
-  // State to hold the selected pending requirement for approval
-  const [selectedReq, setSelectedReq] = useState(null);
-  const [selectedStudent, setSelectedStudent] = useState(null);
-
-  // Function to handle pending requirement
-  const handlePendingReq = async (req, student) => {
+  const handlePendingReq = (req, student) => {
     setSelectedReq(req);
     setSelectedStudent(student);
-    //console.log("Selected Req", req);
-    //console.log("Selected Student", student);
-    handleShow();
+    setShow(true);
   };
 
-  const [show, setShow] = useState(false);
-
   const handleClose = () => {
-    fetchData();
     setShow(false);
-  }
-
-  const handleShow = () => setShow(true);
+    fetchRequests();
+  };
 
   return (
     <>
       <NavbarInstructor />
       <Container fluid="md">
         <h1>Complete Case Approval</h1>
-        {pendingReqs.length === 0 ? (
+
+        {loading ? (
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
+        ) : error ? (
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
+        ) : pendingReqs.length === 0 ? (
           <div className="d-flex justify-content-center">
             <p>No complete case request for approval.</p>
           </div>
@@ -161,8 +173,7 @@ function CompApproval() {
                       <strong>Student:</strong> {studentData[pendingReq.studentEmail]} <br />
                     </Col>
                     <Col>
-                      <strong>Complexity:</strong> {pendingReq.complexity}{" "}
-                      <br />
+                      <strong>Complexity:</strong> {pendingReq.complexity} <br />
                       <strong>Note:</strong> {pendingReq.note2}
                     </Col>
                     <Col>

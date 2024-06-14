@@ -1,14 +1,30 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getCompcaseReqByStudentEmail } from "../../features/apiCalls";
 import Cookies from "js-cookie";
-import { Container, Row, Col, ListGroup, Badge, Modal } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Badge, Modal, Alert } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import ModalUpdateComp from "./ModalUpdateComp";
 import "../../pages/CustomStyles.css";
 import "../../App.css";
 import LoginByEmail from "../../components/LoginByEmail";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function CompStatus() {
+  const [loadingStudent, setLoadingStudent] = useState(true);
+  
+  const [error, setError] = useState(null);
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -22,7 +38,9 @@ function CompStatus() {
       const result = await getCompcaseReqByStudentEmail(userEmail);
       setCompReq(result);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      setError("Error fetching data:", error);
+    }finally {
+      setLoadingStudent(false);
     }
   }, [userEmail]);
 
@@ -58,6 +76,21 @@ function CompStatus() {
                 <h2>Complete Case Status</h2>
               </Col>
             </Row>
+            {loadingStudent ? (
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
+          ) : error ? (
+            <div className="d-flex justify-content-center">
+              <Alert variant="danger">{error}</Alert>
+            </div>
+          ) : (
             <ListGroup>
               {sortedCompReq.map((req) => (
                 <ListGroup.Item
@@ -94,6 +127,7 @@ function CompStatus() {
                 </ListGroup.Item>
               ))}
             </ListGroup>
+          )}
           </Container>
           <ModalUpdateComp show={show} handleClose={handleClose} compReq={selectedCompReq} />
           <Modal size="sm" show={smShow} onHide={() => setSmShow(false)} aria-labelledby="example-modal-sizes-title-sm">

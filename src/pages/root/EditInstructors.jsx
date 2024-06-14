@@ -10,10 +10,22 @@ import {
   Dropdown,
   DropdownButton,
   Alert,
-  Spinner,
 } from "react-bootstrap";
 import ModalEditInstructor from "./ModalEditInstructor";
 import NavbarRoot from "./NavbarRoot";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function EditInstructors() {
   const [instructors, setInstructors] = useState([]);
@@ -69,7 +81,9 @@ function EditInstructors() {
   // Extract unique division from instructor.division to populate type dropdown
   const divisionOptions = [
     { label: "All", value: null },
-    ...Array.from(new Set(instructors.map((instructor) => instructor.division))).map((division) => ({
+    ...Array.from(
+      new Set(instructors.map((instructor) => instructor.division))
+    ).map((division) => ({
       label: fullNameDivision(division),
       value: division,
     })),
@@ -85,11 +99,19 @@ function EditInstructors() {
           </Col>
         </Row>
         {loading ? (
-          <div className="text-center">
-            <Spinner animation="border" />
-          </div>
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         ) : error ? (
-          <Alert variant="danger">{error}</Alert>
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
+          </div>
         ) : (
           <>
             <Row className="d-flex justify-content-center">
@@ -159,6 +181,7 @@ function EditInstructors() {
                   </ListGroup.Item>
                 ))}
             </ListGroup>
+            <br />
             {selectedInstructor && (
               <ModalEditInstructor
                 show={show}

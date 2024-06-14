@@ -13,10 +13,31 @@ import {
   Col,
   ListGroup,
   Badge,
-  Spinner,
   Alert,
 } from "react-bootstrap";
 import ModalReqApproval from "./ModalReqApproval";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function ReqApproval() {
   const [user, setUser] = useState(() => {
@@ -31,6 +52,8 @@ function ReqApproval() {
   const userEmail = user.email;
 
   const [instructor, setInstructor] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
 
   const [state, setState] = useState({
     loading: true,
@@ -52,19 +75,26 @@ function ReqApproval() {
         setState((prevState) => ({ ...prevState, error: "No data available" }));
       }
     } catch (err) {
-      setState((prevState) => ({ ...prevState, error: "Failed to fetch instructor data" }));
+      setState((prevState) => ({
+        ...prevState,
+        error: "Failed to fetch instructor data",
+      }));
     }
   }, [userEmail]);
 
   const fetchRequests = useCallback(async () => {
     try {
-      const result = await getDivReqByInstructorEmail(userEmail, instructorDivision);
+      const result = await getDivReqByInstructorEmail(
+        userEmail,
+        instructorDivision
+      );
       if (result.error) {
         setState((prevState) => ({ ...prevState, error: result.error }));
       } else {
         const pendingFilter = result.filter((req) => req.isApproved === 0);
         const studentDataPromises = pendingFilter.map(async (req) => {
           const studentResult = await getStudentByEmail(req.studentEmail);
+          setSuccess(true);
           return {
             studentEmail: req.studentEmail,
             studentName: studentResult[0]?.studentName || "Unknown",
@@ -83,9 +113,15 @@ function ReqApproval() {
           studentData: studentDataMap,
           loading: false,
         }));
+
+        setLoading(false);
       }
     } catch (err) {
-      setState((prevState) => ({ ...prevState, error: "Failed to fetch requests", loading: false }));
+      setState((prevState) => ({
+        ...prevState,
+        error: "Failed to fetch requests",
+        loading: false,
+      }));
     }
   }, [userEmail, instructorDivision]);
 
@@ -112,7 +148,7 @@ function ReqApproval() {
   const handleClose = () => {
     setShow(false);
     fetchRequests();
-  }
+  };
 
   return (
     <>
@@ -121,9 +157,20 @@ function ReqApproval() {
         <h1>Requirement Approval</h1>
         {state.loading ? (
           <div className="d-flex justify-content-center">
-            <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
+
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie
+                      options={defaultOptions}
+                      height={140}
+                      width={140}
+                    />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
           </div>
         ) : state.error ? (
           <div className="d-flex justify-content-center">
@@ -138,7 +185,12 @@ function ReqApproval() {
             {state.pendingReqs.map((pendingReq) => (
               <div key={pendingReq.id}>
                 <ListGroup.Item
-                  onClick={() => handlePendingReq(pendingReq, state.studentData[pendingReq.studentEmail])}
+                  onClick={() =>
+                    handlePendingReq(
+                      pendingReq,
+                      state.studentData[pendingReq.studentEmail]
+                    )
+                  }
                   className="myDiv"
                 >
                   <Badge
@@ -160,7 +212,8 @@ function ReqApproval() {
                   <Row>
                     <Col>
                       <strong>db-ID:</strong> {pendingReq.id} <br />
-                      <strong>Student:</strong> {state.studentData[pendingReq.studentEmail]} <br />
+                      <strong>Student:</strong>{" "}
+                      {state.studentData[pendingReq.studentEmail]} <br />
                     </Col>
                     <Col>
                       <strong>Book No.</strong> {pendingReq.bookNo} <br />

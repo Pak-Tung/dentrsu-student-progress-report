@@ -1,12 +1,42 @@
 import React, { useState, useEffect } from "react";
 import NavbarInstructor from "../../components/NavbarInstructor";
-import { Container, Row, Col, ListGroup, Badge, Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Badge,
+  Image,
+  Alert,
+} from "react-bootstrap";
 import {
   getInstructorByEmail,
   getStudentByDivInstructorEmail,
 } from "../../features/apiCalls";
 import "../../App.css";
 import ModalStudentByDiv from "./ModalStudentByDiv";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function DivisionAdvisee() {
   const [user, setUser] = useState(() => {
@@ -74,15 +104,23 @@ function DivisionAdvisee() {
     <>
       <NavbarInstructor />
       <Container fluid="md">
-        <div className="d-flex justify-content-center mb-4">
-          <h4>Division Advisee: {studentData.length} students</h4>
-        </div>
         {loading ? (
-          <p>Loading...</p>
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         ) : error ? (
-          <p>{error}</p>
+          <Alert variant="danger">{error}</Alert>
         ) : (
           <>
+            <div className="d-flex justify-content-center mb-4">
+              <h4>Division Advisee: {studentData.length} students</h4>
+            </div>
             <ListGroup>
               {studentData.map((student, index) => {
                 const studentYear =
