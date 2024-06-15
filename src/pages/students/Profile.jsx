@@ -6,7 +6,7 @@ import { getTeamLeaderById } from "../../features/apiTL";
 import LoginByEmail from "../../components/LoginByEmail";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Badge } from "react-bootstrap";
+import { Container, Row, Col, Badge, Alert } from "react-bootstrap";
 import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
@@ -133,16 +133,14 @@ function Profile() {
         </div>
         <Row>
           <Col className="d-flex justify-content-center mb-2">
-            <Badge
-              bg={student.status === "Complete" ? "success" : "danger"}
-            >
+            <Badge bg={student.status === "Complete" ? "success" : "danger"}>
               {student.status === "Complete" ? "Complete" : "Incomplete"}
             </Badge>
           </Col>
         </Row>
         {error ? (
-          <div className="alert alert-danger" role="alert">
-            {error}
+          <div className="d-flex justify-content-center">
+            <Alert variant="danger">{error}</Alert>
           </div>
         ) : success ? (
           <div className="d-flex justify-content-center">
