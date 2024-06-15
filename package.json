@@ -52,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "ajv": "^7.2.4",
     "nodemon": "^3.1.0"
   }
 }
