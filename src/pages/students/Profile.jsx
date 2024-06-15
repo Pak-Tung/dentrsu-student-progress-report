@@ -21,14 +21,6 @@ const defaultOptions = {
   },
 };
 
-const defaultOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: successData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function Profile() {
   const [user, setUser] = useState(() => {
