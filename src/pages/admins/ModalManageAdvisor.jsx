@@ -6,7 +6,6 @@ import {
   Col,
   ListGroup,
   Image,
-  Spinner,
   Alert,
   Button,
   InputGroup,
@@ -16,12 +15,26 @@ import {
   getStudentByDivInstructorEmail,
   updateStudentDivInstructorByDivInstructorEmail,
 } from "../../features/apiCalls";
+import * as loadingData from "../../components/loading.json";
+import * as successData from "../../components/success.json";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function ModalManageAdvisor({ show, handleClose, instructor }) {
   const [division, setDivision] = useState(() => {
     const savedDivision = localStorage.getItem("division");
     return savedDivision ? JSON.parse(savedDivision) : "";
   });
+
 
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -99,7 +112,7 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
         throw new Error("Failed to update student data");
       }
     } catch (err) {
-      alert("Failed to add advisee. Please try again later.");
+      alert("Failed to add advisee. Please recheck student ID.");
     }
   };
 
@@ -131,11 +144,15 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
       </Modal.Header>
       <Modal.Body>
         {loading ? (
-          <Container className="d-flex justify-content-center">
-            <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
-          </Container>
+          <FadeIn>
+          <div>
+            <Container>
+              <Row className="d-flex justify-content-center">
+                <Lottie options={defaultOptions} height={140} width={140} />
+              </Row>
+            </Container>
+          </div>
+        </FadeIn>
         ) : error ? (
           <Container>
             <Alert variant="danger" className="text-center">
