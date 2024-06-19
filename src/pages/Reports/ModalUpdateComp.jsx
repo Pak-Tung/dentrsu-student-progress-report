@@ -289,9 +289,17 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
             </Col>
             <Col md={8}></Col>
             <Col md={2}>
-              <Button variant="secondary" onClick={handleClose}>
+            </Col>
+          </Row>
+          <Row>
+          <Col md={2}>
+            </Col>
+            <Col md={8} className="d-flex justify-content-center">
+            <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
+            </Col>
+            <Col md={2}>
             </Col>
           </Row>
         </Container>
