@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useMemo, useContext } from "react";
 import {
   getReqByDivision,
   insertDivisionReq,
@@ -13,6 +13,8 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import "../../App.css";
 import Cookies from "js-cookie";
+import { ThemeContext } from "../../ThemeContext";
+
 
 const InputGroupField = ({
   id,
@@ -23,9 +25,12 @@ const InputGroupField = ({
   onChange,
   disabled,
   required,
+  className,
 }) => (
   <InputGroup className="mb-3">
-    <InputGroup.Text id={id}>{label}:</InputGroup.Text>
+    <InputGroup.Text id={id} className={className}>
+      {label}:
+    </InputGroup.Text>
     <Form.Control
       placeholder={placeholder}
       aria-label={label.toLowerCase()}
@@ -35,11 +40,13 @@ const InputGroupField = ({
       onChange={onChange}
       disabled={disabled}
       required={required}
+      className={className}
     />
   </InputGroup>
 );
 
 const SubmissionForm = ({ division }) => {
+  const { theme } = useContext(ThemeContext);
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -162,11 +169,9 @@ const SubmissionForm = ({ division }) => {
           unit_RSU: unitRSU,
           unit_DC: unitDC,
         };
-        //console.log('updatedFormData', updatedFormData);
         const response = await insertDivisionReq(updatedFormData, division);
         if (response.insertId > 0 && response.affectedRows > 0) {
           alert("Form submitted successfully!");
-          
           window.location.reload();
         }
       } catch (error) {
@@ -176,9 +181,11 @@ const SubmissionForm = ({ division }) => {
     setValidated(true);
   };
 
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
+
   return (
     <>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Form noValidate validated={validated} onSubmit={handleSubmit} className={theme}>
         <Container fluid>
           <Row className="justify-content-center">
             <Col>
@@ -189,10 +196,11 @@ const SubmissionForm = ({ division }) => {
                 name="bookNo"
                 onChange={handleInput}
                 required={true}
+                className={themeClass}
               />
             </Col>
-            </Row>
-            <Row className="justify-content-center">
+          </Row>
+          <Row className="justify-content-center">
             <Col>
               <InputGroupField
                 id="pageNo"
@@ -201,6 +209,7 @@ const SubmissionForm = ({ division }) => {
                 name="pageNo"
                 onChange={handleInput}
                 required={true}
+                className={themeClass}
               />
             </Col>
           </Row>
@@ -212,6 +221,7 @@ const SubmissionForm = ({ division }) => {
                   value={selectedOption}
                   onChange={handleChange}
                   required
+                  className={themeClass}
                 >
                   <option value="" disabled>Select Type of Work</option>
                   {options.map((option) => (
@@ -232,13 +242,14 @@ const SubmissionForm = ({ division }) => {
                 name="area"
                 onChange={handleInput}
                 required
+                className={themeClass}
               />
             </Col>
           </Row>
           <Row className="justify-content-md-center">
             <Col>
               <InputGroup className="mb-3">
-                <InputGroup.Text id="requirement-rsu">
+                <InputGroup.Text id="requirement-rsu" className={themeClass}>
                   Requirement (RSU)
                 </InputGroup.Text>
                 <Form.Control
@@ -249,15 +260,16 @@ const SubmissionForm = ({ division }) => {
                   onChange={handleInput}
                   disabled={unitRSU === "" || unitRSU === "unit_RSU"}
                   required
+                  className={themeClass}
                 />
-                <InputGroup.Text id="unit_rsu">{unitRSU}</InputGroup.Text>
+                <InputGroup.Text id="unit_rsu" className={themeClass}>{unitRSU}</InputGroup.Text>
               </InputGroup>
             </Col>
           </Row>
           <Row className="justify-content-md-center">
             <Col>
               <InputGroup className="mb-3">
-                <InputGroup.Text id="requirement-dc">
+                <InputGroup.Text id="requirement-dc" className={themeClass}>
                   Requirement (DC)
                 </InputGroup.Text>
                 <Form.Control
@@ -268,8 +280,9 @@ const SubmissionForm = ({ division }) => {
                   onChange={handleInput}
                   disabled={unitDC === "" || unitDC === "unit_DC"}
                   required
+                  className={themeClass}
                 />
-                <InputGroup.Text id="unit_dc">{unitDC}</InputGroup.Text>
+                <InputGroup.Text id="unit_dc" className={themeClass}>{unitDC}</InputGroup.Text>
               </InputGroup>
             </Col>
           </Row>
@@ -282,6 +295,7 @@ const SubmissionForm = ({ division }) => {
                 name="HN"
                 onChange={handleInput}
                 required
+                className={themeClass}
               />
             </Col>
             <Col>
@@ -292,6 +306,7 @@ const SubmissionForm = ({ division }) => {
                 name="patientName"
                 onChange={handleInput}
                 required
+                className={themeClass}
               />
             </Col>
           </Row>
@@ -306,6 +321,7 @@ const SubmissionForm = ({ division }) => {
                 onChange={handleInput}
                 disabled
                 required
+                className={themeClass}
               />
             </Col>
           </Row>
@@ -320,12 +336,13 @@ const SubmissionForm = ({ division }) => {
                 onChange={handleInput}
                 disabled
                 required
+                className={themeClass}
               />
             </Col>
           </Row>
           <Row>
             <div className="d-grid gap-2">
-              <Button variant="dark" size="lg" type="submit">
+              <Button variant={theme === 'dark' ? "secondary" : "dark"} size="lg" type="submit">
                 Submit
               </Button>
             </div>
@@ -337,6 +354,3 @@ const SubmissionForm = ({ division }) => {
 }
 
 export default SubmissionForm;
-
-
-

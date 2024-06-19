@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import {
   Container,
@@ -16,6 +16,8 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -36,6 +38,7 @@ const defaultOptions2 = {
 };
 
 function MemberInTeam() {
+  const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : {};
@@ -50,7 +53,6 @@ function MemberInTeam() {
     const fetchData = async () => {
       try {
         const result = await getStudentByTeamleaderEmail(userEmail);
-        //console.log("result", result);
         setStudentData(result);
       } catch (err) {
         setError("Failed to fetch students");
@@ -61,7 +63,6 @@ function MemberInTeam() {
     fetchData();
   }, [userEmail]);
 
-  // Sort the student data
   const sortedStudentData = [...studentData].sort((a, b) => {
     return a.startClinicYear - b.startClinicYear;
   });
@@ -69,7 +70,6 @@ function MemberInTeam() {
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const handleStudentSelect = async (student) => {
-    //console.log("student", student);
     setSelectedStudent(student);
     handleShow();
   };
@@ -85,10 +85,14 @@ function MemberInTeam() {
     return currentYear - startClinicYear + (currentMonth > 4 ? 5 : 4);
   };
 
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
+  const alertClass = theme === "dark" ? "alert-dark" : "";
+
   return (
     <>
       <NavbarInstructor />
-      <Container fluid="md">
+      <Container fluid="md" className={containerClass}>
         {loading ? (
           <FadeIn>
             <div>
@@ -100,7 +104,7 @@ function MemberInTeam() {
             </div>
           </FadeIn>
         ) : error ? (
-          <Alert variant="danger">{error}</Alert>
+          <Alert variant="danger" className={alertClass}>{error}</Alert>
         ) : (
           <>
             <div className="d-flex justify-content-center mb-4">
@@ -111,7 +115,7 @@ function MemberInTeam() {
                 <ListGroup.Item
                   key={index}
                   onClick={() => handleStudentSelect(student)}
-                  className="myDiv"
+                  className={`myDiv ${listGroupItemClass}`}
                 >
                   <Row>
                     <Col md={2}>

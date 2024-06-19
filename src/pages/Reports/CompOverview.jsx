@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   getStudentByEmail,
   getCompcaseReqByStudentEmail,
@@ -8,9 +8,10 @@ import Navbar from "../../components/Navbar";
 import { Container, Row, Col, ListGroup, Badge, Alert } from "react-bootstrap";
 import LoginByEmail from "../../components/LoginByEmail";
 import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -22,19 +23,18 @@ const defaultOptions = {
 };
 
 function CompOverview() {
+  const { theme } = useContext(ThemeContext);
   const [loadingStudent, setLoadingStudent] = useState(true);
   const [error, setError] = useState(null);
-  // Initialize user data from cookies
+
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
     : console.log("User email", Cookies.get("user"));
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
-  // State hooks for managing data
   const [student, setStudent] = useState([]);
 
-  // Fetch student data based on email
   useEffect(() => {
     const fetchStudentData = async () => {
       const result = await getStudentByEmail(userEmail);
@@ -68,7 +68,6 @@ function CompOverview() {
     fetchData();
   }, [userEmail]);
 
-  // Filter and sort compReq by complexity in ascending order
   const sortedCompReq = compReq
     .filter((req) => req.isApproved === 1)
     .sort((a, b) => {
@@ -81,13 +80,17 @@ function CompOverview() {
       return 0;
     });
 
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
+  const alertClass = theme === "dark" ? "alert-dark" : "";
+
   return (
     <>
       {userEmail !== undefined ? (
         <>
           <Navbar />
           <br />
-          <Container fluid="md">
+          <Container fluid="md" className={containerClass}>
             <Row className="justify-content-center">
               <Col md={6} className="text-center">
                 <h2>Complete Case Status</h2>
@@ -109,13 +112,13 @@ function CompOverview() {
               </FadeIn>
             ) : error ? (
               <div className="d-flex justify-content-center">
-                <Alert variant="danger">{error}</Alert>
+                <Alert variant="danger" className={alertClass}>{error}</Alert>
               </div>
             ) : sortedCompReq.length > 0 ? (
               <ListGroup>
                 {sortedCompReq.map((req) => (
                   <div key={req.id}>
-                    <ListGroup.Item>
+                    <ListGroup.Item className={listGroupItemClass}>
                       <Badge bg="success" pill>
                         APPROVED
                       </Badge>

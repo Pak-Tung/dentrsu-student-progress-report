@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "../../components/Navbar";
 import RadarChart from "../../components/RadarChart";
@@ -15,6 +15,8 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const LABELS = [
   "Operative",
@@ -59,6 +61,7 @@ const defaultOptions2 = {
 };
 
 const CheckStatus = () => {
+  const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
@@ -90,7 +93,6 @@ const CheckStatus = () => {
           console.error("Failed to fetch student data", err);
         }
       }
-      
     };
 
     fetchStudentData();
@@ -102,7 +104,6 @@ const CheckStatus = () => {
         try {
           const result = await getCompleteReqsPercentageByDivision(student.studentEmail);
           setCompleteReqsPercentage(result);
-          
         } catch (err) {
           console.error("Failed to fetch completion requirements percentage", err);
         }
@@ -183,12 +184,12 @@ const CheckStatus = () => {
       ) : success ? (
         <>
           <Navbar />
-          <Container>
+          <Container className={theme === "dark" ? "container-dark" : ""}>
             <Row>
               <Col className="text-center" md={12}>
                 <h2>
                   {student.title + " " + student.studentName + " "}{" "}
-                  <Badge bg={student.status === "Complete" ? "success" : "danger"}>
+                  <Badge bg={student.status === "Complete" ? "success" : theme === "dark" ? "badge-dark" : "danger"}>
                     {student.status === "Complete" ? "Complete" : "Incomplete"}
                   </Badge>
                 </h2>
@@ -204,10 +205,10 @@ const CheckStatus = () => {
               </Col>
             </Row>
             <Row className="d-flex justify-content-center mb-2">
-              <Col md={6}>
+              <Col md={6} className={theme === "dark" ? "chart-dark" : ""}>
                 <RadarChart label={LABELS} dataset={percentageRSU} />
               </Col>
-              <Col md={6}>
+              <Col md={6} className={theme === "dark" ? "chart-dark" : ""}>
                 <RadarChart label={LABELS} dataset={percentageDC} />
               </Col>
             </Row>
@@ -218,14 +219,16 @@ const CheckStatus = () => {
             </Row>
             <Row className="d-flex justify-content-center mb-2">
               <Col md={2}></Col>
-              <Col md={8}>
+              <Col md={8} className={theme === "dark" ? "chart-dark" : ""}>
                 <StackedCompCases student={student} />
               </Col>
               <Col md={2}></Col>
             </Row>
             <Row>
               <Col className="d-flex justify-content-center mb-2">
-                <Button onClick={handleRequest}>Request Complete Status</Button>
+                <Button onClick={handleRequest} className={theme === "dark" ? "button-dark" : ""}>
+                  Request Complete Status
+                </Button>
               </Col>
             </Row>
           </Container>

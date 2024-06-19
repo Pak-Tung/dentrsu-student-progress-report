@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import "../../App.css";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import Cookies from "js-cookie";
@@ -16,6 +16,8 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -36,6 +38,7 @@ const defaultOptions2 = {
 };
 
 function CompApproval() {
+  const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
@@ -119,11 +122,17 @@ function CompApproval() {
     fetchRequests();
   };
 
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
+  const alertClass = theme === "dark" ? "alert-dark" : "";
+  const textClass = theme === "dark" ? "text-dark-mode" : "";
+  const badgeClass = theme === "dark" ? "badge-dark" : "";
+
   return (
     <>
       <NavbarInstructor />
-      <Container fluid="md">
-        <h1>Complete Case Approval</h1>
+      <Container fluid="md" className={containerClass}>
+        <h1 className={textClass}>Complete Case Approval</h1>
 
         {loading ? (
           <FadeIn>
@@ -137,11 +146,11 @@ function CompApproval() {
           </FadeIn>
         ) : error ? (
           <div className="d-flex justify-content-center">
-            <Alert variant="danger">{error}</Alert>
+            <Alert variant="danger" className={alertClass}>{error}</Alert>
           </div>
         ) : pendingReqs.length === 0 ? (
           <div className="d-flex justify-content-center">
-            <p>No complete case request for approval.</p>
+            <p className={textClass}>No complete case request for approval.</p>
           </div>
         ) : (
           <ListGroup>
@@ -149,7 +158,7 @@ function CompApproval() {
               <div key={pendingReq.id}>
                 <ListGroup.Item
                   onClick={() => handlePendingReq(pendingReq, studentData[pendingReq.studentEmail])}
-                  className="myDiv"
+                  className={`myDiv ${listGroupItemClass}`}
                 >
                   <Badge
                     bg={
@@ -159,6 +168,7 @@ function CompApproval() {
                         ? "danger"
                         : "warning"
                     }
+                    className={badgeClass}
                     pill
                   >
                     {pendingReq.isApproved === 1
@@ -169,16 +179,16 @@ function CompApproval() {
                   </Badge>
                   <Row>
                     <Col>
-                      <strong>db-ID:</strong> {pendingReq.id} <br />
-                      <strong>Student:</strong> {studentData[pendingReq.studentEmail]} <br />
+                      <strong className={textClass}>db-ID:</strong> {pendingReq.id} <br />
+                      <strong className={textClass}>Student:</strong> {studentData[pendingReq.studentEmail]} <br />
                     </Col>
                     <Col>
-                      <strong>Complexity:</strong> {pendingReq.complexity} <br />
-                      <strong>Note:</strong> {pendingReq.note2}
+                      <strong className={textClass}>Complexity:</strong> {pendingReq.complexity} <br />
+                      <strong className={textClass}>Note:</strong> {pendingReq.note2}
                     </Col>
                     <Col>
-                      <strong>HN:</strong> {pendingReq.HN} <br />
-                      <strong>Name:</strong> {pendingReq.patientName}
+                      <strong className={textClass}>HN:</strong> {pendingReq.HN} <br />
+                      <strong className={textClass}>Name:</strong> {pendingReq.patientName}
                     </Col>
                   </Row>
                 </ListGroup.Item>

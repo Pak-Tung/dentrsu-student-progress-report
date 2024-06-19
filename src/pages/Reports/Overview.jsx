@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getStudentByEmail, getAllDivisions } from "../../features/apiCalls";
 import Cookies from "js-cookie";
 import Navbar from "../../components/Navbar";
@@ -10,6 +10,8 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -30,49 +32,43 @@ const defaultOptions2 = {
 };
 
 function Overview() {
+  const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Initialize user data from cookies
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
     : console.log("User email", Cookies.get("user"));
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
-  // State hooks for managing data
   const [student, setStudent] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("all");
-  const [selectedDivisionName, setSelectedDivisionName] =
-    useState("Select Division");
+  const [selectedDivisionName, setSelectedDivisionName] = useState("Select Division");
 
-  // Fetch student data based on email
   useEffect(() => {
-
-      const fetchStudentData = async () => {
-        const result = await getStudentByEmail(userEmail);
-        const { error } = result;
-        const data = result[0];
-        if (error) {
-          console.log(error);
+    const fetchStudentData = async () => {
+      const result = await getStudentByEmail(userEmail);
+      const { error } = result;
+      const data = result[0];
+      if (error) {
+        console.log(error);
+      } else {
+        if (data) {
+          setStudent(data);
+          setLoading(true);
+          setTimeout(() => {
+            setSuccess(true);
+          }, 1200);
         } else {
-          if (data) {
-            setStudent(data);
-            setLoading(true);
-            setTimeout(() => {
-              setSuccess(true);
-            }, 1200);
-          } else {
-            console.log("Data is undefined");
-          }
+          console.log("Data is undefined");
         }
-      };
-      fetchStudentData();
-
+      }
+    };
+    fetchStudentData();
   }, [userEmail]);
 
-  // Fetch all divisions data
   useEffect(() => {
     const fetchDivisionsData = async () => {
       const result = await getAllDivisions();
@@ -87,7 +83,6 @@ function Overview() {
     fetchDivisionsData();
   }, []);
 
-  // Handle division selection from the dropdown
   const handleSelectDivision = (division) => {
     setSelectedDivision(division);
     const selectedDiv = divisions.find((div) => div.shortName === division);
@@ -96,7 +91,6 @@ function Overview() {
     );
   };
 
-  // Render division components based on selected division
   const renderDivisionComponent = () => {
     const divNames = [
       "oper",
@@ -141,15 +135,16 @@ function Overview() {
             <>
               <Navbar />
               <br />
-              <Container fluid="md">
+              <Container fluid="md" className={theme === "dark" ? "container-dark" : ""}>
                 <Row className="d-flex justify-content-center">
                   <Col>
                     <div className="d-flex justify-content-center">
                       <DropdownButton
-                        variant="outline-dark"
+                        variant={theme === "dark" ? "outline-light" : "outline-dark"}
                         id="dropdown-basic-button"
                         title={selectedDivisionName}
                         onSelect={handleSelectDivision}
+                        className={theme === "dark" ? "text-dark-mode" : ""}
                       >
                         <Dropdown.Item eventKey="all">
                           All Divisions
@@ -158,6 +153,7 @@ function Overview() {
                           <Dropdown.Item
                             key={division.id}
                             eventKey={division.shortName}
+                            // className={theme === "dark" ? "text-dark-mode" : ""}
                           >
                             {division.fullName}
                           </Dropdown.Item>

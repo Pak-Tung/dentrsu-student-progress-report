@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -9,32 +9,71 @@ import {
   Legend,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
+import "../DarkMode.css";
+import { ThemeContext } from "../ThemeContext";
 
-function RadarChart({label, dataset}) {
-  ChartJS.register(
-    RadialLinearScale,
-    PointElement,
-    LineElement,
-    Filler,
-    Tooltip,
-    Legend
-  );
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
+
+function RadarChart({ label, dataset }) {
+  const { theme } = useContext(ThemeContext);
+
+  const isDarkMode = theme === 'dark';
 
   const data = {
-    labels: label, //['Operative', 'Periodontic', 'Endodontic', 'Prosthodontic', 'Oral Diagnosis', 'Oral Radiology', 'Oral Surgery', 'Orthodontic', 'Pediatric Dentistry'],
+    labels: label,
     datasets: [
       {
-        label: '%',//'Requirement Progression',
-        data: dataset,//[20, 90, 30, 50, 20, 30, 0, 10, 70],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
+        label: '%',
+        data: dataset,
+        backgroundColor: isDarkMode ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)',
+        borderColor: isDarkMode ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
       },
     ],
   };
+
+  const options = {
+    scales: {
+      r: {
+        angleLines: {
+          color: isDarkMode ? '#ffffff' : '#000000',
+        },
+        grid: {
+          color: isDarkMode ? '#888888' : '#cccccc',
+        },
+        pointLabels: {
+          color: isDarkMode ? '#ffffff' : '#000000',
+        },
+        ticks: {
+          backdropColor: isDarkMode ? '#333333' : '#ffffff',
+          color: isDarkMode ? '#ffffff' : '#000000',
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: isDarkMode ? '#ffffff' : '#000000',
+        },
+      },
+      tooltip: {
+        backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.7)',
+        titleColor: isDarkMode ? '#ffffff' : '#000000',
+        bodyColor: isDarkMode ? '#ffffff' : '#000000',
+      },
+    },
+  };
+
   return (
-    <Radar data={data} />
-  )
+    <Radar data={data} options={options} />
+  );
 }
 
-export default RadarChart; 
+export default RadarChart;

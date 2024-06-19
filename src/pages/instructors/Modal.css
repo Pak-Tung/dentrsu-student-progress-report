@@ -1,0 +1,55 @@
+/* DarkMode.css */
+
+.modal-dark {
+    background-color: #1e1e1e;
+    color: #ffffff;
+  }
+  
+  .modal-header-dark {
+    background-color: #333;
+    color: #ffffff;
+    border-bottom: 1px solid #444;
+  }
+  
+  .modal-footer-dark {
+    background-color: #333;
+    color: #ffffff;
+    border-top: 1px solid #444;
+  }
+  
+  .input-group-dark {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #444;
+  }
+  
+  .input-group-dark .form-control {
+    background-color: #444;
+    color: #ffffff;
+    border: 1px solid #555;
+  }
+  
+  .input-group-dark .input-group-text {
+    background-color: #555;
+    color: #ffffff;
+    border: 1px solid #666;
+  }
+  
+  .input-dark {
+    background-color: #444;
+    color: #ffffff;
+    border: 1px solid #555;
+  }
+  
+  .textarea-dark {
+    background-color: #444;
+    color: #ffffff;
+    border: 1px solid #555;
+  }
+  
+  .select-dark {
+    background-color: #444;
+    color: #ffffff;
+    border: 1px solid #555;
+  }
+  

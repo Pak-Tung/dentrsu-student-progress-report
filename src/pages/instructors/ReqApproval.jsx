@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import "../../App.css";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import Cookies from "js-cookie";
@@ -20,6 +20,8 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -40,6 +42,7 @@ const defaultOptions2 = {
 };
 
 function ReqApproval() {
+  const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
     try {
@@ -150,14 +153,19 @@ function ReqApproval() {
     fetchRequests();
   };
 
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
+  const alertClass = theme === "dark" ? "alert-dark" : "";
+  const textClass = theme === "dark" ? "text-dark-mode" : "";
+  const badgeClass = theme === "dark" ? "badge-dark" : "";
+
   return (
     <>
       <NavbarInstructor />
-      <Container fluid="md">
-        <h1>Requirement Approval</h1>
+      <Container fluid="md" className={containerClass}>
+        <h1 className={textClass}>Requirement Approval</h1>
         {state.loading ? (
           <div className="d-flex justify-content-center">
-
             <FadeIn>
               <div>
                 <Container>
@@ -174,11 +182,11 @@ function ReqApproval() {
           </div>
         ) : state.error ? (
           <div className="d-flex justify-content-center">
-            <Alert variant="danger">{state.error}</Alert>
+            <Alert variant="danger" className={alertClass}>{state.error}</Alert>
           </div>
         ) : state.pendingReqs.length === 0 ? (
           <div className="d-flex justify-content-center">
-            <p>No requirement request for approval.</p>
+            <p className={textClass}>No requirement request for approval.</p>
           </div>
         ) : (
           <ListGroup>
@@ -191,7 +199,7 @@ function ReqApproval() {
                       state.studentData[pendingReq.studentEmail]
                     )
                   }
-                  className="myDiv"
+                  className={`myDiv ${listGroupItemClass}`}
                 >
                   <Badge
                     bg={
@@ -201,6 +209,7 @@ function ReqApproval() {
                         ? "danger"
                         : "warning"
                     }
+                    className={badgeClass}
                     pill
                   >
                     {pendingReq.isApproved === 1
@@ -211,25 +220,25 @@ function ReqApproval() {
                   </Badge>
                   <Row>
                     <Col>
-                      <strong>db-ID:</strong> {pendingReq.id} <br />
-                      <strong>Student:</strong>{" "}
+                      <strong className={textClass}>db-ID:</strong> {pendingReq.id} <br />
+                      <strong className={textClass}>Student:</strong>{" "}
                       {state.studentData[pendingReq.studentEmail]} <br />
                     </Col>
                     <Col>
-                      <strong>Book No.</strong> {pendingReq.bookNo} <br />
-                      <strong>Page No.</strong> {pendingReq.pageNo}
+                      <strong className={textClass}>Book No.</strong> {pendingReq.bookNo} <br />
+                      <strong className={textClass}>Page No.</strong> {pendingReq.pageNo}
                     </Col>
                     <Col>
-                      <strong>Type:</strong> {pendingReq.type} <br />
-                      <strong>Area:</strong> {pendingReq.area}
+                      <strong className={textClass}>Type:</strong> {pendingReq.type} <br />
+                      <strong className={textClass}>Area:</strong> {pendingReq.area}
                     </Col>
                     <Col>
-                      <strong>RSU:</strong> {pendingReq.req_RSU} <br />
-                      <strong>DC:</strong> {pendingReq.req_DC}
+                      <strong className={textClass}>RSU:</strong> {pendingReq.req_RSU} <br />
+                      <strong className={textClass}>DC:</strong> {pendingReq.req_DC}
                     </Col>
                     <Col>
-                      <strong>HN:</strong> {pendingReq.HN} <br />
-                      <strong>Name:</strong> {pendingReq.patientName}
+                      <strong className={textClass}>HN:</strong> {pendingReq.HN} <br />
+                      <strong className={textClass}>Name:</strong> {pendingReq.patientName}
                     </Col>
                   </Row>
                 </ListGroup.Item>

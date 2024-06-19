@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from "react";
+import { Modal, Button, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
 import Cookies from "js-cookie";
 import { updateDivReqById, getReqByDivision } from "../features/apiCalls";
-import InputGroup from "react-bootstrap/InputGroup";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { getInstructorsByDivision } from "../features/apiTL";
+import { ThemeContext } from "../ThemeContext";
 
 function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
+  const { theme } = useContext(ThemeContext);
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -16,9 +14,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getReqByDivision(division);
-      //console.log("division", division);
       const { error } = response;
-      //console.log("result", response);
       if (error) {
         console.log(error);
       } else {
@@ -79,7 +75,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
         instructorEmail: divisionReq.instructorEmail,
         approvedDate: divisionReq.approvedDate,
         id: divisionReq.id,
-        note: divisionReq.note
+        note: divisionReq.note,
       });
       setSelectedOption(divisionReq.type);
       setSelectedInstructor(divisionReq.instructorEmail);
@@ -91,8 +87,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
 
   const handleChange = (event) => {
     const selected = event.target.value;
-    setSelectedOption(event.target.value);
-    //console.log("options", options);
+    setSelectedOption(selected);
 
     const item = options.find((d) => d.type === selected);
 
@@ -128,7 +123,6 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
     const fetchData = async () => {
       const response = await getInstructorsByDivision(division);
       const { error } = response;
-      //console.log("result", response);
       if (error) {
         console.log(error);
       } else {
@@ -143,13 +137,11 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
     fetchData();
   }, [division]);
 
-  // State to hold the selected instructor
   const [selectedInstructor, setSelectedInstructor] = useState("");
 
   const handleChangeInstructor = (event) => {
     setSelectedInstructor(event.target.value);
 
-    // Update the form data
     const { name, value } = event.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -169,17 +161,10 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
           unit_RSU: unitRSU,
           unit_DC: unitDC,
         };
-        //console.log("form data", JSON.stringify(updatedFormData));
-        const response = await updateDivReqById(
-          divisionReq.id,
-          updatedFormData,
-          division
-        );
-        //console.log("responseAPI", response);
+        const response = await updateDivReqById(divisionReq.id, updatedFormData, division);
         if (response.affectedRows === 1) {
           alert("Form submitted successfully!");
           localStorage.setItem("selectedDivision", division);
-          //window.location.reload();
           handleClose();
         }
       } catch (error) {
@@ -190,18 +175,18 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
+    <Modal show={show} onHide={handleClose} className={theme}>
+      <Modal.Header closeButton className={theme}>
         <Modal.Title>Edit Requirement</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={theme}>
         {divisionReq && (
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} className={theme}>
             <Container fluid>
               <Row className="justify-content-center">
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="bookNo">Book No:</InputGroup.Text>
+                    <InputGroup.Text id="bookNo" className={theme === "dark" ? "bg-dark text-white" : ""}>Book No:</InputGroup.Text>
                     <Form.Control
                       placeholder="Requirement Book No."
                       aria-label="bookNo"
@@ -209,12 +194,13 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       name="bookNo"
                       value={formData.bookNo}
                       onInput={handleInput}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="pageNo">Page No:</InputGroup.Text>
+                    <InputGroup.Text id="pageNo" className={theme === "dark" ? "bg-dark text-white" : ""}>Page No:</InputGroup.Text>
                     <Form.Control
                       placeholder="Requirement Page No."
                       aria-label="pageNo"
@@ -222,6 +208,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       name="pageNo"
                       value={formData.pageNo}
                       onInput={handleInput}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
@@ -233,6 +220,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       name="type"
                       value={selectedOption}
                       onChange={handleChange}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     >
                       {options.map((option) => (
                         <option key={option.id} value={option.type}>
@@ -246,7 +234,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
               <Row>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="area">Area/Teeth</InputGroup.Text>
+                    <InputGroup.Text id="area" className={theme === "dark" ? "bg-dark text-white" : ""}>Area/Teeth</InputGroup.Text>
                     <Form.Control
                       placeholder="Tooth/Sextant/Quadrant/Full Mouth/Case"
                       aria-label="area"
@@ -255,6 +243,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       value={formData.area}
                       required
                       onInput={handleInput}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
@@ -262,7 +251,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
               <Row className="justify-content-md-center">
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="requirement-rsu">
+                    <InputGroup.Text id="requirement-rsu" className={theme === "dark" ? "bg-dark text-white" : ""}>
                       Requirement (RSU)
                     </InputGroup.Text>
                     <Form.Control
@@ -274,15 +263,16 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       value={formData.req_RSU}
                       onInput={handleInput}
                       required
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
-                    <InputGroup.Text id="unit-rsu">{unitRSU}</InputGroup.Text>
+                    <InputGroup.Text id="unit-rsu" className={theme === "dark" ? "bg-dark text-white" : ""}>{unitRSU}</InputGroup.Text>
                   </InputGroup>
                 </Col>
               </Row>
               <Row className="justify-content-md-center">
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="requirement-dc">
+                    <InputGroup.Text id="requirement-dc" className={theme === "dark" ? "bg-dark text-white" : ""}>
                       Requirement (DC)
                     </InputGroup.Text>
                     <Form.Control
@@ -294,15 +284,16 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       value={formData.req_DC}
                       onInput={handleInput}
                       required
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
-                    <InputGroup.Text id="unit-rsu">{unitDC}</InputGroup.Text>
+                    <InputGroup.Text id="unit-dc" className={theme === "dark" ? "bg-dark text-white" : ""}>{unitDC}</InputGroup.Text>
                   </InputGroup>
                 </Col>
               </Row>
               <Row className="justify-content-md-center">
                 <Col md={4}>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="HN" style={{ fontSize: "11pt" }}>HN</InputGroup.Text>
+                    <InputGroup.Text id="HN" style={{ fontSize: "11pt" }} className={theme === "dark" ? "bg-dark text-white" : ""}>HN</InputGroup.Text>
                     <Form.Control
                       placeholder="0000000"
                       aria-label="HN"
@@ -310,12 +301,13 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       name="HN"
                       value={formData.HN}
                       onInput={handleInput}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="patientName" style={{ fontSize: "11pt" }}>Pt Name</InputGroup.Text>
+                    <InputGroup.Text id="patientName" style={{ fontSize: "11pt" }} className={theme === "dark" ? "bg-dark text-white" : ""}>Pt Name</InputGroup.Text>
                     <Form.Control
                       placeholder="Name of Patient"
                       aria-label="patientName"
@@ -324,20 +316,19 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       value={formData.patientName}
                       onInput={handleInput}
                       required
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Form.Group
-                    controlId="Form.SelectInstructor"
-                    className="mb-3"
-                  >
+                  <Form.Group controlId="Form.SelectInstructor" className="mb-3">
                     <Form.Select
                       name="instructorEmail"
                       value={selectedInstructor}
                       onChange={handleChangeInstructor}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     >
                       {optionsInstructor.map((option) => (
                         <option key={option.id} value={option.instructorEmail}>
@@ -348,14 +339,12 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                   </Form.Group>
                 </Col>
               </Row>
-
               <Row>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="note-label">
+                    <InputGroup.Text id="note-label" className={theme === "dark" ? "bg-dark text-white" : ""}>
                       Comment:
                     </InputGroup.Text>
-
                     <Form.Control
                       as="textarea"
                       rows={3}
@@ -366,11 +355,11 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       value={formData.note}
                       onInput={handleInput}
                       disabled
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
               </Row>
-
               <Row>
                 <div className="d-grid gap-2">
                   <Button variant="dark" size="lg" type="submit">
@@ -382,7 +371,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
           </Form>
         )}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className={theme}>
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>

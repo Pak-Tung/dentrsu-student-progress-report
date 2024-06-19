@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -9,6 +9,8 @@ import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import { Alert } from "react-bootstrap";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -20,6 +22,7 @@ const defaultOptions = {
 };
 
 function ProfileInstructor() {
+  const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -81,9 +84,9 @@ function ProfileInstructor() {
   return (
     <>
       <NavbarInstructor />
-      <div className="container mt-5">
+      <div className={`container-fluid mt-5 ${theme === 'dark' ? 'bg-dark' : ''}`} style={{ minHeight: '100vh' }}>
         <div className="d-flex justify-content-center mb-4">
-          <h2>Instructor Profile</h2>
+          <h2 className={theme === 'dark' ? 'text-white' : ''}>Instructor Profile</h2>
         </div>
 
         {loading ? (
@@ -107,23 +110,23 @@ function ProfileInstructor() {
             </div>
             <div className="d-flex justify-content-center">
               <div className="card" style={{ width: "18rem" }}>
-                <div className="card-header text-center">
+                <div className={`card-header text-center ${theme === 'dark' ? 'bg-secondary text-white' : ''}`}>
                   <h5 className="card-title">{userName}</h5>
                   <p className="card-text">Email: {userEmail}</p>
                 </div>
                 <ul className="list-group list-group-flush">
-                  <li className="list-group-item">
+                  <li className={`list-group-item ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
                     Division: {instructor.division}
                   </li>
-                  <li className="list-group-item text-center bg-light">
+                  <li className={`list-group-item text-center list-group-item-secondary ${theme === 'dark' ? 'bg-secondary text-white' : ''}`}>
                     <b>Team Leader Role</b>
                   </li>
-                  <li className="list-group-item">Floor: {instructor.floor}</li>
-                  <li className="list-group-item">Bay: {instructor.bay}</li>
+                  <li className={`list-group-item ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>Floor: {instructor.floor}</li>
+                  <li className={`list-group-item ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>Bay: {instructor.bay}</li>
                 </ul>
-                <div className="card-footer">
+                <div className={`card-footer ${theme === 'dark' ? 'bg-secondary text-white' : ''}`}>
                   <div className="d-grid gap-2 col-12 mx-auto">
-                    <button className="btn btn-outline-danger" onClick={logOut}>
+                    <button className={theme === 'dark' ? "btn btn-outline-light" : "btn btn-outline-danger"} onClick={logOut}>
                       Log out
                     </button>
                   </div>

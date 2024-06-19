@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import { Container, Row, Col, ListGroup, Alert } from "react-bootstrap";
 import { getAllReqByDivision } from "../../features/apiCalls";
 import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -16,16 +17,8 @@ const defaultOptions = {
   },
 };
 
-const defaultOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: successData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
 function MinimumReq() {
+  const { theme } = useContext(ThemeContext);
   const division = localStorage.getItem("division");
 
   const fullNameDivision = useCallback((division) => {
@@ -63,10 +56,15 @@ function MinimumReq() {
 
   const sortedReqData = reqData.sort((a, b) => a.id - b.id);
 
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
+  const alertClass = theme === "dark" ? "alert-dark" : "";
+  const textClass = theme === "dark" ? "text-dark-mode" : "";
+
   return (
     <>
       <NavbarInstructor />
-      <Container fluid="md">
+      <Container fluid="md" className={containerClass}>
         {loading ? (
           <FadeIn>
             <div>
@@ -78,16 +76,16 @@ function MinimumReq() {
             </div>
           </FadeIn>
         ) : error ? (
-          <Alert variant="danger">{error}</Alert>
+          <Alert variant="danger" className={alertClass}>{error}</Alert>
         ) : (
           <>
             <div className="d-flex justify-content-center mb-4">
-              <h4>
+              <h4 className={textClass}>
                 Minimum Requirement of {fullNameDivision(division)} Division
               </h4>
             </div>
             <ListGroup>
-              <ListGroup.Item>
+              <ListGroup.Item className={listGroupItemClass}>
                 <Row>
                   <Col md={4}>
                     <strong>Type</strong>
@@ -107,7 +105,7 @@ function MinimumReq() {
                 </Row>
               </ListGroup.Item>
               {sortedReqData.map((req) => (
-                <ListGroup.Item key={req.id}>
+                <ListGroup.Item key={req.id} className={listGroupItemClass}>
                   <Row>
                     <Col md={4}>{req.type}</Col>
                     <Col md={2}>{req.req_RSU < 0.001 ? "" : req.req_RSU}</Col>

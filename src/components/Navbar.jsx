@@ -1,13 +1,17 @@
 // NavbarStudent.js
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Cookies from "js-cookie";
 import Navbar from "react-bootstrap/Navbar";
 import "../Navbar.css";
+import "../DarkMode.css";
+import { ThemeContext } from "../ThemeContext";
 
 function NavbarStudent() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
@@ -25,7 +29,7 @@ function NavbarStudent() {
   return (
     <Navbar
       expand="md"
-      className="navbar navbar-expand-lg navbar-light bg-light"
+      className={`navbar navbar-expand-lg navbar-${theme} bg-${theme}`}
     >
       <Navbar.Brand href="/">
         STUDENT: {user.email ? user.email : "User.email@rsu.ac.th"}
@@ -64,9 +68,13 @@ function NavbarStudent() {
               Student Status
             </NavDropdown.Item>
           </NavDropdown>
-          <Nav.Item className="flex-fill">
-            <Nav.Link href="/">Profile</Nav.Link>
-          </Nav.Item>
+          <NavDropdown title="Profile" id="nav-profile" className="flex-fill">
+            <NavDropdown.Item href="/">Profile</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={toggleTheme}>
+              Switch light/dark theme
+            </NavDropdown.Item>
+          </NavDropdown>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

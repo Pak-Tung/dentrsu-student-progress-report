@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Modal,
   Button,
@@ -10,13 +10,15 @@ import {
 import { getReqByDivision, getAllDivisions } from "../../features/apiCalls";
 import SumByDivAndStudentEmail from "../Reports/SumByDivAndStudentEmail";
 import CompByStudentEmail from "../Reports/CompByStudentEmail";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 function ModalStudentByDiv({ show, handleClose, student, division }) {
+  const { theme } = useContext(ThemeContext);
   const [req, setReq] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState(division || "all");
-  const [selectedDivisionName, setSelectedDivisionName] =
-    useState("Select Division");
+  const [selectedDivisionName, setSelectedDivisionName] = useState("Select Division");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -63,11 +65,10 @@ function ModalStudentByDiv({ show, handleClose, student, division }) {
     );
   }, [selectedDivision, divisions]);
 
-
   const renderDivisionComponent = () => {
     const divisionComponents = {
       all: (
-        <Container fluid="md">
+        <Container fluid="md" className={containerClass}>
           {[
             "oper",
             "endo",
@@ -94,7 +95,7 @@ function ModalStudentByDiv({ show, handleClose, student, division }) {
         </Container>
       ),
       completeCases: (
-        <Container fluid="md">
+        <Container fluid="md" className={containerClass}>
           <Row className="d-flex justify-content-center">
             {student?.studentEmail && (
               <CompByStudentEmail studentEmail={student.studentEmail} />
@@ -106,7 +107,7 @@ function ModalStudentByDiv({ show, handleClose, student, division }) {
 
     return (
       divisionComponents[selectedDivision] || (
-        <Container fluid="md">
+        <Container fluid="md" className={containerClass}>
           <Row className="d-flex justify-content-center">
             {student?.studentEmail && (
               <SumByDivAndStudentEmail
@@ -126,22 +127,28 @@ function ModalStudentByDiv({ show, handleClose, student, division }) {
     return currentYear - startClinicYear + (currentMonth > 4 ? 5 : 4);
   };
 
+  const modalClass = theme === "dark" ? "modal-dark" : "";
+  const modalHeaderFooterClass = theme === "dark" ? "modal-header-dark modal-footer-dark" : "";
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const badgeClass = theme === "dark" ? "badge-dark" : "";
+  const textClass = theme === "dark" ? "text-dark-mode" : "";
+
   return (
-    <Modal show={show} onHide={handleClose} fullscreen={true}>
-      <Modal.Header closeButton>
-        <Modal.Title>
+    <Modal show={show} onHide={handleClose} fullscreen={true} className={modalClass}>
+      <Modal.Header closeButton className={modalHeaderFooterClass}>
+        <Modal.Title className={textClass}>
           {student
             ? `${student.studentId} ${student.title} ${student.studentName}`
             : "Student Details"}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={modalClass}>
         <Container fluid>
           <Row className="justify-content-center">
             <Col>
               {student ? (
                 <div className="d-flex justify-content-center">
-                  <p>
+                  <p className={textClass}>
                     Year:
                     <strong>
                       {calculateStudentYear(student.startClinicYear)}th
@@ -156,7 +163,7 @@ function ModalStudentByDiv({ show, handleClose, student, division }) {
                     {"   "}
                     <Badge
                       bg={student.status === "Complete" ? "success" : "danger"}
-                      // pill
+                      className={badgeClass}
                     >
                       {student.status === "Complete"
                         ? "Complete"
@@ -165,7 +172,7 @@ function ModalStudentByDiv({ show, handleClose, student, division }) {
                   </p>
                 </div>
               ) : (
-                <p>No student selected</p>
+                <p className={textClass}>No student selected</p>
               )}
             </Col>
           </Row>
@@ -178,7 +185,7 @@ function ModalStudentByDiv({ show, handleClose, student, division }) {
           <br />
         </Container>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className={modalHeaderFooterClass}>
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>

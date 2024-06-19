@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getStudentByEmail, getAllDivisions } from "../../features/apiCalls";
 import Cookies from "js-cookie";
@@ -7,9 +7,10 @@ import StatusByDiv from "../../components/StatusByDiv";
 import { Form, Container, Row, Col, Alert } from "react-bootstrap";
 import LoginByEmail from "../../components/LoginByEmail";
 import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -21,6 +22,7 @@ const defaultOptions = {
 };
 
 function ReqStatus() {
+  const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const cookieUser = Cookies.get("user");
     return cookieUser ? JSON.parse(cookieUser) : {};
@@ -98,28 +100,32 @@ function ReqStatus() {
     );
   };
 
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const formControlClass = theme === "dark" ? "form-control-dark" : "";
+  const alertClass = theme === "dark" ? "alert-dark" : "";
+
   return (
     <>
       {userEmail ? (
         <>
           <Navbar />
-          <Container>
+          <Container className={containerClass}>
             <Row className="justify-content-center">
               <Col md={6} className="text-center">
                 <h2>{requirementLabel} Status</h2>
               </Col>
             </Row>
             <Row className="justify-content-center">
-              <Col md={6} className="text-center">
+              <Col md={6} className={`text-center`}>
                 <Form.Group controlId="divisionSelect">
-                  <Form.Label className="w-100">
+                  <Form.Label className={`w-100`}>
                     <b>Select Division</b>
                   </Form.Label>
                   <Form.Control
                     as="select"
                     value={selectedDivision}
                     onChange={handleDivisionChange}
-                    className="custom-width"
+                    className={`custom-width ${formControlClass}`}
                   >
                     {divisions.map((division) => (
                       <option key={division.id} value={division.shortName}>
@@ -143,7 +149,7 @@ function ReqStatus() {
             </FadeIn>
           ) : error ? (
             <div className="d-flex justify-content-center">
-              <Alert variant="danger">{error}</Alert>
+              <Alert variant="danger" className={alertClass}>{error}</Alert>
             </div>
           ) : (
             <div className="d-flex justify-content-center">

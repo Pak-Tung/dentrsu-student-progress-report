@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { getDivReqByStudentEmail } from "../features/apiCalls";
 import "../App.css";
 import Cookies from "js-cookie";
@@ -17,6 +17,7 @@ import ModalUpdateReq from "./ModalUpdateReq";
 import * as loadingData from "../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import { ThemeContext } from "../ThemeContext";
 
 const defaultOptions = {
   loop: true,
@@ -28,6 +29,8 @@ const defaultOptions = {
 };
 
 function StatusByDiv(division) {
+  const { theme } = useContext(ThemeContext);
+  
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -107,7 +110,7 @@ function StatusByDiv(division) {
 
   return (
     <>
-      <Container fluid="md">
+      <Container fluid="md" className={`status-by-div-container ${theme}`}>
         <div
           className="justify-content-center"
           style={{
@@ -127,7 +130,7 @@ function StatusByDiv(division) {
                   ).label
                 : "Select Approval Status"
             }
-            variant="dark"
+            variant={theme === 'dark' ? 'secondary' : 'dark'}
             className="me-2"
           >
             {approvalStatusOptions.map((option) => (
@@ -149,7 +152,7 @@ function StatusByDiv(division) {
                     .label
                 : "Select Type"
             }
-            variant="dark"
+            variant={theme === 'dark' ? 'secondary' : 'dark'}
           >
             {typeOptions.map((option) => (
               <Dropdown.Item
@@ -188,7 +191,7 @@ function StatusByDiv(division) {
               <div key={req.id}>
                 <ListGroup.Item
                   onClick={() => handleUpdateDivisionReq(req)}
-                  className="myDiv"
+                  className={`myDiv ${theme === 'dark' ? 'bg-dark text-white' : ''}`}
                 >
                   <Badge
                     bg={
@@ -241,12 +244,12 @@ function StatusByDiv(division) {
         onHide={() => setSmShow(false)}
         aria-labelledby="example-modal-sizes-title-sm"
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className={theme === "dark" ? "bg-dark text-white" : ""}>
           <Modal.Title id="modal-update-forbidden">
             Update Forbidden!
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>Requirement is already approved. Cannot update.</Modal.Body>
+        <Modal.Body className={theme === "dark" ? "bg-dark text-white" : ""}>Requirement is already approved. Cannot update.</Modal.Body>
       </Modal>
     </>
   );

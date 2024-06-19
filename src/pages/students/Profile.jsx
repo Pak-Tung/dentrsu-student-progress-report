@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+// Profile.js
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getStudentByEmail } from "../../features/apiCalls";
@@ -11,6 +12,8 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import { ThemeContext } from "../../ThemeContext";
+import "../../DarkMode.css";
 
 const defaultOptions = {
   loop: true,
@@ -21,8 +24,9 @@ const defaultOptions = {
   },
 };
 
-
 function Profile() {
+  const { theme } = useContext(ThemeContext);
+
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
@@ -110,9 +114,9 @@ function Profile() {
   return (
     <>
       <Navbar />
-      <div className="container mt-5">
+      <div className={`container-fluid mt-5 ${theme === 'dark' ? 'bg-dark' : ''}`} style={{ minHeight: '100vh' }}>
         <div className="d-flex justify-content-center mb-4">
-          <h2>Student Profile</h2>
+          <h2 className={theme === 'dark' ? 'text-white' : ''}>Student Profile</h2>
         </div>
         <div className="d-flex justify-content-center mb-4">
           <img
@@ -137,29 +141,29 @@ function Profile() {
         ) : success ? (
           <div className="d-flex justify-content-center">
             <div className="card" style={{ width: "18rem" }}>
-              <div className="card-header text-center">
+              <div className={`card-header text-center ${theme === 'dark' ? 'bg-secondary text-white' : ''}`}>
                 <h5 className="card-title">Name: {userName}</h5>
                 <p className="card-text">Email: {userEmail}</p>
               </div>
               <ul className="list-group list-group-flush">
-                <li className="list-group-item">
+                <li className={`list-group-item ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
                   Year: {calculateStudentYear(student.startClinicYear)}th
                 </li>
-                <li className="list-group-item">Floor: {student.floor}</li>
-                <li className="list-group-item">
+                <li className={`list-group-item ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>Floor: {student.floor}</li>
+                <li className={`list-group-item ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
                   Unit: {student.bay + student.unitNumber}
                 </li>
-                <li className="list-group-item">Status: {student.status}</li>
-                <li className="list-group-item text-center list-group-item-secondary">
+                <li className={`list-group-item ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>Status: {student.status}</li>
+                <li className={`list-group-item text-center list-group-item-secondary ${theme === 'dark' ? 'bg-secondary text-white' : ''}`}>
                   == Team Leader ==
                 </li>
-                <li className="list-group-item text-center">
+                <li className={`list-group-item text-center ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
                   {teamLeader.title}. {teamLeader.instructorName}
                 </li>
               </ul>
-              <div className="card-footer">
+              <div className={`card-footer ${theme === 'dark' ? 'bg-secondary text-white' : ''}`}>
                 <div className="d-grid gap-2 col-12 mx-auto">
-                  <button className="btn btn-outline-danger" onClick={logOut}>
+                  <button className={theme === 'dark' ? "btn btn-outline-light" : "btn btn-outline-danger"} onClick={logOut}>
                     Log out
                   </button>
                 </div>

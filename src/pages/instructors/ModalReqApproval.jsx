@@ -1,16 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { Modal, Button, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
 import Cookies from "js-cookie";
 import { getReqByDivision, updateDivReqById } from "../../features/apiCalls";
+import "./Modal.css";
+import { ThemeContext } from "../../ThemeContext";
 
-function ModalReqApproval({
-  show,
-  handleClose,
-  divisionReq,
-  division,
-  studentName,
-}) {
-  //console.log("divisionInRA", division);
+function ModalReqApproval({ show, handleClose, divisionReq, division, studentName }) {
+  const { theme } = useContext(ThemeContext);
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -21,11 +17,7 @@ function ModalReqApproval({
   useEffect(() => {
     const fetchData = async () => {
       const response = await getReqByDivision(division);
-      const { error } = response;
-      //console.log("resultMRA", response);
-      if (error) {
-        console.log(error);
-      } else {
+      if (!response.error) {
         setOptions(response);
       }
     };
@@ -55,7 +47,6 @@ function ModalReqApproval({
 
   useEffect(() => {
     if (divisionReq) {
-      //console.log("divisionReq", divisionReq);
       setFormData({
         studentEmail: userEmail,
         bookNo: divisionReq.bookNo || "",
@@ -90,7 +81,6 @@ function ModalReqApproval({
   const handleChange = (event) => {
     const selected = event.target.value;
     setSelectedOption(selected);
-    //console.log("options", options);
 
     const item = options.find((d) => d.type === selected);
 
@@ -125,16 +115,9 @@ function ModalReqApproval({
     event.preventDefault();
     try {
       const updatedFormData = { ...formData, isApproved: 1 };
-      //console.log("form data", JSON.stringify(updatedFormData));
-      const response = await updateDivReqById(
-        divisionReq.id,
-        updatedFormData,
-        division
-      );
-      //console.log("responseAPI", response);
+      const response = await updateDivReqById(divisionReq.id, updatedFormData, division);
       if (response.affectedRows === 1) {
         alert("Form approved successfully!");
-        //window.location.reload();
         handleClose();
       }
     } catch (error) {
@@ -146,16 +129,9 @@ function ModalReqApproval({
     event.preventDefault();
     try {
       const updatedFormData = { ...formData, isApproved: -1 };
-      //console.log("form data", JSON.stringify(updatedFormData));
-      const response = await updateDivReqById(
-        divisionReq.id,
-        updatedFormData,
-        division
-      );
-      //console.log("responseAPI", response);
+      const response = await updateDivReqById(divisionReq.id, updatedFormData, division);
       if (response.affectedRows === 1) {
         alert("Form sent back for revision!");
-        //window.location.reload();
         handleClose();
       }
     } catch (error) {
@@ -163,25 +139,32 @@ function ModalReqApproval({
     }
   };
 
+  const modalClass = theme === "dark" ? "modal-dark" : "";
+  const modalHeaderFooterClass = theme === "dark" ? "modal-header-dark modal-footer-dark" : "";
+  const inputGroupClass = theme === "dark" ? "input-group-dark" : "";
+  const inputClass = theme === "dark" ? "input-dark" : "";
+  const textareaClass = theme === "dark" ? "textarea-dark" : "";
+  const selectClass = theme === "dark" ? "select-dark" : "";
+
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
+    <Modal show={show} onHide={handleClose} className={modalClass}>
+      <Modal.Header closeButton className={modalHeaderFooterClass}>
         <Modal.Title>Requirement Approval</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={modalClass}>
         {divisionReq && (
           <Form>
             <Container fluid>
               <Row className="justify-content-center">
                 <Col>
                   <div className="d-flex justify-content-center">
-                     <h3>Student: {studentName}</h3>
+                    <h3>Student: {studentName}</h3>
                   </div>
                 </Col>
               </Row>
               <Row className="justify-content-center">
                 <Col>
-                  <InputGroup className="mb-3">
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
                     <InputGroup.Text id="bookNo">Book No:</InputGroup.Text>
                     <Form.Control
                       placeholder="Requirement Book No."
@@ -190,12 +173,13 @@ function ModalReqApproval({
                       name="bookNo"
                       value={formData.bookNo}
                       onInput={handleInput}
+                      className={inputClass}
                       disabled
                     />
                   </InputGroup>
                 </Col>
                 <Col>
-                  <InputGroup className="mb-3">
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
                     <InputGroup.Text id="pageNo">Page No:</InputGroup.Text>
                     <Form.Control
                       placeholder="Requirement Page No."
@@ -204,6 +188,7 @@ function ModalReqApproval({
                       name="pageNo"
                       value={formData.pageNo}
                       onInput={handleInput}
+                      className={inputClass}
                       disabled
                     />
                   </InputGroup>
@@ -217,6 +202,7 @@ function ModalReqApproval({
                       value={selectedOption}
                       onChange={handleChange}
                       disabled
+                      className={selectClass}
                     >
                       {options.map((option) => (
                         <option key={option.id} value={option.type}>
@@ -229,7 +215,7 @@ function ModalReqApproval({
               </Row>
               <Row>
                 <Col>
-                  <InputGroup className="mb-3">
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
                     <InputGroup.Text id="area">Area/Teeth</InputGroup.Text>
                     <Form.Control
                       placeholder="Tooth/Sextant/Quadrant/Full Mouth/Case"
@@ -239,6 +225,7 @@ function ModalReqApproval({
                       value={formData.area}
                       required
                       onInput={handleInput}
+                      className={inputClass}
                       disabled
                     />
                   </InputGroup>
@@ -246,10 +233,8 @@ function ModalReqApproval({
               </Row>
               <Row className="justify-content-md-center">
                 <Col>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Text id="requirement-rsu">
-                      Requirement (RSU)
-                    </InputGroup.Text>
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
+                    <InputGroup.Text id="requirement-rsu">Requirement (RSU)</InputGroup.Text>
                     <Form.Control
                       placeholder="0"
                       aria-label="requirement-rsu"
@@ -259,6 +244,7 @@ function ModalReqApproval({
                       value={formData.req_RSU}
                       onInput={handleInput}
                       required
+                      className={inputClass}
                     />
                     <InputGroup.Text id="unit-rsu">{unitRSU}</InputGroup.Text>
                   </InputGroup>
@@ -266,10 +252,8 @@ function ModalReqApproval({
               </Row>
               <Row className="justify-content-md-center">
                 <Col>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Text id="requirement-dc">
-                      Requirement (DC)
-                    </InputGroup.Text>
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
+                    <InputGroup.Text id="requirement-dc">Requirement (DC)</InputGroup.Text>
                     <Form.Control
                       placeholder="0"
                       aria-label="requirement-dc"
@@ -279,6 +263,7 @@ function ModalReqApproval({
                       value={formData.req_DC}
                       onInput={handleInput}
                       required
+                      className={inputClass}
                     />
                     <InputGroup.Text id="unit-rsu">{unitDC}</InputGroup.Text>
                   </InputGroup>
@@ -286,7 +271,7 @@ function ModalReqApproval({
               </Row>
               <Row className="justify-content-md-center">
                 <Col md={4}>
-                  <InputGroup className="mb-3">
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
                     <InputGroup.Text id="HN" style={{ fontSize: "11pt" }}>
                       HN
                     </InputGroup.Text>
@@ -297,16 +282,14 @@ function ModalReqApproval({
                       name="HN"
                       value={formData.HN}
                       onInput={handleInput}
+                      className={inputClass}
                       disabled
                     />
                   </InputGroup>
                 </Col>
                 <Col>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Text
-                      id="patientName"
-                      style={{ fontSize: "11pt" }}
-                    >
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
+                    <InputGroup.Text id="patientName" style={{ fontSize: "11pt" }}>
                       Pt Name
                     </InputGroup.Text>
                     <Form.Control
@@ -316,23 +299,16 @@ function ModalReqApproval({
                       name="patientName"
                       value={formData.patientName}
                       onInput={handleInput}
+                      className={inputClass}
                       disabled
                     />
                   </InputGroup>
                 </Col>
               </Row>
-
               <Row>
                 <Col>
                   <div className="d-grid gap-2">
-                    <Button
-                      style={{
-                        backgroundColor: "#339933",
-                        borderColor: "#339933",
-                      }}
-                      size="lg"
-                      onClick={handleApprove}
-                    >
+                    <Button style={{ backgroundColor: "#339933", borderColor: "#339933" }} size="lg" onClick={handleApprove}>
                       Approve
                     </Button>
                   </div>
@@ -341,11 +317,8 @@ function ModalReqApproval({
               <br />
               <Row>
                 <Col>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Text id="note-label">
-                      Revision required
-                    </InputGroup.Text>
-
+                  <InputGroup className={`mb-3 ${inputGroupClass}`}>
+                    <InputGroup.Text id="note-label">Revision required</InputGroup.Text>
                     <Form.Control
                       as="textarea"
                       rows={3}
@@ -355,21 +328,14 @@ function ModalReqApproval({
                       name="note"
                       value={formData.note || ""}
                       onInput={handleInput}
+                      className={textareaClass}
                     />
                   </InputGroup>
                 </Col>
               </Row>
-
               <Row>
                 <div className="d-grid gap-2">
-                  <Button
-                    style={{
-                      backgroundColor: "#6600cc",
-                      borderColor: "#6600cc",
-                    }}
-                    size="lg"
-                    onClick={handleRevision}
-                  >
+                  <Button style={{ backgroundColor: "#6600cc", borderColor: "#6600cc" }} size="lg" onClick={handleRevision}>
                     Sent Back for Revision
                   </Button>
                 </div>
@@ -378,7 +344,7 @@ function ModalReqApproval({
           </Form>
         )}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className={modalHeaderFooterClass}>
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>

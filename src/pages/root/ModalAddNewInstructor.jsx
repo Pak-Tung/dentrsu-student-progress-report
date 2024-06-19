@@ -79,15 +79,14 @@ function ModalAddNewInstructor({ show, handleClose, email, role }) {
     }
     setValidated(true);
     try {
-      const responseUser = await insertUser(userFormDate);
-      //console.log("responseUser", responseUser);
-
       const response = await insertInstructor(formData);
       //console.log("responseAPI", response);
-      if (response.name === "AxiosError") {
+      if (response.name === "AxiosError") {  
         alert(response.request.responseText);
         //window.location.reload(); 
       } else if (response.data.affectedRows === 1) {
+        const responseUser = await insertUser(userFormDate);
+        //console.log("responseUser", responseUser);
         alert("Add New Instructor successfully!");
         handleClose();
       }else {

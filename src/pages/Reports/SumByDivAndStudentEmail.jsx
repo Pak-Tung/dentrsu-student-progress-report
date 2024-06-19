@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Cookies from "js-cookie";
 import {
   getDivReqByStudentEmail,
   getReqByDivision,
 } from "../../features/apiCalls";
 import { Container, Row, Col, Badge, ListGroup } from "react-bootstrap";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 function SumByDivAndStudentEmail({ division, studentEmail }) {
-  //console.log("division at SumByDiv", division);
-  //console.log("studentEmail at SumByDiv", studentEmail);
+  const { theme } = useContext(ThemeContext);
  
   const userEmail = studentEmail;
 
@@ -94,10 +95,15 @@ function SumByDivAndStudentEmail({ division, studentEmail }) {
     return minReq.map((req) => req.type);
   };
 
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
+  const listGroupItemActiveClass = theme === "dark" ? "list-group-item-active-dark" : "";
+  const badgeClass = theme === "dark" ? "badge-dark" : "";
+
   return (
-    <Container fluid="md">
+    <Container fluid="md" className={containerClass}>
       <ListGroup>
-        <ListGroup.Item active>
+        <ListGroup.Item className={listGroupItemActiveClass}>
         <Row>
             <Col>{divTitle} Requirement</Col>
             <Col className="text-center">RSU Requirement</Col>
@@ -112,11 +118,11 @@ function SumByDivAndStudentEmail({ division, studentEmail }) {
           const min_RSU = displayMinValue(type, "req_RSU");
           const min_DC = displayMinValue(type, "req_DC");
           return (
-            <ListGroup.Item key={type}>
+            <ListGroup.Item key={type} className={listGroupItemClass}>
               <Row>
                 <Col>
                   <h4>
-                    <Badge bg={getBadgeBg(req_RSU, req_DC, min_RSU, min_DC)}>
+                    <Badge bg={getBadgeBg(req_RSU, req_DC, min_RSU, min_DC)} className={badgeClass}>
                       {type}
                     </Badge>
                   </h4>

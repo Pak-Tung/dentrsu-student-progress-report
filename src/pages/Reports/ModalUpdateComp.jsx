@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Modal, Button, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
 import Cookies from "js-cookie";
 import {
@@ -7,8 +7,10 @@ import {
   getInstructorsByTeamleaderRole,
   deleteCompReqById,
 } from "../../features/apiCalls";
+import { ThemeContext } from "../../ThemeContext";
 
 function ModalUpdateComp({ show, handleClose, compReq }) {
+  const { theme } = useContext(ThemeContext);
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -156,13 +158,13 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Complete Case</Modal.Title>
+    <Modal show={show} onHide={handleClose} className={theme}>
+      <Modal.Header closeButton className={theme === "dark" ? "bg-dark text-white" : ""}>
+        <Modal.Title className={theme === "dark" ? "bg-dark text-white" : ""}>Edit Complete Case</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={theme}>
         {compReq && (
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} className={theme}>
             <Container fluid>
               <Row className="justify-content-center">
                 <Col>
@@ -171,6 +173,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
                       name="complexity"
                       value={selectedOption}
                       onChange={handleChange}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     >
                       {options.map((option) => (
                         <option key={option.id} value={option.complexity}>
@@ -184,7 +187,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
               <Row className="justify-content-md-center">
                 <Col md={4}>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="HN">HN</InputGroup.Text>
+                    <InputGroup.Text id="HN" className={theme === "dark" ? "bg-dark text-white" : ""}>HN</InputGroup.Text>
                     <Form.Control
                       placeholder="0000000"
                       aria-label="HN"
@@ -192,12 +195,13 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
                       name="HN"
                       value={formData.HN}
                       onChange={handleInput}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="patientName">Pt Name</InputGroup.Text>
+                    <InputGroup.Text id="patientName" className={theme === "dark" ? "bg-dark text-white" : ""}>Pt Name</InputGroup.Text>
                     <Form.Control
                       placeholder="Name of Patient"
                       aria-label="patientName"
@@ -206,6 +210,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
                       value={formData.patientName}
                       onChange={handleInput}
                       required
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
@@ -217,6 +222,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
                       name="instructorEmail"
                       value={selectedInstructor}
                       onChange={handleChangeInstructor}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     >
                       {optionsInstructor.map((option) => (
                         <option key={option.id} value={option.instructorEmail}>
@@ -230,7 +236,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
               <Row>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="note2">Case Note</InputGroup.Text>
+                    <InputGroup.Text id="note2" className={theme === "dark" ? "bg-dark text-white" : ""}>Case Note</InputGroup.Text>
                     <Form.Control
                       placeholder="Note"
                       aria-label="note2"
@@ -238,6 +244,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
                       name="note2"
                       value={formData.note2}
                       onChange={handleInput}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
@@ -245,7 +252,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
               <Row>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="note-label">Comment</InputGroup.Text>
+                    <InputGroup.Text id="note-label" className={theme === "dark" ? "bg-dark text-white" : ""}>Comment</InputGroup.Text>
                     <Form.Control
                       as="textarea"
                       rows={3}
@@ -256,6 +263,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
                       value={formData.note}
                       onChange={handleInput}
                       disabled
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
                   </InputGroup>
                 </Col>
@@ -271,7 +279,7 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
           </Form>
         )}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className={theme}>
         <Container>
           <Row>
             <Col md={2}>
@@ -293,4 +301,3 @@ function ModalUpdateComp({ show, handleClose, compReq }) {
 }
 
 export default ModalUpdateComp;
-
