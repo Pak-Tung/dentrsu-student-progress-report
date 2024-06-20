@@ -583,6 +583,15 @@ export const deleteCompReqById = async (id) => {
     }
 };
 
+export const updateUserPictureByEmail = async (email, imgUrl) => {
+    try {
+        const response = await axios.put(`${ host }/api/students/update/picture/studentEmail/${email}`, imgUrl);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
 
 
 
