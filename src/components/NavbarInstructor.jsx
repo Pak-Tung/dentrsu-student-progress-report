@@ -34,20 +34,39 @@ function NavbarInstructor() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto w-100 justify-content-between">
-          <NavDropdown title="Approval" id="nav-approval" className="flex-fill">
-            <NavDropdown.Item href="/reqApproval">Requirement</NavDropdown.Item>
+          <NavDropdown title="Patients" id="nav-patients" className="flex-fill">
+            <NavDropdown.Item href="/allTeamleaderPatients">
+              All patients
+            </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/compApproval">Complete cases</NavDropdown.Item>
+            <NavDropdown.Item href="/txApproval">
+              Treatment Approval
+            </NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown title="Requirements" id="nav-approval" className="flex-fill">
+            <NavDropdown.Item href="/reqApproval">Requirement Approval</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/requestComplete">Requesting Complete Status</NavDropdown.Item>
+            <NavDropdown.Item href="/compApproval">
+              Complete cases Approval
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/requestComplete">
+              Student Complete Status Approval
+            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Member" id="nav-member" className="flex-fill">
-            <NavDropdown.Item href="/memberInTeam">Member in Team</NavDropdown.Item>
+            <NavDropdown.Item href="/memberInTeam">
+              Member in Team
+            </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/divisionAdvisee">Division Advisee</NavDropdown.Item>
+            <NavDropdown.Item href="/divisionAdvisee">
+              Division Advisee
+            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Division" id="nav-division" className="flex-fill">
-            <NavDropdown.Item href="/minReq">Minimum Requirement</NavDropdown.Item>
+            <NavDropdown.Item href="/minReq">
+              Minimum Requirement
+            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Profile" id="nav-profile" className="flex-fill">
             <NavDropdown.Item href="/">Profile</NavDropdown.Item>
@@ -59,7 +78,7 @@ function NavbarInstructor() {
         </Nav>
       </Navbar.Collapse>
     </Navbar>
-  )
+  );
 }
 
 export default NavbarInstructor;

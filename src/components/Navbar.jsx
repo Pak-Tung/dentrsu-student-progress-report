@@ -37,6 +37,9 @@ function NavbarStudent() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto w-100 justify-content-between">
+          <NavDropdown title="Patients" id="nav-patients" className="flex-fill">
+            <NavDropdown.Item href="/allPatients">All patients</NavDropdown.Item>
+          </NavDropdown>
           <NavDropdown title="Submission" id="nav-submit" className="flex-fill">
             <NavDropdown.Item href="/reqSubmit">Requirement</NavDropdown.Item>
             <NavDropdown.Divider />
