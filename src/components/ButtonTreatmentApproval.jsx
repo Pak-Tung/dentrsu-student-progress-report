@@ -89,6 +89,7 @@ function ButtonTreatmentApproval({ treatment, updateTreatment }) {
             borderRadius: 5,
             border: "none",
           }}
+          title={role === "student" ? "Click to request treatment approval" : "Click to approve treatment"}
         >
           Approve
         </button>

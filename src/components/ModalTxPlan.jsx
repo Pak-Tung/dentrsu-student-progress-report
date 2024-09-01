@@ -533,7 +533,11 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                           complexity
                         )}
                       </strong>
-                      <p>Complexity</p>
+                      <p
+                        title={"Contact Team Leader to update complexity"}
+                      >
+                        Complexity
+                      </p>
                     </Col>
                     <Col>
                       <strong>{getStudentName(updatePt.studentEmail)}</strong>

@@ -119,6 +119,7 @@ function ButtonCompletedTxApproval({ patient, updateStatus }) {
           borderRadius: 5,
           border: "none",
         }}
+        title={role === "student" ? "Click to request complete case approval" : "Click to approve complete case"} 
       >
         Approval Request
       </button>

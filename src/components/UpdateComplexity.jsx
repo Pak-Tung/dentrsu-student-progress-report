@@ -32,6 +32,13 @@ function UpdateComplexity({ patient, updateComplexity }) {
 
   const handleSubmitComplexity = async (e) => {
     e.preventDefault();
+
+    // Show confirmation dialog
+    const confirmed = window.confirm("Are you sure you want to update the complexity?");
+    if (!confirmed) {
+      return; // Exit function if user cancels
+    }
+
     try {
       const response = await updatePatientbyhn(patient.hn, updatePt);
       // Optionally call updateComplexity to update parent state

@@ -113,8 +113,9 @@ function ButtonTxApproval({ patient, updateStatus }) {
           borderRadius: 5,
           border: "none",
         }}
+        title={role === "student" ? "Click to request treatment plan approval" : "Click to approve treatment plan"}
       >
-        {role === "student" ? "Tx Approval Request" : "Approve Treatment Plan"}
+        {role === "student" ? "Approval Request" : "Approve Plan"}
       </button>
     </>
   );
