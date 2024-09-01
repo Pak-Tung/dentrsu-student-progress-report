@@ -10,7 +10,7 @@ function LoginScreen({ handleLoginSuccess }) {
       <Row className="d-flex justify-content-center">
         <Col className="text-center">
         <h3>Comprehensive Dental Care Clinic</h3>
-          <h2>Online Requirements</h2>
+          <h2>DentRSU Connect</h2>
         </Col>
       </Row>
       <Row className="d-flex justify-content-center">
