@@ -108,25 +108,25 @@ function TreatmentApproval() {
       </div>
       <Container fluid="md" className={`status-by-div-container ${theme}`}>
         <Row className="text-center">
-          <Col xs={2}>
+          <Col md={2}>
             <strong>Patient</strong>
           </Col>
-          <Col xs={1}>
+          <Col md={1}>
             <strong>Area</strong>
           </Col>
-          <Col xs={4}>
+          <Col md={4}>
             <strong>Description</strong>
           </Col>
-          <Col xs={1}>
+          <Col md={1}>
             <strong>Start</strong>
           </Col>
-          <Col xs={1}>
+          <Col md={1}>
             <strong>Completed</strong>
           </Col>
-          <Col xs={2} className="text-center">
+          <Col md={2} className="text-center">
             <strong>Operator</strong>
           </Col>
-          <Col xs={1} className="text-center"></Col>
+          <Col md={1} className="text-center"></Col>
         </Row>
 
         <ListGroup>
@@ -137,28 +137,28 @@ function TreatmentApproval() {
                 return (
                   <ListGroup.Item key={treatment.id}>
                     <Row>
-                      <Col xs={2}>
+                      <Col md={2}>
                         {treatment.hn}{" "}{treatment.patientName}
                     </Col>
-                      <Col className="text-center" xs={1}>
+                      <Col className="text-center" md={1}>
                         {treatment.area} <br />
                       </Col>
-                      <Col xs={4}>
+                      <Col md={4}>
                         {treatment.description}
                         <br />
                       </Col>
-                      <Col className="text-center" xs={1}>
+                      <Col className="text-center" md={1}>
                         {formatDateFormISO(treatment.startDate)}
                         <br />
                       </Col>
-                      <Col className="text-center" xs={1}>
+                      <Col className="text-center" md={1}>
                         {formatDateFormISO(treatment.completeDate)}
                       </Col>
-                      <Col className="text-center" xs={2}>
+                      <Col className="text-center" md={2}>
                         {getStudentName(treatment.operatorEmail)}
                         <br />
                       </Col>
-                      <Col className="text-center" xs={1}>
+                      <Col className="text-center" md={1}>
                         {role !== "student" && (
                           <button
                             onClick={() => handleTreatmentApproval(treatment)}
