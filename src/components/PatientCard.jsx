@@ -12,16 +12,8 @@ import ModalTxPlan from "./ModalTxPlan";
 import "../App.css";
 import { getAllStudents, getTxPlanByPatientHn } from "../features/apiCalls";
 import { ThemeContext } from "../ThemeContext";
+import { formatDate } from "../utilities/dateUtils";
 
-// Convert MySQL date string to JavaScript Date object and format it as DD/MM/YYYY
-const formatDate = (dateStr) => {
-  if (!dateStr) return "";
-  const date = new Date(dateStr);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 
 function PatientCard({ patients = [], updatePatients }) {
   const { theme } = useContext(ThemeContext);
@@ -110,23 +102,23 @@ function PatientCard({ patients = [], updatePatients }) {
     <>
       <Container fluid="md" className={`status-by-div-container ${theme}`}>
         <Row className="text-center">
-          <Col></Col>
-          <Col>
+          <Col md={3}></Col>
+          <Col md={2}>
             <strong>Accepted Date</strong> <br />
           </Col>
-          <Col>
+          <Col md={2}>
             <strong>TxPlan Approved Date</strong>
             <br />
           </Col>
-          <Col>
+          <Col md={2}>
             <strong>Completed Date</strong>
             <br />
           </Col>
-          <Col>
+          <Col md={1}> 
             <strong>Complexity</strong>
             <br />
           </Col>
-          <Col>
+          <Col md={2}>
             <strong>{role === 'student' ? 'Note' : 'Operator'}</strong>
             <br />
           </Col>
@@ -180,28 +172,28 @@ function PatientCard({ patients = [], updatePatients }) {
                         : "INCOMPLETE"}
                     </Badge>
                     <Row>
-                      <Col>
+                      <Col sm={3}>
                         {patient.hn} {patient.name}
                         <br />
                         Tel: {patient.tel}
                         <br />
                       </Col>
-                      <Col className="text-center">
+                      <Col className="text-center" md={2}>
                         {formatDate(patient.acceptedDate)} <br />
                       </Col>
-                      <Col className="text-center">
+                      <Col className="text-center" md={2}>
                         {formatDate(patient.planApprovedDate)}
                         <br />
                       </Col>
-                      <Col className="text-center">
+                      <Col className="text-center" md={2}>
                         {formatDate(patient.completedDate)}
                         <br />
                       </Col>
-                      <Col className="text-center">
+                      <Col className="text-center" md={1}>
                         {patient.complexity}
                         <br />
                       </Col>
-                      <Col className="text-center">
+                      <Col className="text-center" md={2}>
                         {role === 'student' ? patient.note : getStudentName(patient.studentEmail)}
                         <br />
                       </Col>

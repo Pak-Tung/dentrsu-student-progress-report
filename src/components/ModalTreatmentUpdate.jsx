@@ -193,10 +193,10 @@ function ModalTreatmentUpdate({
 
             <Form onSubmit={handleFormSubmit} className={`mt-4`}>
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   ID
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Control
                     type="number"
                     name="id"
@@ -207,10 +207,10 @@ function ModalTreatmentUpdate({
               </Form.Group>
 
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   HN
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Control
                     type="text"
                     name="hn"
@@ -221,10 +221,10 @@ function ModalTreatmentUpdate({
               </Form.Group>
 
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   Treatment No.
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Control
                     type="text"
                     name="txid"
@@ -235,10 +235,10 @@ function ModalTreatmentUpdate({
               </Form.Group>
 
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   Phase
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Select
                     name="phase"
                     value={newTxPlan.phase}
@@ -256,10 +256,10 @@ function ModalTreatmentUpdate({
               </Form.Group>
 
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   Area
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Control
                     type="text"
                     name="area"
@@ -271,10 +271,10 @@ function ModalTreatmentUpdate({
               </Form.Group>
 
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   Select Division
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Select
                     name="division"
                     value={newTxPlan.division}
@@ -294,10 +294,10 @@ function ModalTreatmentUpdate({
               </Form.Group>
 
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   Description
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Select
                     name="description"
                     value={selectedOption}
@@ -317,10 +317,10 @@ function ModalTreatmentUpdate({
               </Form.Group>
 
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column sm={3}>
+                <Form.Label column md={3}>
                   Note
                 </Form.Label>
-                <Col sm={9}>
+                <Col md={9}>
                   <Form.Control
                     type="text"
                     name="note"

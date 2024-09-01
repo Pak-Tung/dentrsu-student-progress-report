@@ -110,16 +110,16 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
         </Button> */}
 
         <Row className="text-center">
-          <Col xs={2}>
+          <Col md={2}>
             <strong>Phase</strong>
           </Col>
-          <Col xs={1}>
+          <Col md={1}>
             <strong>No</strong>
           </Col>
-          <Col xs={2}>
+          <Col md={2}>
             <strong>Area</strong>
           </Col>
-          <Col xs={3}
+          <Col md={3}
             onClick={() => setShowAll((prevShowAll) => !prevShowAll)}
             className={`myDiv ${
               theme === "dark" ? "bg-dark text-white" : ""
@@ -127,13 +127,13 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
           >
             <strong>Description</strong>
           </Col>
-          <Col xs={1}>
+          <Col md={1}>
             <strong>Start</strong>
           </Col>
-          <Col xs={1}>
+          <Col md={1}>
             <strong>Completed</strong>
           </Col>
-          <Col xs={2}>
+          <Col md={2}>
             <strong>Authorized by</strong>
           </Col>
         </Row>
@@ -165,22 +165,22 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
                   style={isStrikeThrough ? { textDecoration: "line-through", opacity: 0.5 } : {}}
                 >
                   <Row>
-                    <Col xs={2}>{!isPhaseDisplayed ? treatment.phase : ""}</Col>
-                    <Col className="text-center" xs={1}>
+                    <Col md={2}>{!isPhaseDisplayed ? treatment.phase : ""}</Col>
+                    <Col className="text-center" md={1}>
                       {treatment.txid}
                     </Col>
-                    <Col className="text-center" xs={2}>
+                    <Col className="text-center" md={2}>
                       {treatment.area}
                     </Col>
-                    <Col xs={3}>{treatment.description}</Col>
-                    <Col className="text-center" xs={1}>
+                    <Col md={3}>{treatment.description}</Col>
+                    <Col className="text-center" md={1}>
                       {formatDate(treatment.startDate)}
                     </Col>
-                    <Col className="text-center" xs={1}>
+                    <Col className="text-center" md={1}>
                       {formatDate(treatment.completeDate)}
                     </Col>
 
-                    <Col className="text-center" xs={2}>
+                    <Col className="text-center" md={2}>
                       {treatment.status === 2 ? (
                         treatment.approvedInstructor
                       ) : treatment.status === 1 ? (

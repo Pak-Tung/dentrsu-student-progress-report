@@ -32,6 +32,7 @@ import UpdateComplexity from "./UpdateComplexity";
 import ButtonTreatmentPlanApproval from "./ButtonTreatmentPlanApproval";
 import ButtonCompletedTxApproval from "./ButtonCompletedTxApproval";
 import ButtonUpdatePatientProfile from "./ButtonUpdatePatientProfile";
+import { formatDateFormISO, formatDate } from "../utilities/dateUtils";
 
 const defaultOptions = {
   loop: true,
@@ -241,16 +242,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     }
   };
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  };
 
   const convertStatus = (status) => {
     switch (status) {
@@ -339,7 +330,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
 
     const processedUpdatePt = {
       ...updatePt,
-      acceptedDate: updatePt.acceptedDate === "" ? null : updatePt.acceptedDate,
+      acceptedDate: formatDateFormISO(new Date().toISOString()),
       completedDate:
         updatePt.completedDate === "" ? null : updatePt.completedDate,
       planApprovedDate:
@@ -601,10 +592,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                 className={`mt-4 ${containerClass}`}
               >
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={3}>
+                  <Form.Label column md={3}>
                     Tel:
                   </Form.Label>
-                  <Col sm={9}>
+                  <Col md={9}>
                     <Form.Control
                       type="text"
                       name="tel"
@@ -620,10 +611,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   className="mb-3"
                   hidden={role === "student"} // Hide if role is "student"
                 >
-                  <Form.Label column sm={3}>
+                  <Form.Label column md={3}>
                     Complexity
                   </Form.Label>
-                  <Col sm={9}>
+                  <Col md={9}>
                     <Form.Control
                       type="number"
                       name="complexity"
@@ -635,10 +626,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                 </Form.Group>
 
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={3}>
+                  <Form.Label column md={3}>
                     Note
                   </Form.Label>
-                  <Col sm={9}>
+                  <Col md={9}>
                     <Form.Control
                       type="text"
                       name="note"
@@ -649,10 +640,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                 </Form.Group>
 
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={3}>
+                  <Form.Label column md={3}>
                     Team Leader
                   </Form.Label>
-                  <Col sm={9}>
+                  <Col md={9}>
                     <Form.Control
                       as="select"
                       name="teamleaderEmail"
@@ -677,10 +668,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                 </Form.Group>
 
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={3}>
+                  <Form.Label column md={3}>
                     Main Operator
                   </Form.Label>
-                  <Col sm={9}>
+                  <Col md={9}>
                     <Form.Control
                       as="select"
                       name="studentEmail"
@@ -727,10 +718,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   className={`mt-4 ${containerClass}`}
                 >
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       HN
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col md={9}>
                       <Form.Control
                         type="text"
                         name="hn"
@@ -741,10 +732,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       Patient Name:
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col md={9}>
                       <Form.Control
                         type="text"
                         name="patientName"
@@ -756,10 +747,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       Treatment No.
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col md={9}>
                       <Form.Control
                         type="text"
                         name="txid"
@@ -770,10 +761,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       Phase
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col md={9}>
                       <Form.Select
                         name="phase"
                         value={newTxPlan.phase}
@@ -791,10 +782,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       Area
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col md={9}>
                       <Form.Control
                         type="text"
                         name="area"
@@ -806,10 +797,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       Select Division
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col md={9}>
                       <Form.Control
                         as="select"
                         value={selectedDivision}
@@ -828,18 +819,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       Description
                     </Form.Label>
-                    <Col sm={9}>
-                      {/* <Form.Control
-                        type="text"
-                        name="description"
-                        value={newTxPlan.description}
-                        onChange={handleFormChange}
-                        required
-                      /> */}
-
+                    <Col md={9}>
                       <Form.Group
                         controlId="Form.SelectCustom"
                         className="mb-3"
@@ -864,10 +847,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column sm={3}>
+                    <Form.Label column md={3}>
                       Note
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col md={9}>
                       <Form.Control
                         type="text"
                         name="note"

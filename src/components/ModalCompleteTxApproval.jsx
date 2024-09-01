@@ -224,10 +224,10 @@ function ModalCompleteTxApproval({ show, handleClose, treatment, onUpdate2 }) {
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={3}>
+              <Form.Label column md={3}>
                 Select Operator
               </Form.Label>
-              <Col sm={9}>
+              <Col md={9}>
                 <Form.Select
                   name="operatorEmail"
                   value={newTx.operatorEmail}
@@ -247,10 +247,10 @@ function ModalCompleteTxApproval({ show, handleClose, treatment, onUpdate2 }) {
             </Form.Group>
 
           <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={3}>
+              <Form.Label column md={3}>
                 Select Division
               </Form.Label>
-              <Col sm={9}>
+              <Col md={9}>
                 <Form.Select
                   name="division"
                   value={newTx.division}
@@ -270,10 +270,10 @@ function ModalCompleteTxApproval({ show, handleClose, treatment, onUpdate2 }) {
             </Form.Group>
 
             <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={3}>
+              <Form.Label column md={3}>
                 Select Instructor
               </Form.Label>
-              <Col sm={9}>
+              <Col md={9}>
                 <Form.Select
                   name="approvedInstructor"
                   value={newTx.approvedInstructor}
