@@ -162,7 +162,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     }));
 
     setSelectedTeamleader(patient.teamleaderEmail);
-    setSelectedStudent(patient.studentEmail);
+    setSelectedStudent(patient.studentEmail? patient.studentEmail : "");
   }, [patient]);
 
   useEffect(() => {
@@ -656,7 +656,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       required
                       disabled={role === "student"} // Disable if role is "student"
                     >
-                      <option value="-" disabled>
+                      <option value="" disabled>
                         Select Team Leader
                       </option>
                       {instructors.map((instructor) => (
@@ -684,7 +684,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       required
                       {...(role === "student" ? { disabled: true } : {})} // Disable if role is "student"
                     >
-                      <option value="-" disabled>
+                      <option value="" disabled>
                         Select Main Operator to Assign {role}
                       </option>
                       {studentsInTeam.map((student) => (
