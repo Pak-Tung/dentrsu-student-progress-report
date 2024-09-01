@@ -330,7 +330,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
 
     const processedUpdatePt = {
       ...updatePt,
-      acceptedDate: formatDateFormISO(new Date().toISOString()),
+      acceptedDate: updatePt.completedDate === "" || "-" ?formatDateFormISO(new Date().toISOString()) : updatePt.acceptedDate,
       completedDate:
         updatePt.completedDate === "" ? null : updatePt.completedDate,
       planApprovedDate:

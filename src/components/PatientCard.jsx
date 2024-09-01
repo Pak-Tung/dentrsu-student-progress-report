@@ -222,22 +222,22 @@ function PatientCard({ patients = [], updatePatients }) {
   );
 }
 
-PatientCard.propTypes = {
-  patients: PropTypes.arrayOf(
-    PropTypes.shape({
-      hn: PropTypes.number,
-      name: PropTypes.string.isRequired,
-      tel: PropTypes.string,
-      acceptedDate: PropTypes.string,
-      planApprovedDate: PropTypes.string,
-      completedDate: PropTypes.string,
-      complexity: PropTypes.number,
-      status: PropTypes.number,
-      note: PropTypes.string,
-      studentEmail: PropTypes.string,
-    })
-  ),
-  updatePatients: PropTypes.func.isRequired,
-};
+// PatientCard.propTypes = {
+//   patients: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       hn: PropTypes.number,
+//       name: PropTypes.string.isRequired,
+//       tel: PropTypes.string,
+//       acceptedDate: PropTypes.string,
+//       planApprovedDate: PropTypes.string,
+//       completedDate: PropTypes.string,
+//       complexity: PropTypes.number,
+//       status: PropTypes.number,
+//       note: PropTypes.string,
+//       studentEmail: PropTypes.string,
+//     })
+//   ),
+//   updatePatients: PropTypes.func.isRequired,
+// };
 
 export default PatientCard;
