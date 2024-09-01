@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import Cookies from "js-cookie";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getStudentByEmail } from "../../features/apiCalls";
-import { getTeamLeaderById } from "../../features/apiTL";
+import { getTeamLeaderByEmail } from "../../features/apiTL";
 import LoginByEmail from "../../components/LoginByEmail";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ import Lottie from "react-lottie";
 import { ThemeContext } from "../../ThemeContext";
 import "../../DarkMode.css";
 import { updateUserPictureByEmail } from "../../features/apiCalls";
-import LoadingComponent from "../../components/LoadingComponent";
+
 
 const defaultOptions = {
   loop: true,
@@ -81,14 +81,15 @@ function Profile() {
 
   useEffect(() => {
     const fetchTeamLeaderData = async () => {
-      if (student.teamLeaderId) {
+      if (student.teamleaderEmail) { 
         setLoading(true);
         try {
-          const res = await getTeamLeaderById(student.teamLeaderId);
+          const res = await getTeamLeaderByEmail(student.teamleaderEmail);
+          console.log(res);
           if (res.error) {
             setError(res.error);
-          } else if (res[0]) {
-            setTeamLeader(res[0]);
+          } else if (res.data[0]) {
+            setTeamLeader(res.data[0]);
             setSuccess(true);
           } else {
             setError("Team Leader data is undefined");
@@ -101,7 +102,7 @@ function Profile() {
       }
     };
     fetchTeamLeaderData();
-  }, [student.teamLeaderId]);
+  }, [student.teamLeaderEmail]);
 
   const navigate = useNavigate();
   const logOut = useCallback(() => {
@@ -276,16 +277,15 @@ function Profile() {
             </div>
           </div>
         ) : (
-          // <FadeIn>
-          //   <div>
-          //     <Container>
-          //       <Row className="d-flex justify-content-center">
-          //         <Lottie options={defaultOptions} height={140} width={140} />
-          //       </Row>
-          //     </Container>
-          //   </div>
-          // </FadeIn>
-          <LoadingComponent />
+          <FadeIn>
+            <div>
+              <Container>
+                <Row className="d-flex justify-content-center">
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                </Row>
+              </Container>
+            </div>
+          </FadeIn>
         )}
       </div>
     </>

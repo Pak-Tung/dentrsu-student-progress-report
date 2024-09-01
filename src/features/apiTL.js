@@ -11,9 +11,9 @@ export const getStudentsByTeamLeaderId = async (teamLeaderId) => {
     }
 };
 
-export const getTeamLeaderByEmail = async (teamLeaderEmail) => {
+export const getTeamLeaderByEmail = async (email) => {
     try {
-        const response = await axios.get(`${ host }/api/students/teamLeaders/${teamLeaderEmail}`);
+        const response = await axios.get(`${ host }/api/students/teamLeaders/teamLeaderEmail/${email}`);
         return response;
     } catch (error) {
         return error;

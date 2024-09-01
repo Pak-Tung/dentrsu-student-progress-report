@@ -9,7 +9,6 @@ import { Alert } from "react-bootstrap";
 import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
-import LoadingComponent from "../../components/LoadingComponent";
 
 const defaultOptions = {
   loop: true,
@@ -90,10 +89,10 @@ function ProfileAdmin() {
           <h2>Admin Profile</h2>
         </div>
         {loading ? (
-          // <div className="d-flex justify-content-center">
-          //   <Lottie options={defaultOptions} height={120} width={120} />
-          // </div>
-          <LoadingComponent />
+          <div className="d-flex justify-content-center">
+            <Lottie options={defaultOptions} height={120} width={120} />
+          </div>
+
         ) : error ? (
           <div className="d-flex justify-content-center">
             <Alert variant="danger">{error}</Alert>
