@@ -82,10 +82,11 @@ function Profile() {
   useEffect(() => {
     const fetchTeamLeaderData = async () => {
       if (student.teamleaderEmail) { 
+        
         setLoading(true);
         try {
           const res = await getTeamLeaderByEmail(student.teamleaderEmail);
-          console.log(res);
+          
           if (res.error) {
             setError(res.error);
           } else if (res.data[0]) {
@@ -102,7 +103,7 @@ function Profile() {
       }
     };
     fetchTeamLeaderData();
-  }, [student.teamLeaderEmail]);
+  }, [student.teamleaderEmail]);
 
   const navigate = useNavigate();
   const logOut = useCallback(() => {
