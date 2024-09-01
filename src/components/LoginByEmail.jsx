@@ -16,6 +16,7 @@ import * as successData from "./success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import { Container, Row } from "react-bootstrap";
+import LoadingComponent from "./LoadingComponent";
 
 const defaultOptions = {
   loop: true,
@@ -176,15 +177,7 @@ function LoginByEmail() {
             <FadeIn>
               <div>
                 {loading ? (
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
+                  <LoadingComponent />
                 ) : (
                   <Container>
                     <Row className="d-flex justify-content-center">

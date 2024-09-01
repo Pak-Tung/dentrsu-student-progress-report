@@ -23,6 +23,7 @@ import Lottie from "react-lottie";
 import { ThemeContext } from "../../ThemeContext";
 import "../../DarkMode.css";
 import { updateUserPictureByEmail } from "../../features/apiCalls";
+import LoadingComponent from "../../components/LoadingComponent";
 
 const defaultOptions = {
   loop: true,
@@ -275,15 +276,16 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
+          // <FadeIn>
+          //   <div>
+          //     <Container>
+          //       <Row className="d-flex justify-content-center">
+          //         <Lottie options={defaultOptions} height={140} width={140} />
+          //       </Row>
+          //     </Container>
+          //   </div>
+          // </FadeIn>
+          <LoadingComponent />
         )}
       </div>
     </>
