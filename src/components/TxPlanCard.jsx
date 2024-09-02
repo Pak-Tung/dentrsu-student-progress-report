@@ -116,7 +116,7 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
           <Col md={1}>
             <strong>No</strong>
           </Col>
-          <Col md={2}>
+          <Col md={1}>
             <strong>Area</strong>
           </Col>
           <Col md={3}
@@ -130,7 +130,7 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
           <Col md={1}>
             <strong>Start</strong>
           </Col>
-          <Col md={1}>
+          <Col md={2}>
             <strong>Completed</strong>
           </Col>
           <Col md={2}>
@@ -169,14 +169,14 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
                     <Col className="text-center" md={1}>
                       {treatment.txid}
                     </Col>
-                    <Col className="text-center" md={2}>
+                    <Col className="text-center" md={1}>
                       {treatment.area}
                     </Col>
                     <Col md={3}>{treatment.description}</Col>
                     <Col className="text-center" md={1}>
                       {formatDate(treatment.startDate)}
                     </Col>
-                    <Col className="text-center" md={1}>
+                    <Col className="text-center" md={2}>
                       {formatDate(treatment.completeDate)}
                     </Col>
 
