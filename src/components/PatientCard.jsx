@@ -60,9 +60,13 @@ function PatientCard({ patients = [], updatePatients }) {
   }, [patients]);
 
   const getStudentName = (email) => {
-    const student = students.find((student) => student.studentEmail === email);
-    return student ? student.studentName : email;
-  };
+    if (email === "") {
+        return "-";
+    } else {
+        const student = students.find((student) => student.studentEmail === email);
+        return student ? student.studentName : email;
+    }
+};
 
   const handlePatientUpdate = (patient) => {
     setSelectedPatient(patient);
