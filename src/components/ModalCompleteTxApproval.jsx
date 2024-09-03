@@ -118,7 +118,7 @@ function ModalCompleteTxApproval({ show, handleClose, treatment, onUpdate2 }) {
     const fetchStudents = async () => {
       try {
         const result = await getAllStudents();
-        console.log(result);
+        //console.log(result);
         if (result.error) {
           setError(result.error);
         } else {
@@ -151,7 +151,7 @@ function ModalCompleteTxApproval({ show, handleClose, treatment, onUpdate2 }) {
     //console.log("Treatment approval submitted:", newTx);
 
     try {
-      const result = await updateTreatmentById(newTx.id, newTx);
+      const result = await updateTreatmentById(treatment.id, newTx);
       if (result.error) {
         setError(result.error);
       } else {
