@@ -81,6 +81,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     division: "",
     startDate: "",
     completedDate: "",
+    status: "",
   });
   const [updatePt, setUpdatePt] = useState({
     tel: "",
@@ -210,6 +211,8 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
       division: selectedValue,
     }));
   };
+
+
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -473,6 +476,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     }
   }, [selectedDivision]);
 
+
   return (
     <Modal show={show} onHide={handleClose} className={theme} fullscreen={true}>
       <Modal.Header closeButton className={theme}>
@@ -557,7 +561,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                             updateStatus={updateStatus}
                           />
                         ) : (
-                          updatePt.planApprovalBy
+                          getInstructorName(updatePt.planApprovalBy)
                         )}
                       </strong>
                       <br />
@@ -576,7 +580,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                             updateStatus={updateStatus}
                           />
                         ) : (
-                          updatePt.completedTxApprovalBy
+                          getInstructorName(updatePt.completedTxApprovalBy)
                         )}
                       </strong>
                       <br />
@@ -698,6 +702,30 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                     </Form.Control>
                   </Col>
                 </Form.Group>
+
+                <Form.Group as={Row} className="mb-3">
+
+                <Form.Label column md={3}>
+                  Status
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Check
+                    type="checkbox"
+                    id="statusCheckbox"
+                    name="status"
+                    label="Set to Discharged (-1)"
+                    {...(role === "student" ? { disabled: true } : {})} // Disable if role is "student"
+                    checked={updatePt.status === -1}
+                    onChange={(e) =>
+                      setUpdatePt((prevUpdatePt) => ({
+                        ...prevUpdatePt,
+                        status: e.target.checked ? -1 : patient.status,
+                      }))
+                    }
+                  />
+                </Col>
+              </Form.Group>
+
 
                 <Button variant="dark" type="submit">
                   Save Patient Update

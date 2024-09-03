@@ -61,4 +61,9 @@
 
 }
 
+.phase-column {
+  text-decoration: none !important; /* Ensure it overrides any other styles */
+  opacity: 1 !important; /* Ensure full opacity */
+}
+
 

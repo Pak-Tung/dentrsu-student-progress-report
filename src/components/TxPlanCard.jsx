@@ -1,18 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import PropTypes from "prop-types";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  Alert,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Alert, Button } from "react-bootstrap";
 import ModalTreatmentUpdate from "./ModalTreatmentUpdate";
 import { ThemeContext } from "../ThemeContext";
 import "../App.css";
 import ButtonTreatmentApproval from "./ButtonTreatmentApproval";
+import { getAllInstructors, getPatientByHn } from "../features/apiCalls";
 
 // Convert MySQL date string to JavaScript Date object and format it as DD/MM/YYYY
 const formatDate = (dateStr) => {
@@ -25,6 +19,7 @@ const formatDate = (dateStr) => {
 
   return `${day}/${month}/${year}`;
 };
+
 
 function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
   const { theme } = useContext(ThemeContext);
@@ -42,7 +37,7 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
     }
   }, []);
 
-  const [showAll, setShowAll] = useState(true); // State to toggle between showing all treatments or only active treatments
+  const [showAll, setShowAll] = useState(true);
 
   const containerClass = theme === "dark" ? "container-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
@@ -52,7 +47,6 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
 
   const handleClose = () => setShowModal(false);
 
-  // Define the order for phases
   const phaseOrder = [
     "Systemic",
     "Acute",
@@ -61,14 +55,11 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
     "Maintenance",
   ];
 
-  // Filter treatments based on showAll state
   const filteredTreatments = showAll
     ? treatments
     : treatments.filter((treatment) => treatment.status !== -1);
 
-  // Sort treatments by phase order and txid
   const sortedTreatments = filteredTreatments.sort((a, b) => {
-    // Sort by phase order
     const phaseAIndex = phaseOrder.indexOf(a.phase);
     const phaseBIndex = phaseOrder.indexOf(b.phase);
 
@@ -76,39 +67,62 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
       return phaseAIndex - phaseBIndex;
     }
 
-    // If phases are the same, sort by txid
     return a.txid - b.txid;
   });
 
-  // To keep track of phases that have already been displayed
   const displayedPhases = new Set();
 
   const handleUpdateTreatment = (treatment) => {
     setSelectedTreatment(treatment);
-    setShowModal(true); // Show the update form
+    setShowModal(true);
   };
 
   const handleTreatmentUpdate = (updatedTreatment) => {
-    updateTreatment(updatedTreatment); // Call the update function passed as prop
+    updateTreatment(updatedTreatment);
     setShowModal(false);
   };
 
   const handleNewTreatmentUpdate = (updatedNewTreatment) => {
-    updateNewTreatment(updatedNewTreatment); // Call the update function passed as prop
+    updateNewTreatment(updatedNewTreatment);
     setShowModal(false);
   };
+
+  const [instructors, setInstructors] = useState([]);
+
+  useEffect(() => {
+    getAllInstructors().then((data) => {
+      setInstructors(data);
+    });
+  }, []);
+
+  const getInstructorName = (email) => {
+    const instructor = instructors.find(
+      (instructor) => instructor.instructorEmail === email
+    );
+    return instructor ? instructor.instructorName : email;
+  };
+
+  const [patient, setPatient] = useState({});
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      if (treatments[0] && treatments[0].hn) {
+        const response = await getPatientByHn(treatments[0].hn);
+        setPatient(response[0]);
+      }
+    };
+
+    fetchPatient();
+  }, [treatments[0]?.hn]);
+
+
+  // Check if patient status is -1
+  const isPatientDisabled = patient.status === -1;
+  //console.log("isPatientDisabled", isPatientDisabled);
 
   return (
     <>
       <Container fluid="md" className={`status-by-div-container ${theme}`}>
-        {/* <Button
-          variant="outline-primary"
-          onClick={() => setShowAll((prevShowAll) => !prevShowAll)}
-          className="mb-3"
-        >
-          {showAll ? "Show Active Treatments Only" : "Show All Treatments"}
-        </Button> */}
-
         <Row className="text-center">
           <Col md={2}>
             <strong>Phase</strong>
@@ -119,11 +133,10 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
           <Col md={1}>
             <strong>Area</strong>
           </Col>
-          <Col md={3}
+          <Col
+            md={3}
             onClick={() => setShowAll((prevShowAll) => !prevShowAll)}
-            className={`myDiv ${
-              theme === "dark" ? "bg-dark text-white" : ""
-            }`}
+            className={`myDiv ${theme === "dark" ? "bg-dark text-white" : ""}`}
           >
             <strong>Description</strong>
           </Col>
@@ -142,30 +155,36 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
             sortedTreatments.map((treatment) => {
               const isPhaseDisplayed = displayedPhases.has(treatment.phase);
               if (!isPhaseDisplayed) {
-                displayedPhases.add(treatment.phase); // Add phase to the set
+                displayedPhases.add(treatment.phase);
               }
 
               const isStrikeThrough = treatment.status === -1;
+              const isClickable = role === "student" && (!isStrikeThrough && !isPatientDisabled);
 
               return (
                 <ListGroup.Item
                   key={treatment.id}
                   onClick={
-                    role === "student"
-                      ? () => {
-                          if (!isStrikeThrough) {
-                            handleUpdateTreatment(treatment);
-                          }
-                        }
+                    isClickable
+                      ? () => handleUpdateTreatment(treatment)
                       : undefined
                   }
                   className={`myDiv ${
                     theme === "dark" ? "bg-dark text-white" : ""
                   }`}
-                  style={isStrikeThrough ? { textDecoration: "line-through", opacity: 0.5 } : {}}
+                  style={
+                    isStrikeThrough
+                      ? { textDecoration: "line-through", opacity: 0.5 }
+                      : {}
+                  }
                 >
                   <Row>
-                    <Col md={2}>{!isPhaseDisplayed ? treatment.phase : ""}</Col>
+                    <Col
+                      md={2}
+                      style={isStrikeThrough ? { textDecoration: "none" } : {}}
+                    >
+                      {!isPhaseDisplayed ? treatment.phase : ""}
+                    </Col>
                     <Col className="text-center" md={1}>
                       {treatment.txid}
                     </Col>
@@ -182,7 +201,7 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
 
                     <Col className="text-center" md={2}>
                       {treatment.status === 2 ? (
-                        treatment.approvedInstructor
+                        getInstructorName(treatment.approvedInstructor)
                       ) : treatment.status === 1 ? (
                         role === "student" ? (
                           "Pending Approval"
@@ -217,7 +236,7 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
           show={showModal}
           handleClose={handleClose}
           treatment={selectedTreatment}
-          onUpdate={handleTreatmentUpdate} // Pass handler to modal
+          onUpdate={handleTreatmentUpdate}
           onUpdateNewTx={handleNewTreatmentUpdate}
         />
       )}
