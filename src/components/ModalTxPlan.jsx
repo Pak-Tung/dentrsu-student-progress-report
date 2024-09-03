@@ -443,16 +443,27 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
   }, []);
 
   const getInstructorName = (email) => {
-    const instructor = instructors.find(
-      (instructor) => instructor.instructorEmail === email
-    );
-    return instructor ? instructor.instructorName : email;
+    if (email === "") {
+      return "-";
+    } else {
+      const instructor = instructors.find(
+        (instructor) => instructor.instructorEmail === email
+      );
+      return instructor ? instructor.instructorName : email;
+    }
   };
 
+
+
+
   const getStudentName = (email) => {
-    const student = students.find((student) => student.studentEmail === email);
-    return student ? student.studentName : email;
-  };
+    if (email === "") {
+        return "-";
+    } else {
+        const student = students.find((student) => student.studentEmail === email);
+        return student ? student.studentName : email;
+    }
+};
 
   const [txtypes, setTxtypes] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
