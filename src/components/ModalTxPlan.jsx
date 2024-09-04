@@ -163,7 +163,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     }));
 
     setSelectedTeamleader(patient.teamleaderEmail);
-    setSelectedStudent(patient.studentEmail? patient.studentEmail : "");
+    setSelectedStudent(patient.studentEmail ? patient.studentEmail : "");
   }, [patient]);
 
   useEffect(() => {
@@ -212,8 +212,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     }));
   };
 
-
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -244,7 +242,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
       setError("Error saving tx plan data: " + error.message);
     }
   };
-
 
   const convertStatus = (status) => {
     switch (status) {
@@ -333,7 +330,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
 
     const processedUpdatePt = {
       ...updatePt,
-      acceptedDate: updatePt.completedDate === "" || "-" ?formatDateFormISO(new Date().toISOString()) : updatePt.acceptedDate,
+      acceptedDate:
+        updatePt.completedDate === "" || "-"
+          ? formatDateFormISO(new Date().toISOString())
+          : updatePt.acceptedDate,
       completedDate:
         updatePt.completedDate === "" ? null : updatePt.completedDate,
       planApprovedDate:
@@ -453,17 +453,16 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     }
   };
 
-
-
-
   const getStudentName = (email) => {
     if (email === "") {
-        return "-";
+      return "-";
     } else {
-        const student = students.find((student) => student.studentEmail === email);
-        return student ? student.studentName : email;
+      const student = students.find(
+        (student) => student.studentEmail === email
+      );
+      return student ? student.studentName : email;
     }
-};
+  };
 
   const [txtypes, setTxtypes] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
@@ -486,7 +485,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
       fetchTxtypes();
     }
   }, [selectedDivision]);
-
 
   return (
     <Modal show={show} onHide={handleClose} className={theme} fullscreen={true}>
@@ -548,9 +546,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                           complexity
                         )}
                       </strong>
-                      <p
-                        title={"Contact Team Leader to update complexity"}
-                      >
+                      <p title={"Contact Team Leader to update complexity"}>
                         Complexity
                       </p>
                     </Col>
@@ -715,28 +711,41 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                 </Form.Group>
 
                 <Form.Group as={Row} className="mb-3">
-
-                <Form.Label column md={3}>
-                  Status
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Check
-                    type="checkbox"
-                    id="statusCheckbox"
-                    name="status"
-                    label="Set to Discharged (-1)"
-                    {...(role === "student" ? { disabled: true } : {})} // Disable if role is "student"
-                    checked={updatePt.status === -1}
-                    onChange={(e) =>
-                      setUpdatePt((prevUpdatePt) => ({
-                        ...prevUpdatePt,
-                        status: e.target.checked ? -1 : patient.status,
-                      }))
-                    }
-                  />
-                </Col>
-              </Form.Group>
-
+                  <Form.Label column md={3}>
+                    Status
+                  </Form.Label>
+                  <Col md={9}>
+                    <Form.Check
+                      type="switch"
+                      id="statusSwitch"
+                      name="status"
+                      label="Set Status to Discharged"
+                      disabled={role === "student"} // Directly use the condition here
+                      checked={updatePt.status === -1}
+                      onChange={(e) =>
+                        setUpdatePt((prevUpdatePt) => {
+                          let newStatus;
+                          if (e.target.checked) {
+                            newStatus = -1;
+                          } else if (!patient.planApprovalBy) {
+                            newStatus = 0;
+                          } else if (
+                            patient.planApprovalBy &&
+                            !patient.completedTxApprovalBy
+                          ) {
+                            newStatus = 2;
+                          } else {
+                            newStatus = patient.status; // Retain current status if none of the conditions apply
+                          }
+                          return {
+                            ...prevUpdatePt,
+                            status: newStatus,
+                          };
+                        })
+                      }
+                    />
+                  </Col>
+                </Form.Group>
 
                 <Button variant="dark" type="submit">
                   Save Patient Update
