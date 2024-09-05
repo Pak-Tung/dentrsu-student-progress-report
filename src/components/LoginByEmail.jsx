@@ -97,7 +97,7 @@ function LoginByEmail() {
               }
             } catch (error) {
               console.error("Error fetching student profile:", error);
-              alert("Student profile not found. Please contact administrator.");
+              alert(`Student profile not found (Browser Login with ${email}). Please contact administrator.`);
               setLoading(false);
               return;
             }
@@ -114,7 +114,7 @@ function LoginByEmail() {
               }
             } catch (error) {
               console.error("Error fetching instructor profile:", error);
-              alert("Instructor profile not found. Please contact administrator.");
+              alert(`Instructor profile not found (Browser Login with ${email}). Please contact administrator.`);
               setLoading(false);
               return;
             }
@@ -128,8 +128,8 @@ function LoginByEmail() {
             setLoading(false);
           }
         } catch (error) {
-          console.error("Error fetching user profile:", error);
-          alert("User profile not found. Please contact administrator.");
+          //console.error("Error fetching user profile:", error);
+          alert(`User profile not found (Browser Login with ${email}). Please contact administrator.`);
           setLoading(false);
         }
       } else {
