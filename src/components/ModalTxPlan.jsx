@@ -692,7 +692,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       name="studentEmail"
                       value={selectedStudent}
                       onChange={handleStudentChange}
-                      required
                       {...(role === "student" ? { disabled: true } : {})} // Disable if role is "student"
                     >
                       <option value="" disabled>
