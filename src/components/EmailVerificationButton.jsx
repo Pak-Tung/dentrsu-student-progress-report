@@ -24,10 +24,11 @@ const EmailVerificationButton = ({handleLoginSuccess}) => {
         // Save the token to local storage for future use
         const token = response.data.token;
         const email = response.data.user_email_id;
+        const emailLowerCase = email.toLowerCase();
         //console.log("token", token);
-        //console.log("email", email);
+        //console.log("email", emailLowerCase);
         localStorage.setItem("token", token);
-        localStorage.setItem("email", email);
+        localStorage.setItem("email", emailLowerCase);
         handleLoginSuccess();
       } catch (error) {
         console.error(error);

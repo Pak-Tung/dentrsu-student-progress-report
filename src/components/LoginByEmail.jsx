@@ -82,7 +82,9 @@ function LoginByEmail() {
       if (email && token) {
         try {
           const users = await getAllUsers();
-          const userRecord = users.data.find((u) => u.email === email);
+          const userRecord = users.data.find((u) => u.email === email.toLowerCase());
+
+          
 
           if (!userRecord) {
             throw new Error("User not found");
@@ -90,7 +92,7 @@ function LoginByEmail() {
 
           if (userRecord.role === "student") {
             try {
-              const student = await getStudentByEmail(email);
+              const student = await getStudentByEmail(email.toLowerCase);
               if (student) {
                 userRecord.role = "student";
                 userRecord.name = student[0].studentName;
@@ -107,7 +109,7 @@ function LoginByEmail() {
             userRecord.role === "root"
           ) {
             try {
-              const instructor = await getInstructorByEmail(email);
+              const instructor = await getInstructorByEmail(email.toLowerCase());
               if (instructor) {
                 userRecord.name = instructor[0].instructorName;
                 userRecord.division = instructor[0].division;
@@ -144,13 +146,25 @@ function LoginByEmail() {
     }
   }, [isLoggedIn, email, token]);
 
-  const setCookiesAndLocalStorage = (userRecord) => {
-    Cookies.set("role", JSON.stringify(userRecord.role), { expires: 7 });
-    Cookies.set("user", JSON.stringify(userRecord), { expires: 7 });
+  // const setCookiesAndLocalStorage = (userRecord) => {
+  //   Cookies.set("role", JSON.stringify(userRecord.role), { expires: 7 });
+  //   Cookies.set("user", JSON.stringify(userRecord), { expires: 7 });
 
+  //   localStorage.setItem("role", JSON.stringify(userRecord.role));
+  //   localStorage.setItem("user", JSON.stringify(userRecord));
+  // };
+
+  const setCookiesAndLocalStorage = (userRecord) => {
+    // Convert email to lowercase before saving
+    const lowercaseEmail = userRecord.email.toLowerCase();
+    
+    Cookies.set("role", JSON.stringify(userRecord.role), { expires: 30 });
+    Cookies.set("user", JSON.stringify({ ...userRecord, email: lowercaseEmail }), { expires: 30 });
+  
     localStorage.setItem("role", JSON.stringify(userRecord.role));
-    localStorage.setItem("user", JSON.stringify(userRecord));
+    localStorage.setItem("user", JSON.stringify({ ...userRecord, email: lowercaseEmail }));
   };
+  
 
   const renderProfile = () => {
     switch (role) {
