@@ -693,6 +693,15 @@ export const getTxtypesByDivision = async (division) => {
         return error;
     }
 };
+ export const insertNewPatient = async (patient) => {
+    try {
+        const response = await axios.post(`${ host }/api/students/patients/new`, patient);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
 
 
 

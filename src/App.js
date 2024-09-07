@@ -31,6 +31,7 @@ import AllTeamleaderPatients from "./pages/instructors/AllTeamleaderPatients";
 import TreatmentPlanApproval from "./pages/instructors/TreatmentPlanApproval";
 import TreatmentApproval from "./pages/instructors/TreatmentApproval";
 import UploadPatientsCSV from "./components/UploadPatientsCSV";
+import CreateNewPatient from "./components/CreateNewPatient";
 
 //import SelectRoleAdmin from "./pages/admins/selectRoleAdmin";
 
@@ -64,6 +65,7 @@ function App() {
         <Route path="/assignAdvisor" element={<DivisionAdvisor />} />
         <Route path="/assignAdvisee" element={<ManageDivisionAdvisee />} />
         <Route path="/requestComplete" element={<RequestComplete />} />
+        <Route path="/newPatient" element={<CreateNewPatient />} />
 
         <Route path="/addDivision" element={<AddDivision />} />
         <Route path="/addUser" element={<UserManagement />} />
