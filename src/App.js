@@ -30,6 +30,7 @@ import AllPatients from "./pages/students/AllPatients";
 import AllTeamleaderPatients from "./pages/instructors/AllTeamleaderPatients";
 import TreatmentPlanApproval from "./pages/instructors/TreatmentPlanApproval";
 import TreatmentApproval from "./pages/instructors/TreatmentApproval";
+import UploadPatientsCSV from "./components/UploadPatientsCSV";
 
 //import SelectRoleAdmin from "./pages/admins/selectRoleAdmin";
 
@@ -68,6 +69,8 @@ function App() {
         <Route path="/addUser" element={<UserManagement />} />
         <Route path="/editInstructors" element={<EditInstructors />} />
         <Route path="/editStudents" element={<EditStudents />} />
+
+        <Route path="/uploadPatientsCSV" element={<UploadPatientsCSV />} />
         
         
         <Route path="/" element={<RoleLogin />} />

@@ -33,6 +33,8 @@ function NavbarRoot() {
             <NavDropdown.Item href="/editInstructors">Instructors</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/editStudents">Students</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/uploadPatientsCSV">Patients</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Division Management" id="nav-divisionManagement" className="flex-fill">
             <NavDropdown.Item href="/addDivision">Division</NavDropdown.Item>
