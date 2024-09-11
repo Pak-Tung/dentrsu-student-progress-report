@@ -4,6 +4,7 @@ import { insertNewPatient, getStudentByTeamleaderEmail } from "../features/apiCa
 import { Button, Form, Container, Row, Col, Alert } from "react-bootstrap";
 import { ThemeContext } from "../ThemeContext";
 import Cookies from "js-cookie";
+import { formatDateFormISO } from "../utilities/dateUtils"
 
 function CreateNewPatient() {
   const { theme } = useContext(ThemeContext);
@@ -20,6 +21,7 @@ function CreateNewPatient() {
     tel: "",
     teamleaderEmail: "",
     studentEmail: "",
+    acceptedDate: "",
   });
 
   const [error, setError] = useState(null);
@@ -41,6 +43,7 @@ function CreateNewPatient() {
         setFormData({
           ...formData,
           teamleaderEmail: userEmail,
+          acceptedDate: formatDateFormISO(new Date().toISOString()),
         });
         try {
           const result = await getStudentByTeamleaderEmail(userEmail);
@@ -84,6 +87,7 @@ function CreateNewPatient() {
           tel: "",
           teamleaderEmail: userEmail,
           studentEmail: "",
+          acceptedDate: formatDateFormISO(new Date().toISOString()),
         });
       }
     } catch (error) {
