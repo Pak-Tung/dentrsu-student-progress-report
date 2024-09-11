@@ -92,7 +92,7 @@ function LoginByEmail() {
 
           if (userRecord.role === "student") {
             try {
-              const student = await getStudentByEmail(email.toLowerCase);
+              const student = await getStudentByEmail(email.toLowerCase());
               if (student) {
                 userRecord.role = "student";
                 userRecord.name = student[0].studentName;

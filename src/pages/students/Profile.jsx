@@ -60,6 +60,7 @@ function Profile() {
         setLoading(true);
         try {
           const result = await getStudentByEmail(userEmail);
+          console.log(result);
           if (result.error) {
             setError(result.error);
           } else if (result[0]) {
@@ -78,6 +79,8 @@ function Profile() {
     };
     fetchStudentData();
   }, [userEmail]);
+
+
 
   useEffect(() => {
     const fetchTeamLeaderData = async () => {
@@ -274,6 +277,7 @@ function Profile() {
                     Log out
                   </button>
                 </div>
+                
               </div>
             </div>
           </div>
