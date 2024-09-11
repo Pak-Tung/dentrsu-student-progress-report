@@ -74,8 +74,9 @@ function CreateNewPatient() {
 
     try {
       const result = await insertNewPatient(formData); // Call the API to insert the patient
-      if (result.error) {
-        setError(result.error);
+      //console.log(result.response.data.error.sqlMessage);
+      if (result.response.data.error.sqlMessage) {
+        setError(result.response.data.error.sqlMessage);
         setSuccessMessage(null);
       } else {
         setSuccessMessage("Patient created successfully!");
@@ -91,7 +92,7 @@ function CreateNewPatient() {
         });
       }
     } catch (error) {
-      setError("Error creating patient: " + error.message);
+      setError("Error creating patient: " + error.sqlMessage);
       setSuccessMessage(null);
     }
   };
