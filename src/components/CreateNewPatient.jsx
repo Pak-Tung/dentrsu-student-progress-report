@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import NavbarInstructor from "./NavbarInstructor";
-import { insertNewPatient, getStudentByTeamleaderEmail } from "../features/apiCalls";
+import {
+  insertNewPatient,
+  getStudentByTeamleaderEmail,
+} from "../features/apiCalls";
 import { Button, Form, Container, Row, Col, Alert } from "react-bootstrap";
 import { ThemeContext } from "../ThemeContext";
 import Cookies from "js-cookie";
-import { formatDateFormISO } from "../utilities/dateUtils"
+import { formatDateFormISO } from "../utilities/dateUtils";
 
 function CreateNewPatient() {
   const { theme } = useContext(ThemeContext);
@@ -74,11 +77,8 @@ function CreateNewPatient() {
 
     try {
       const result = await insertNewPatient(formData); // Call the API to insert the patient
-      //console.log(result.response.data.error.sqlMessage);
-      if (result.response.data.error.sqlMessage) {
-        setError(result.response.data.error.sqlMessage);
-        setSuccessMessage(null);
-      } else {
+      console.log(result);
+      if (result.affectedRows === 1) {
         setSuccessMessage("Patient created successfully!");
         setError(null);
         // Clear form after successful submission
@@ -90,8 +90,12 @@ function CreateNewPatient() {
           studentEmail: "",
           acceptedDate: formatDateFormISO(new Date().toISOString()),
         });
+      } else {
+        setError(result.response.data.error.sqlMessage);
+        setSuccessMessage(null);
       }
     } catch (error) {
+      console.log("error", error);
       setError("Error creating patient: " + error.sqlMessage);
       setSuccessMessage(null);
     }
@@ -171,8 +175,6 @@ function CreateNewPatient() {
                   readOnly // Keep this field read-only since it comes from the user context
                 />
               </Form.Group>
-
-             
 
               <Button variant="dark" type="submit" className="mt-3">
                 Submit
