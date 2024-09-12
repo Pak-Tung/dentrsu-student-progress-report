@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import NavbarInstructor from "../../components/NavbarInstructor";
-import { Container, Row, Col, Alert, Dropdown } from "react-bootstrap";
+import { Container, Row, Col, Alert, Dropdown, Form } from "react-bootstrap";
 import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
@@ -36,11 +36,17 @@ function AllTeamleaderPatients() {
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [loadingPatients, setLoadingPatients] = useState(true);
   const [error, setError] = useState(null);
-  const [filterStatus, setFilterStatus] = useState("All");
   const [filterStudent, setFilterStudent] = useState("All");
   const [students, setStudents] = useState([]);
-
   const [allStudents, setAllStudents] = useState([]);
+
+  // Status options and state for selected statuses
+  const statusOptions = [
+    { value: -1, label: "Discharged" },
+    { value: 0, label: "Incomplete" },
+    { value: 1, label: "Completed" },
+  ];
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,14 +103,17 @@ function AllTeamleaderPatients() {
     fetchData();
   }, [userEmail]);
 
-  const filterByStatus = (status) => {
-    setFilterStatus(status);
-    applyFilters(filterStudent, status);
-  };
-
   const filterByStudent = (student) => {
     setFilterStudent(student);
-    applyFilters(student, filterStatus);
+    applyFilters(student, selectedStatuses);
+  };
+
+  const handleStatusChange = (statusValue) => {
+    setSelectedStatuses((prevStatuses) =>
+      prevStatuses.includes(statusValue)
+        ? prevStatuses.filter((status) => status !== statusValue)
+        : [...prevStatuses, statusValue]
+    );
   };
 
   const getStudentName = (studentEmail) => {
@@ -114,34 +123,27 @@ function AllTeamleaderPatients() {
     return student ? student.studentName : studentEmail;
   };
 
-  const getStatusName = (status) => {
-    switch (status) {
-      case -1:
-        return "Discharged";
-      case 0:
-        return "Incomplete";
-      case 1:
-        return "Completed";
-      case "All":
-        return "All";
-      default:
-        return "Unknown";
-    }
-  };
-
-  const applyFilters = (student, status) => {
+  const applyFilters = (student, statuses) => {
     let filtered = patients;
 
-    if (status !== "All") {
-      filtered = filtered.filter((patient) => patient.status === status);
+    // Filter by selected statuses
+    if (statuses.length > 0) {
+      filtered = filtered.filter((patient) =>
+        statuses.includes(patient.status)
+      );
     }
 
+    // Filter by student
     if (student !== "All") {
       filtered = filtered.filter((patient) => patient.studentEmail === student);
     }
 
     setFilteredPatients(filtered);
   };
+
+  useEffect(() => {
+    applyFilters(filterStudent, selectedStatuses);
+  }, [selectedStatuses]);
 
   const countPatients = (student) => {
     if (student === "All") {
@@ -165,26 +167,30 @@ function AllTeamleaderPatients() {
             </Row>
             <Row className="justify-content-center">
               <Col md={3} className="text-center">
-                <Dropdown className="mb-2">
+                {/* Dropdown with checkboxes for status filtering */}
+                <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
-                    Status: {getStatusName(filterStatus)}
+                    Filter Status
                   </Dropdown.Toggle>
+
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => filterByStatus("All")}>
-                      All
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => filterByStatus(-1)}>
-                      Discharged
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => filterByStatus(0)}>
-                      Incomplete
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => filterByStatus(1)}>
-                      Completed
-                    </Dropdown.Item>
+                    {statusOptions.map((status) => (
+                      <Dropdown.Item
+                        key={status.value}
+                        onClick={() => handleStatusChange(status.value)}
+                      >
+                        {selectedStatuses.includes(status.value) ? (
+                          <span>&#10003; </span>
+                        ) : (
+                          <span>&nbsp;&nbsp;&nbsp;</span>
+                        )}
+                        {status.label}
+                      </Dropdown.Item>
+                    ))}
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
+
               <Col md={3} className="text-center">
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
