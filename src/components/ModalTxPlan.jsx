@@ -603,6 +603,10 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       <p>Completed Date</p>
                     </Col>
                   </Row>
+                  <Row>
+                  <h5>Important note:</h5> <br />
+                  <p> {updatePt.note}</p>
+                  </Row>
                 </ListGroup.Item>
               </ListGroup>
             </Container>
@@ -850,7 +854,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                         name="area"
                         value={newTxPlan.area}
                         onChange={handleFormChange}
-                        required
+                        
                       />
                     </Col>
                   </Form.Group>
@@ -890,7 +894,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                           name="description"
                           value={selectedOption}
                           onChange={handleFormChange}
-                          required
+                          
                         >
                           <option value="" disabled>
                             Select Type of Work

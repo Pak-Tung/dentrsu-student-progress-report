@@ -154,7 +154,7 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
           {sortedTreatments.length > 0 ? (
             sortedTreatments.map((treatment) => {
               const isPhaseDisplayed = displayedPhases.has(treatment.phase);
-              if (!isPhaseDisplayed) {
+              if (!isPhaseDisplayed && treatment.status !== -1) {
                 displayedPhases.add(treatment.phase);
               }
 

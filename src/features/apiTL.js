@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { api } from './mainApi';
+const host = api();
 
-const host = 'https://dentrsu-0b0ffade06fd.herokuapp.com';//'http://localhost:3001';//
+//const host = 'https://dentrsu-0b0ffade06fd.herokuapp.com';//'http://localhost:3001';//
 
 export const getStudentsByTeamLeaderId = async (teamLeaderId) => {
     try {

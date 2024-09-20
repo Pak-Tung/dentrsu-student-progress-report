@@ -40,7 +40,12 @@ function NavbarStudent() {
           <NavDropdown title="Patients" id="nav-patients" className="flex-fill">
             <NavDropdown.Item href="/allPatients">All patients</NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Submission" id="nav-submit" className="flex-fill">
+          <NavDropdown 
+            title="Submission" 
+            id="nav-submit" 
+            className="flex-fill" 
+            disabled
+          >
             <NavDropdown.Item href="/reqSubmit">Requirement</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compSubmit">
@@ -51,6 +56,7 @@ function NavbarStudent() {
             title="Approval Status"
             id="nav-status"
             className="flex-fill"
+            disabled
           >
             <NavDropdown.Item href="/reqStatus">Req Status</NavDropdown.Item>
             <NavDropdown.Divider />
@@ -58,7 +64,12 @@ function NavbarStudent() {
               Complete cases
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Overview" id="nav-overview" className="flex-fill">
+          <NavDropdown 
+            title="Overview" 
+            id="nav-overview" 
+            className="flex-fill" 
+            disabled
+          >
             <NavDropdown.Item href="/overview">
               Requirement Overview
             </NavDropdown.Item>
@@ -71,7 +82,11 @@ function NavbarStudent() {
               Student Status
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Profile" id="nav-profile" className="flex-fill">
+          <NavDropdown 
+            title="Profile" 
+            id="nav-profile" 
+            className="flex-fill"
+          >
             <NavDropdown.Item href="/">Profile</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={toggleTheme}>

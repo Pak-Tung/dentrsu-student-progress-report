@@ -8,6 +8,7 @@ import {
 import Profile from "../pages/students/Profile";
 import ProfileInstructor from "../pages/instructors/ProfileInstructor";
 import ProfileRoot from "../pages/root/ProfileRoot";
+import ProfilePatientBank from "../pages/patientBank/ProfilePatientBank";
 import SelectRoleAdmin from "../pages/admins/SelectRoleAdmin";
 import Cookies from "js-cookie";
 import LoginScreen from "./LoginScreen";
@@ -106,6 +107,7 @@ function LoginByEmail() {
           } else if (
             userRecord.role === "instructor" ||
             userRecord.role === "admin" ||
+            userRecord.role === "ptBank" ||
             userRecord.role === "root"
           ) {
             try {
@@ -116,7 +118,7 @@ function LoginByEmail() {
               }
             } catch (error) {
               console.error("Error fetching instructor profile:", error);
-              alert(`Instructor profile not found (Browser Login with ${email}). Please contact administrator.`);
+              alert(`Profile not found (Browser Login with ${email}). Please contact administrator.`);
               setLoading(false);
               return;
             }
@@ -176,6 +178,8 @@ function LoginByEmail() {
         return <ProfileInstructor />;
       case "student":
         return <Profile />;
+      case "ptBank":
+        return <ProfilePatientBank />;
       default:
         return <LoginScreen handleLoginSuccess={handleLoginSuccess} />;
     }

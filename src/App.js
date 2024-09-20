@@ -32,6 +32,12 @@ import TreatmentPlanApproval from "./pages/instructors/TreatmentPlanApproval";
 import TreatmentApproval from "./pages/instructors/TreatmentApproval";
 import UploadPatientsCSV from "./components/UploadPatientsCSV";
 import CreateNewPatient from "./components/CreateNewPatient";
+import AddNewPatient from "./pages/patientBank/AddNewPatient";
+import AssignPatientToInstructor from "./pages/patientBank/AssignPatientToInstructor";
+import SearchPatientByHN from "./pages/patientBank/SearchPatientByHN";
+import SearchPatientByStudent from "./pages/patientBank/SearchPatientByStudent";
+import SearchPatientByInstructor from "./pages/patientBank/SearchPatientByInstructor";
+import AddMultiNewPatient from "./pages/patientBank/AddMultiNewPatient";
 
 //import SelectRoleAdmin from "./pages/admins/selectRoleAdmin";
 
@@ -71,6 +77,13 @@ function App() {
         <Route path="/addUser" element={<UserManagement />} />
         <Route path="/editInstructors" element={<EditInstructors />} />
         <Route path="/editStudents" element={<EditStudents />} />
+
+        <Route path="/addNewPatient" element={<AddNewPatient />} />
+        <Route path="/assignPatientToInstructor" element={<AssignPatientToInstructor />} />
+        <Route path="/searchPatientByHn" element={<SearchPatientByHN />} />
+        <Route path="/searchPatientByStudent" element={<SearchPatientByStudent />} />
+        <Route path="/searchPatientByInstructor" element={<SearchPatientByInstructor />} />
+        <Route path="/addMultiNewPatient" element={<AddMultiNewPatient />} />
 
         <Route path="/uploadPatientsCSV" element={<UploadPatientsCSV />} />
         

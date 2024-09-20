@@ -14,7 +14,6 @@ import { getAllStudents, getTxPlanByPatientHn } from "../features/apiCalls";
 import { ThemeContext } from "../ThemeContext";
 import { formatDate } from "../utilities/dateUtils";
 
-
 function PatientCard({ patients = [], updatePatients }) {
   const { theme } = useContext(ThemeContext);
   const [role, setRole] = useState("");
@@ -61,12 +60,12 @@ function PatientCard({ patients = [], updatePatients }) {
 
   const getStudentName = (email) => {
     if (email === "") {
-        return "-";
+      return "-";
     } else {
-        const student = students.find((student) => student.studentEmail === email);
-        return student ? student.studentName : email;
+      const student = students.find((student) => student.studentEmail === email);
+      return student ? student.studentName : email;
     }
-};
+  };
 
   const handlePatientUpdate = (patient) => {
     setSelectedPatient(patient);
@@ -99,34 +98,36 @@ function PatientCard({ patients = [], updatePatients }) {
 
   const hasTxPlanStatusOne = (txPlan) => {
     if (!Array.isArray(txPlan)) return false;
-    return txPlan.some(row => row.status === 1);
+    return txPlan.some((row) => row.status === 1);
   };
 
   return (
     <>
       <Container fluid="md" className={`status-by-div-container ${theme}`}>
-        <Row className="text-center">
-          <Col md={3}></Col>
-          <Col md={2}>
-            <strong>Accepted Date</strong> <br />
-          </Col>
-          <Col md={2}>
-            <strong>TxPlan Approved Date</strong>
-            <br />
-          </Col>
-          <Col md={2}>
-            <strong>Completed Date</strong>
-            <br />
-          </Col>
-          <Col md={1}> 
-            <strong>Complexity</strong>
-            <br />
-          </Col>
-          <Col md={2}>
-            <strong>{role === 'student' ? 'Note' : 'Operator'}</strong>
-            <br />
-          </Col>
-        </Row>
+        {newPatients.length > 0 && (
+          <Row className="text-center">
+            <Col md={3}></Col>
+            <Col md={2}>
+              <strong>Accepted Date</strong> <br />
+            </Col>
+            <Col md={2}>
+              <strong>TxPlan Approved Date</strong>
+              <br />
+            </Col>
+            <Col md={2}>
+              <strong>Completed Date</strong>
+              <br />
+            </Col>
+            <Col md={1}>
+              <strong>Complexity</strong>
+              <br />
+            </Col>
+            <Col md={2}>
+              <strong>{role === "student" ? "Note" : "Operator"}</strong>
+              <br />
+            </Col>
+          </Row>
+        )}
 
         {error && (
           <div className="d-flex justify-content-center">
@@ -151,7 +152,9 @@ function PatientCard({ patients = [], updatePatients }) {
                   <ListGroup.Item
                     key={patient.hn}
                     onClick={() => handlePatientUpdate(patient)}
-                    className={`myDiv ${theme === "dark" ? "bg-dark text-white" : ""}`}
+                    className={`myDiv ${
+                      theme === "dark" ? "bg-dark text-white" : ""
+                    }`}
                   >
                     <Badge
                       bg={
@@ -198,7 +201,9 @@ function PatientCard({ patients = [], updatePatients }) {
                         <br />
                       </Col>
                       <Col className="text-center" md={2}>
-                        {role === 'student' ? patient.note : getStudentName(patient.studentEmail)}
+                        {role === "student"
+                          ? patient.note
+                          : getStudentName(patient.studentEmail)}
                         <br />
                       </Col>
                     </Row>
@@ -208,12 +213,13 @@ function PatientCard({ patients = [], updatePatients }) {
           ) : (
             <div className="d-flex justify-content-center">
               <Alert variant="danger" className={alertClass}>
-                {"No patient data found"}
+                {"No patient data"}
               </Alert>
             </div>
           )}
         </ListGroup>
       </Container>
+
       {selectedPatient && (
         <ModalTxPlan
           show={showModal}
@@ -225,23 +231,5 @@ function PatientCard({ patients = [], updatePatients }) {
     </>
   );
 }
-
-// PatientCard.propTypes = {
-//   patients: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       hn: PropTypes.number,
-//       name: PropTypes.string.isRequired,
-//       tel: PropTypes.string,
-//       acceptedDate: PropTypes.string,
-//       planApprovedDate: PropTypes.string,
-//       completedDate: PropTypes.string,
-//       complexity: PropTypes.number,
-//       status: PropTypes.number,
-//       note: PropTypes.string,
-//       studentEmail: PropTypes.string,
-//     })
-//   ),
-//   updatePatients: PropTypes.func.isRequired,
-// };
 
 export default PatientCard;

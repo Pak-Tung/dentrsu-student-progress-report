@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import ProfileInstructor from "../instructors/ProfileInstructor";
 import ProfileAdmin from "../admins/ProfileAdmin";
+import ProfilePatientBank from "../patientBank/ProfilePatientBank";
 import Profile from "../students/Profile";
 import NavbarRoot from "./NavbarRoot";
 import ModalSetAdminDiv from "./ModalSetAdminDiv";
@@ -50,6 +51,8 @@ function ProfileRoot() {
     return <ProfileAdmin />; // Render ProfileAdmin component if role is 'admin' and modal is not shown
   } else if (role === "student") {
     return <Profile />; // Render Profile component if role is 'student'
+  } else if (role === "ptBank") {
+    return <ProfilePatientBank />; // Render Profile component if role is 'ptBank'
   }
 
   if (!userEmail) {
@@ -94,6 +97,9 @@ function ProfileRoot() {
               </Button>
               <Button variant="secondary" size="lg" onClick={() => handleSelectRole("student")}>
                 STUDENT
+              </Button>
+              <Button variant="secondary" size="lg" onClick={() => handleSelectRole("ptBank")}>
+                PATIENT BANK
               </Button>
             </div>
           </Col>
