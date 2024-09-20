@@ -106,7 +106,9 @@ function PatientCard({ patients = [], updatePatients }) {
       <Container fluid="md" className={`status-by-div-container ${theme}`}>
         {newPatients.length > 0 && (
           <Row className="text-center">
-            <Col md={3}></Col>
+            <Col md={3}>
+              <strong>Total: {newPatients.length} patients</strong>
+            </Col>
             <Col md={2}>
               <strong>Accepted Date</strong> <br />
             </Col>

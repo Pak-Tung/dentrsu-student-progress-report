@@ -81,10 +81,10 @@ function SearchPatientByInstructor() {
         <h4>ค้นหาผู้ป่วยจากอาจารย์ที่ปรึกษา</h4>
         <Form className={`mt-4 ${containerClass}`}>
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
+            <Form.Label column md={2}>
               อาจารย์ผู้รับมอบหมาย:
             </Form.Label>
-            <Col md={9}>
+            <Col md={6}>
               <Form.Control
                 as="select"
                 name="teamleaderEmail"
@@ -132,6 +132,7 @@ function SearchPatientByInstructor() {
         </div>
       ) : (
         <div className="d-flex justify-content-center">
+
           <PatientCard patients={patients} />
         </div>
       )}
