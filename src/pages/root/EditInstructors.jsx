@@ -74,6 +74,9 @@ function EditInstructors() {
       sur: "Oral Surgery",
       pedo: "Pediatric Dentistry",
       ortho: "Orthodontic",
+      ptBank: "Patient Bank",
+      admin: "Admin",
+      root: "Root",
     };
     return divisionMap[division] || "";
   }, []);
