@@ -16,6 +16,8 @@ function SearchPatientByHN() {
   const [hn, setHn] = useState("");
   const [patient, setPatient] = useState({});
 
+  const [show, setShow] = useState(false);
+
   const [updatePt, setUpdatePt] = useState({
     name: "",
     tel: "",
@@ -32,27 +34,29 @@ function SearchPatientByHN() {
   });
 
   useEffect(() => {
-    setUpdatePt((prevPt) => ({
-      ...prevPt,
-      name: patient.name || "",
-      tel: patient.tel || "",
-      teamleaderEmail: patient.teamleaderEmail || "",
-      studentEmail: patient.studentEmail || "",
-      complexity: patient.complexity || "",
-      note: patient.note || "",
-      status: patient.status || "",
-      acceptedDate: patient.acceptedDate
-        ? patient.acceptedDate.split("T")[0]
-        : "",
-      planApprovalBy: patient.planApprovalBy || "",
-      planApprovedDate: patient.planApprovedDate
-        ? patient.planApprovedDate.split("T")[0]
-        : "",
-      completedDate: patient.completedDate
-        ? patient.completedDate.split("T")[0]
-        : "",
-      completedTxApprovalBy: patient.completedTxApprovalBy || "",
-    }));
+    if (patient) {
+      setUpdatePt((prevPt) => ({
+        ...prevPt,
+        name: patient.name || "",
+        tel: patient.tel || "",
+        teamleaderEmail: patient.teamleaderEmail || "",
+        studentEmail: patient.studentEmail || "",
+        complexity: patient.complexity || "",
+        note: patient.note || "",
+        status: patient.status || "",
+        acceptedDate: patient.acceptedDate
+          ? patient.acceptedDate.split("T")[0]
+          : "",
+        planApprovalBy: patient.planApprovalBy || "",
+        planApprovedDate: patient.planApprovedDate
+          ? patient.planApprovedDate.split("T")[0]
+          : "",
+        completedDate: patient.completedDate
+          ? patient.completedDate.split("T")[0]
+          : "",
+        completedTxApprovalBy: patient.completedTxApprovalBy || "",
+      }));
+    }
   }, [patient]);
 
   const [error, setError] = useState(null);
@@ -65,6 +69,7 @@ function SearchPatientByHN() {
         setError(result.error);
       } else {
         setPatient(result[0]);
+        setShow(true);
         setError(null);
       }
     } catch (error) {
@@ -149,89 +154,103 @@ function SearchPatientByHN() {
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
-              ชื่อ นามสกุล ผู้ปวย
-            </Form.Label>
-            <Col md={9}>
-              <Form.Control
-                type="text"
-                name="name"
-                value={updatePt.name}
-                placeholder="คำนำหน้า ชื่อ นามสกุล ผู้ปวย"
-                onChange={(e) =>
-                  setUpdatePt((prevPt) => ({ ...prevPt, name: e.target.value }))
-                }
-                readOnly
-              />
-            </Col>
-          </Form.Group>
+          {/* Render the patient details only if patient data is available */}
+          {show && (
+            <>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  ชื่อ นามสกุล ผู้ปวย
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    value={updatePt.name}
+                    placeholder="คำนำหน้า ชื่อ นามสกุล ผู้ปวย"
+                    onChange={(e) =>
+                      setUpdatePt((prevPt) => ({
+                        ...prevPt,
+                        name: e.target.value,
+                      }))
+                    }
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
 
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
-              หมายเลขโทรศัพท์ผู้ป่วย:
-            </Form.Label>
-            <Col md={9}>
-              <Form.Control
-                type="text"
-                name="tel"
-                value={updatePt.tel}
-                onChange={(e) =>
-                  setUpdatePt((prevPt) => ({ ...prevPt, tel: e.target.value }))
-                }
-                placeholder="เบอร์โทรศัพท์ผู้ป่วย"
-                readOnly
-              />
-            </Col>
-          </Form.Group>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  หมายเลขโทรศัพท์ผู้ป่วย:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="tel"
+                    value={updatePt.tel}
+                    onChange={(e) =>
+                      setUpdatePt((prevPt) => ({
+                        ...prevPt,
+                        tel: e.target.value,
+                      }))
+                    }
+                    placeholder="เบอร์โทรศัพท์ผู้ป่วย"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
 
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
-              หมายเหตุ:
-            </Form.Label>
-            <Col md={9}>
-              <Form.Control
-                type="text"
-                name="note"
-                value={updatePt.note}
-                onChange={(e) =>
-                  setUpdatePt((prevPt) => ({ ...prevPt, note: e.target.value }))
-                }
-                placeholder="หมายเหตุ"
-                readOnly
-              />
-            </Col>
-          </Form.Group>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  หมายเหตุ:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="note"
+                    value={updatePt.note}
+                    onChange={(e) =>
+                      setUpdatePt((prevPt) => ({
+                        ...prevPt,
+                        note: e.target.value,
+                      }))
+                    }
+                    placeholder="หมายเหตุ"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
 
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
-              อาจารย์ผู้รับมอบหมาย:
-            </Form.Label>
-            <Col md={9}>
-              <Form.Control
-                type="text"
-                name="teamleaderEmail"
-                value={getInstructorName(updatePt.teamleaderEmail)}
-                placeholder="อาจารย์ผู้รับมอบหมาย"
-                readOnly
-              />
-            </Col>
-          </Form.Group>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  อาจารย์ผู้รับมอบหมาย:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="teamleaderEmail"
+                    value={getInstructorName(updatePt.teamleaderEmail)}
+                    placeholder="อาจารย์ผู้รับมอบหมาย"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
 
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
-              นักศึกษาผู้รับเคส:
-            </Form.Label>
-            <Col md={9}>
-              <Form.Control
-                type="text"
-                name="studentEmail"
-                value={getStudentName(updatePt.studentEmail)}
-                placeholder="นักศึกษาผู้รับเคส"
-                readOnly
-              />
-            </Col>
-          </Form.Group>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  นักศึกษาผู้รับเคส:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="studentEmail"
+                    value={getStudentName(updatePt.studentEmail)}
+                    placeholder="นักศึกษาผู้รับเคส"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
+            </>
+          )}
         </Form>
       </Container>
     </>

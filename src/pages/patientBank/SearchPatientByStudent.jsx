@@ -6,7 +6,10 @@ import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import PatientCard from "../../components/PatientCard";
-import { getStudentById, getPatientsByStudentEmail } from "../../features/apiCalls";
+import {
+  getStudentById,
+  getPatientsByStudentEmail,
+} from "../../features/apiCalls";
 
 const defaultOptions = {
   loop: true,
@@ -24,6 +27,7 @@ function SearchPatientByStudent() {
 
   const [student, setStudent] = useState({});
   const [studentId, setStudentId] = useState("");
+  const [show, setShow] = useState(false);
 
   const [patients, setPatients] = useState([]);
   const [loadingPatients, setLoadingPatients] = useState(false); // Start as false
@@ -41,6 +45,7 @@ function SearchPatientByStudent() {
       } else {
         setStudent(result.data[0]);
         fetchPatients(result.data[0].studentEmail); // Fetch patients using the studentEmail
+        setShow(true);
       }
     } catch (error) {
       console.error("Error fetching student data:", error);
@@ -71,7 +76,7 @@ function SearchPatientByStudent() {
     <>
       <NavBarPatientBank />
       <Container>
-        <h4>ค้นหาผู้ป่วยของนักศึกษา</h4>
+        <h4>ค้นหาผู้ป่วยด้วยรหัสนักศึกษา</h4>
         <Form className={`mt-4 ${containerClass}`}>
           <Form.Group as={Row} className="mb-3">
             <Form.Label column md={2}>
@@ -94,20 +99,24 @@ function SearchPatientByStudent() {
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={2}>
-              ชื่อ-สกุล นักศึกษา:
-            </Form.Label>
-            <Col md={9}>
-              <Form.Control
-                type="text"
-                name="studentEmail"
-                value={student.studentName || ""} // Fallback to empty string if undefined
-                placeholder="นักศึกษาผู้รับเคส"
-                readOnly
-              />
-            </Col>
-          </Form.Group>
+          {show && (
+            <>
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={2}>
+                  ชื่อ-สกุล นักศึกษา:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="studentEmail"
+                    value={student.studentName || ""} // Fallback to empty string if undefined
+                    placeholder="นักศึกษาผู้รับเคส"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
+            </>
+          )}
         </Form>
       </Container>
 

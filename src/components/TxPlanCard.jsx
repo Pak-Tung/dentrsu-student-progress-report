@@ -7,6 +7,7 @@ import { ThemeContext } from "../ThemeContext";
 import "../App.css";
 import ButtonTreatmentApproval from "./ButtonTreatmentApproval";
 import { getAllInstructors, getPatientByHn } from "../features/apiCalls";
+import ModalCompleteTxApproval from "./ModalCompleteTxApproval";
 
 // Convert MySQL date string to JavaScript Date object and format it as DD/MM/YYYY
 const formatDate = (dateStr) => {
@@ -17,9 +18,9 @@ const formatDate = (dateStr) => {
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
   const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`;
+  //return `${day}/${month}/${year}`;
+  return year===1899?"-":`${day}/${month}/${year}`;
 };
-
 
 function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
   const { theme } = useContext(ThemeContext);
@@ -115,10 +116,20 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
     fetchPatient();
   }, [treatments[0]?.hn]);
 
-
   // Check if patient status is -1
   const isPatientDisabled = patient.status === -1;
   //console.log("isPatientDisabled", isPatientDisabled);
+
+  const [requestTreatment, setRequestTreatment] = useState([]);
+  const [showApprovalRequestForm, setShowApprovalRequestForm] = useState(false);
+  const handleCompleteTreatmentRequest = (treatment) => {
+    setRequestTreatment(treatment);
+    setShowApprovalRequestForm(true); // Show the approval request modal
+  };
+  const handleApprovalUpdate = (updatedTreatment) => {
+    updateTreatment(updatedTreatment);
+    handleClose(); // Close the modal after update
+  };
 
   return (
     <>
@@ -159,7 +170,8 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
               }
 
               const isStrikeThrough = treatment.status === -1;
-              const isClickable = role === "student" && (!isStrikeThrough && !isPatientDisabled);
+              const isClickable =
+                role === "student" && !isStrikeThrough && !isPatientDisabled;
 
               return (
                 <ListGroup.Item
@@ -202,6 +214,25 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
                     <Col className="text-center" md={2}>
                       {treatment.status === 2 ? (
                         getInstructorName(treatment.approvedInstructor)
+                      ) : treatment.status === 0 && role === "student" ? (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCompleteTreatmentRequest(treatment);
+                          }}
+                          style={{
+                            marginBottom: 0,
+                            marginTop: 0,
+                            paddingBottom: 0,
+                            paddingTop: 0,
+                            paddingLeft: 15,
+                            paddingRight: 15,
+                            zIndex: 10,
+                          }}
+                          title={"Click to request approval"}
+                        >
+                          approval request
+                        </button>
                       ) : treatment.status === 1 ? (
                         role === "student" ? (
                           "Pending Approval"
@@ -238,6 +269,15 @@ function TxPlanCard({ treatments = [], updateTreatment, updateNewTreatment }) {
           treatment={selectedTreatment}
           onUpdate={handleTreatmentUpdate}
           onUpdateNewTx={handleNewTreatmentUpdate}
+        />
+      )}
+
+      {requestTreatment && (
+        <ModalCompleteTxApproval
+          show={showApprovalRequestForm}
+          handleClose={() => setShowApprovalRequestForm(false)}
+          treatment={requestTreatment}
+          onUpdate2={handleApprovalUpdate}
         />
       )}
     </>

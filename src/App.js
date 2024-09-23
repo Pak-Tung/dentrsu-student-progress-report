@@ -38,6 +38,7 @@ import SearchPatientByHN from "./pages/patientBank/SearchPatientByHN";
 import SearchPatientByStudent from "./pages/patientBank/SearchPatientByStudent";
 import SearchPatientByInstructor from "./pages/patientBank/SearchPatientByInstructor";
 import AddMultiNewPatient from "./pages/patientBank/AddMultiNewPatient";
+import ProfilePatientBank from "./pages/patientBank/ProfilePatientBank";
 
 //import SelectRoleAdmin from "./pages/admins/selectRoleAdmin";
 
@@ -84,6 +85,7 @@ function App() {
         <Route path="/searchPatientByStudent" element={<SearchPatientByStudent />} />
         <Route path="/searchPatientByInstructor" element={<SearchPatientByInstructor />} />
         <Route path="/addMultiNewPatient" element={<AddMultiNewPatient />} />
+        <Route path="/profilePatientBank" element={<ProfilePatientBank />} />
 
         <Route path="/uploadPatientsCSV" element={<UploadPatientsCSV />} />
         

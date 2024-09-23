@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import PropTypes from "prop-types";
 import {
   Container,
   Row,
@@ -160,23 +159,27 @@ function PatientCard({ patients = [], updatePatients }) {
                   >
                     <Badge
                       bg={
-                        patient.status === 4
+                        patient.status === "4"
                           ? "success"
-                          : patient.status === -1
+                          : patient.status === "-1"
                           ? "danger"
                           : "warning"
                       }
                       pill
                     >
-                      {patient.status === 4
+                      {patient.status === "4"
                         ? "COMPLETED"
-                        : patient.status === -1
+                        : patient.status === "-1"
                         ? "DISCHARGED"
-                        : patient.status === 1
+                        : patient.status === "0"
+                        ? "CHARTING"
+                        : patient.status === "1"
                         ? "REQUEST TX PLAN APPROVAL"
+                        : patient.status === "2"
+                        ? "TX PLAN APPROVED"
                         : txPlan && hasTxPlanStatusOne(txPlan)
                         ? "REQUEST TX APPROVAL"
-                        : patient.status === 3
+                        : patient.status === "3"
                         ? "REQUEST COMPLETE CASE APPROVAL"
                         : "INCOMPLETE"}
                     </Badge>

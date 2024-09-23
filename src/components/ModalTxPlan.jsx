@@ -18,21 +18,19 @@ import {
   getTxPlanByPatientHn,
   insertTxPlan,
   getAllDivisions,
-} from "../features/apiCalls";
-import TxPlanCard from "./TxPlanCard";
-import "../App.css";
-import {
   getInstructorsByTeamleaderRole,
   getAllStudents,
   updatePatientbyhn,
   getStudentByTeamleaderEmail,
   getTxtypesByDivision,
 } from "../features/apiCalls";
+import TxPlanCard from "./TxPlanCard";
+import "../App.css";
 import UpdateComplexity from "./UpdateComplexity";
 import ButtonTreatmentPlanApproval from "./ButtonTreatmentPlanApproval";
 import ButtonCompletedTxApproval from "./ButtonCompletedTxApproval";
 import ButtonUpdatePatientProfile from "./ButtonUpdatePatientProfile";
-import { formatDateFormISO, formatDate } from "../utilities/dateUtils";
+import { formatDateFormISO, formatDate, convertToUTCPlus7 } from "../utilities/dateUtils";
 
 const defaultOptions = {
   loop: true,
@@ -43,7 +41,12 @@ const defaultOptions = {
   },
 };
 
-function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
+function ModalTxPlan({
+  show,
+  handleClose,
+  patient,
+  updatePatients = () => {},
+}) {
   const { theme } = useContext(ThemeContext);
   const [role, setRole] = useState("");
 
@@ -54,12 +57,12 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     }
   }, []);
 
-  const [user, setUser] = useState(() => {
+  const [user] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
   });
 
-  const userEmail = user.email;
+  const userEmail = user.email || "";
 
   const containerClass = theme === "dark" ? "container-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
@@ -83,7 +86,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     completedDate: "",
     status: "",
   });
-  const [updatePt, setUpdatePt] = useState({
+  const initialUpdatePtState = {
     tel: "",
     teamleaderEmail: "",
     studentEmail: "",
@@ -95,13 +98,14 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     completedDate: "",
     planApprovalBy: "",
     completedTxApprovalBy: "",
-  });
+  };
+  const [updatePt, setUpdatePt] = useState(initialUpdatePtState);
 
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("");
 
   useEffect(() => {
-    if (patient.hn) {
+    if (patient && patient.hn) {
       const fetchTxPlanData = async () => {
         setLoadingTxPlan(true);
         try {
@@ -109,7 +113,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
           if (result.error) {
             setError(result.error);
           } else {
-            //console.log(result);
             setTxPlan(result);
 
             // Sort treatments by txid before rendering
@@ -135,35 +138,38 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     setNewTxPlan((prevTxPlan) => ({
       ...prevTxPlan,
       txid: nextTxId,
-      hn: patient.hn,
-      patientName: patient.name,
+      hn: patient.hn || "",
+      patientName: patient.name || "",
+      status: 0,
     }));
   }, [nextTxId, patient.hn, patient.name]);
 
   useEffect(() => {
-    setUpdatePt((prevPt) => ({
-      ...prevPt,
-      tel: patient.tel,
-      teamleaderEmail: patient.teamleaderEmail,
-      studentEmail: patient.studentEmail,
-      complexity: patient.complexity,
-      note: patient.note,
-      status: patient.status,
-      acceptedDate: patient.acceptedDate
-        ? patient.acceptedDate.split("T")[0]
-        : "",
-      planApprovalBy: patient.planApprovalBy,
-      planApprovedDate: patient.planApprovedDate
-        ? patient.planApprovedDate.split("T")[0]
-        : "",
-      completedDate: patient.completedDate
-        ? patient.completedDate.split("T")[0]
-        : "",
-      completedTxApprovalBy: patient.completedTxApprovalBy,
-    }));
+    if (patient) {
+      setUpdatePt({
+        tel: patient.tel || "",
+        teamleaderEmail: patient.teamleaderEmail || "",
+        studentEmail: patient.studentEmail || "",
+        complexity: patient.complexity || "",
+        note: patient.note || "",
+        status: patient.status || "",
+        acceptedDate: patient.acceptedDate
+          ? convertToUTCPlus7(patient.acceptedDate)
+          : "",
+        planApprovalBy: patient.planApprovalBy || "",
+        planApprovedDate: patient.planApprovedDate
+          ? convertToUTCPlus7(patient.planApprovedDate)
+          : "",
+        completedDate: patient.completedDate
+          ? convertToUTCPlus7(patient.completedDate)
+          : "",
+        completedTxApprovalBy: patient.completedTxApprovalBy || "",
+      });
 
-    setSelectedTeamleader(patient.teamleaderEmail);
-    setSelectedStudent(patient.studentEmail ? patient.studentEmail : "");
+      setSelectedTeamleader(patient.teamleaderEmail || "");
+      setSelectedStudent(patient.studentEmail || "");
+      console.log("acceptedDate", patient.acceptedDate);
+    }
   }, [patient]);
 
   useEffect(() => {
@@ -183,7 +189,9 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
   }, []);
 
   const handleAddTreatmentPlan = () => {
-    setShowAddForm((prev) => !prev);
+    if (role === "student") {
+      setShowAddForm((prev) => !prev);
+    }
   };
 
   const handleFormChange = (e) => {
@@ -197,8 +205,8 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
 
   const handleUpdatePtFormChange = (e) => {
     const { name, value } = e.target;
-    setUpdatePt((prevTxPlan) => ({
-      ...prevTxPlan,
+    setUpdatePt((prevUpdatePt) => ({
+      ...prevUpdatePt,
       [name]: value,
     }));
   };
@@ -227,14 +235,19 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
         setNextTxId(nextTxId + 1);
 
         // Clear form inputs
-        setNewTxPlan((prevTxPlan) => ({
-          ...prevTxPlan,
+        setNewTxPlan({
           txid: nextTxId + 1,
           phase: "",
           area: "",
+          description: "",
+          hn: patient.hn || "",
+          patientName: patient.name || "",
           note: "",
           division: "",
-        }));
+          startDate: "",
+          completedDate: "",
+          status: 0,
+        });
         setSelectedDivision("");
         setSelectedOption("");
       }
@@ -245,24 +258,24 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
 
   const convertStatus = (status) => {
     switch (status) {
-      case -1:
+      case "-1":
         return "Discharged";
-      case 0:
+      case "0":
         return "Charting";
-      case 1:
+      case "1":
         return "Pending Tx Plan Approval";
-      case 2:
+      case "2":
         return "Tx Plan Approved";
-      case 3:
+      case "3":
         return "Pending Approval";
-      case 4:
+      case "4":
         return "Completed";
       default:
         return "Unknown";
     }
   };
 
-  const handlePatientUpdate = (patient) => {
+  const handlePatientUpdate = () => {
     // Display patient update form
     setShowPatientUpdateForm((prev) => !prev);
   };
@@ -286,7 +299,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
         if (result.error) {
           setError(result.error);
         } else {
-          //console.log(result);
           setInstructors(result);
         }
       } catch (error) {
@@ -302,8 +314,8 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
   const handleStudentChange = (e) => {
     const selectedValue = e.target.value;
     setSelectedStudent(selectedValue);
-    setUpdatePt((prevTxPlan) => ({
-      ...prevTxPlan,
+    setUpdatePt((prevUpdatePt) => ({
+      ...prevUpdatePt,
       studentEmail: selectedValue,
     }));
   };
@@ -315,7 +327,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
         if (result.error) {
           setError(result.error);
         } else {
-          //console.log(result.data.result);
           setStudents(result.data.result);
         }
       } catch (error) {
@@ -331,14 +342,20 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     const processedUpdatePt = {
       ...updatePt,
       acceptedDate:
-        updatePt.completedDate === "" || "-"
+        updatePt.acceptedDate === "" || updatePt.acceptedDate === "-"
           ? formatDateFormISO(new Date().toISOString())
           : updatePt.acceptedDate,
       completedDate:
-        updatePt.completedDate === "" ? null : updatePt.completedDate,
+        updatePt.completedDate === "" || updatePt.completedDate === "-"
+          ? null
+          : updatePt.completedDate,
       planApprovedDate:
-        updatePt.planApprovedDate === "" ? null : updatePt.planApprovedDate,
+        updatePt.planApprovedDate === "" || updatePt.planApprovedDate === "-"
+          ? null
+          : updatePt.planApprovedDate,
     };
+
+   
 
     // Submit patient update form
     try {
@@ -346,7 +363,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
       if (result.error) {
         setError(result.error);
       } else {
-        // Update patient data in the parent component
         // Update patient data in the parent component
         if (processedUpdatePt) {
           updatePatients((prevPatients) =>
@@ -374,7 +390,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
 
     updatePatients((prevPatients) =>
       prevPatients.map((pt) =>
-        pt.tel === updatedPatient.tel
+        pt.hn === updatedPatient.hn
           ? { ...pt, complexity: updatedPatient.complexity }
           : pt
       )
@@ -393,7 +409,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
 
     updatePatients((prevPatients) =>
       prevPatients.map((pt) =>
-        pt.tel === updatedPatient.tel
+        pt.hn === updatedPatient.hn
           ? {
               ...pt,
               status: updatedPatient.status,
@@ -423,27 +439,28 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
     setTxPlan((prevTxPlan) => [...prevTxPlan, updatedNewTreatment]);
   };
 
-  const [studentsInTeam, setStudentsInTeam] = useState({});
+  const [studentsInTeam, setStudentsInTeam] = useState([]);
 
   useEffect(() => {
     const fetchStudentsInTeam = async () => {
       try {
-        const result = await getStudentByTeamleaderEmail(userEmail);
-        if (result.error) {
-          setError(result.error);
-        } else {
-          //console.log(result);
-          setStudentsInTeam(result);
+        if (userEmail) {
+          const result = await getStudentByTeamleaderEmail(userEmail);
+          if (result.error) {
+            setError(result.error);
+          } else {
+            setStudentsInTeam(result);
+          }
         }
       } catch (error) {
         setError("Error fetching students: " + error.message);
       }
     };
     fetchStudentsInTeam();
-  }, []);
+  }, [userEmail]);
 
   const getInstructorName = (email) => {
-    if (email === "") {
+    if (!email) {
       return "-";
     } else {
       const instructor = instructors.find(
@@ -454,7 +471,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
   };
 
   const getStudentName = (email) => {
-    if (email === "") {
+    if (!email) {
       return "-";
     } else {
       const student = students.find(
@@ -470,21 +487,35 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
   useEffect(() => {
     const fetchTxtypes = async () => {
       try {
-        const result = await getTxtypesByDivision(selectedDivision);
-        if (result.error) {
-          setError(result.error);
-        } else {
-          console.log(result.data);
-          setTxtypes(result.data);
+        if (selectedDivision) {
+          const result = await getTxtypesByDivision(selectedDivision);
+          if (result.error) {
+            setError(result.error);
+          } else {
+            setTxtypes(result.data);
+          }
         }
       } catch (error) {
         setError("Error fetching txtypes: " + error.message);
       }
     };
-    if (selectedDivision) {
-      fetchTxtypes();
-    }
+    fetchTxtypes();
   }, [selectedDivision]);
+
+  const handleClosePatientUpdateForm = () => {
+    setShowPatientUpdateForm(false);
+  };
+
+ 
+
+  const handleDescriptionChange = (e) => {
+    const selectedOption = e.target.value;
+    setSelectedOption(selectedOption);
+    setNewTxPlan((prevTxPlan) => ({
+      ...prevTxPlan,
+      description: selectedOption,
+    }));
+  };
 
   return (
     <Modal show={show} onHide={handleClose} className={theme} fullscreen={true}>
@@ -513,12 +544,11 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
               className={`status-by-div-container ${theme}`}
             >
               <ListGroup>
-                <ListGroup.Item 
+                <ListGroup.Item
                   key={patient.hn}
                   className={`myDiv ${
                     theme === "dark" ? "bg-dark text-white" : ""
                   }`}
-                
                 >
                   <Row className="mb-3">
                     <Col>
@@ -527,10 +557,14 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       </strong>
                       <br />
                       <p>
-                        <ButtonUpdatePatientProfile
-                          handlePatientUpdate={handlePatientUpdate} // Pass the function as a prop
-                          patient={patient} // Pass the patient object as a prop
-                        />
+                        {role === "ptBank" ? (
+                          "Patient"
+                        ) : (
+                          <ButtonUpdatePatientProfile
+                            handlePatientUpdate={handlePatientUpdate} // Pass the function as a prop
+                            patient={patient} // Pass the patient object as a prop
+                          />
+                        )}
                       </p>
                       <strong>{convertStatus(updatePt.status)}</strong>
                       <br />
@@ -543,7 +577,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       <br />
                       <p>Team Leader</p>
                       <strong>
-                        {complexity === 0 ? (
+                        {complexity === "0" && role === "student" ? (
                           <UpdateComplexity
                             patient={patient}
                             updateComplexity={updateComplexity}
@@ -568,7 +602,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       <strong>
                         {(updatePt.planApprovalBy === "" ||
                           updatePt.planApprovalBy === null) &&
-                        updatePt.status === (role === "student" ? 0 : 1) ? (
+                        updatePt.status === (role === "student" ? '0' : '1') ? (
                           <ButtonTreatmentPlanApproval
                             patient={patient}
                             updateStatus={updateStatus}
@@ -587,7 +621,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                       <strong>
                         {(updatePt.completedTxApprovalBy === "" ||
                           updatePt.completedTxApprovalBy === null) &&
-                        updatePt.status === (role === "student" ? 2 : 3) ? (
+                        updatePt.status === (role === "student" ? '2' : '3') ? (
                           <ButtonCompletedTxApproval
                             patient={patient}
                             updateStatus={updateStatus}
@@ -604,164 +638,177 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                     </Col>
                   </Row>
                   <Row>
-                  <h5>Important note:</h5> <br />
-                  <p> {updatePt.note}</p>
+                    <h5>Important note:</h5> <br />
+                    <p> {updatePt.note}</p>
                   </Row>
                 </ListGroup.Item>
               </ListGroup>
             </Container>
 
             {showPatientUpdateForm && (
-             
-                <Form
-                  onSubmit={handlePatientUpdateFormSubmit}
-                  className={`mt-4 ${containerClass}`}
+              <Container>
+              <Form
+                onSubmit={handlePatientUpdateFormSubmit}
+                className={`mt-4 ${containerClass}`}
+              >
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={3}>
+                    Tel:
+                  </Form.Label>
+                  <Col md={9}>
+                    <Form.Control
+                      type="text"
+                      name="tel"
+                      value={updatePt.tel}
+                      onChange={handleUpdatePtFormChange}
+                      required
+                    />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  hidden={role === "student"} // Hide if role is "student"
                 >
-                  <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={3}>
-                      Tel:
-                    </Form.Label>
-                    <Col md={9}>
-                      <Form.Control
-                        type="text"
-                        name="tel"
-                        value={updatePt.tel}
-                        onChange={handleUpdatePtFormChange}
-                        required
-                      />
-                    </Col>
-                  </Form.Group>
+                  <Form.Label column md={3}>
+                    Complexity
+                  </Form.Label>
+                  <Col md={9}>
+                    <Form.Control
+                      type="number"
+                      name="complexity"
+                      value={updatePt.complexity}
+                      onChange={handleUpdatePtFormChange}
+                      required
+                    />
+                  </Col>
+                </Form.Group>
 
-                  <Form.Group
-                    as={Row}
-                    className="mb-3"
-                    hidden={role === "student"} // Hide if role is "student"
-                  >
-                    <Form.Label column md={3}>
-                      Complexity
-                    </Form.Label>
-                    <Col md={9}>
-                      <Form.Control
-                        type="number"
-                        name="complexity"
-                        value={updatePt.complexity}
-                        onChange={handleUpdatePtFormChange}
-                        required
-                      />
-                    </Col>
-                  </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={3}>
+                    Note
+                  </Form.Label>
+                  <Col md={9}>
+                    <Form.Control
+                      type="text"
+                      name="note"
+                      value={updatePt.note}
+                      onChange={handleUpdatePtFormChange}
+                    />
+                  </Col>
+                </Form.Group>
 
-                  <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={3}>
-                      Note
-                    </Form.Label>
-                    <Col md={9}>
-                      <Form.Control
-                        type="text"
-                        name="note"
-                        value={updatePt.note}
-                        onChange={handleUpdatePtFormChange}
-                      />
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={3}>
-                      Team Leader
-                    </Form.Label>
-                    <Col md={9}>
-                      <Form.Control
-                        as="select"
-                        name="teamleaderEmail"
-                        value={selectedTeamleader}
-                        onChange={handleTeamleaderChange}
-                        required
-                        disabled={role === "student"} // Disable if role is "student"
-                      >
-                        <option value="" disabled>
-                          Select Team Leader
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={3}>
+                    Team Leader
+                  </Form.Label>
+                  <Col md={9}>
+                    <Form.Control
+                      as="select"
+                      name="teamleaderEmail"
+                      value={selectedTeamleader}
+                      onChange={handleTeamleaderChange}
+                      required
+                      disabled={role === "student"} // Disable if role is "student"
+                    >
+                      <option value="" disabled>
+                        Select Team Leader
+                      </option>
+                      {instructors.map((instructor) => (
+                        <option
+                          key={instructor.id}
+                          value={instructor.instructorEmail}
+                        >
+                          {instructor.instructorName}
                         </option>
-                        {instructors.map((instructor) => (
-                          <option
-                            key={instructor.id}
-                            value={instructor.instructorEmail}
-                          >
-                            {instructor.instructorName}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Col>
-                  </Form.Group>
+                      ))}
+                    </Form.Control>
+                  </Col>
+                </Form.Group>
 
-                  <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={3}>
-                      Main Operator
-                    </Form.Label>
-                    <Col md={9}>
-                      <Form.Control
-                        as="select"
-                        name="studentEmail"
-                        value={selectedStudent}
-                        onChange={handleStudentChange}
-                        {...(role === "student" ? { disabled: true } : {})} // Disable if role is "student"
-                      >
-                        <option value="" disabled>
-                          Select Main Operator to Assign {role}
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={3}>
+                    Main Operator
+                  </Form.Label>
+                  <Col md={9}>
+                    <Form.Control
+                      as="select"
+                      name="studentEmail"
+                      value={selectedStudent}
+                      onChange={handleStudentChange}
+                      {...(role === "student" ? { disabled: true } : {})} // Disable if role is "student"
+                    >
+                      <option value="" disabled>
+                        Select Main Operator to Assign {role}
+                      </option>
+                      {studentsInTeam.map((student) => (
+                        <option
+                          key={student.studentId}
+                          value={student.studentEmail}
+                        >
+                          {student.studentName}
                         </option>
-                        {studentsInTeam.map((student) => (
-                          <option
-                            key={student.studentId}
-                            value={student.studentEmail}
-                          >
-                            {student.studentName}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Col>
-                  </Form.Group>
+                      ))}
+                    </Form.Control>
+                  </Col>
+                </Form.Group>
 
-                  <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={3}>
-                      Status
-                    </Form.Label>
-                    <Col md={9}>
-                      <Form.Check
-                        type="switch"
-                        id="statusSwitch"
-                        name="status"
-                        label="Set Status to Discharged"
-                        disabled={role === "student"} // Directly use the condition here
-                        checked={updatePt.status === -1}
-                        onChange={(e) =>
-                          setUpdatePt((prevUpdatePt) => {
-                            let newStatus;
-                            if (e.target.checked) {
-                              newStatus = -1;
-                            } else if (!patient.planApprovalBy) {
-                              newStatus = 0;
-                            } else if (
-                              patient.planApprovalBy &&
-                              !patient.completedTxApprovalBy
-                            ) {
-                              newStatus = 2;
-                            } else {
-                              newStatus = patient.status; // Retain current status if none of the conditions apply
-                            }
-                            return {
-                              ...prevUpdatePt,
-                              status: newStatus,
-                            };
-                          })
-                        }
-                      />
-                    </Col>
-                  </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={3}>
+                    Status
+                  </Form.Label>
+                  <Col md={9}>
+                    <Form.Check
+                      type="switch"
+                      id="statusSwitch"
+                      name="status"
+                      label="Set Status to Discharged"
+                      disabled={role === "student"} // Directly use the condition here
+                      checked={updatePt.status === "-1"}
+                      onChange={(e) =>
+                        setUpdatePt((prevUpdatePt) => {
+                          let newStatus;
+                          if (e.target.checked) {
+                            newStatus = "-1";
+                          } else if (!patient.planApprovalBy) {
+                            newStatus = "0";
+                          } else if (
+                            patient.planApprovalBy &&
+                            !patient.completedTxApprovalBy
+                          ) {
+                            newStatus = "2";
+                          } else {
+                            newStatus = patient.status; // Retain current status if none of the conditions apply
+                          }
+                          return {
+                            ...prevUpdatePt,
+                            status: newStatus,
+                          };
+                        })
+                      }
+                    />
+                  </Col>
+                </Form.Group>
 
-                  <Button variant="dark" type="submit">
-                    Save Patient Update
-                  </Button>
-                </Form>
-          
+                <Form.Group as={Row} className="mb-3">
+                  <Col md={4}></Col>
+                  <Col md={4}>
+                    <Button variant="dark" type="submit">
+                      Save Patient Update
+                    </Button>
+                  </Col>
+                  <Col md={4}>
+                    <Button
+                      variant="outline-dark"
+                      onClick={handleClosePatientUpdateForm}
+                    >
+                      Close Patient Update Form
+                    </Button>
+                  </Col>
+                </Form.Group>
+              </Form>
+              </Container>
             )}
 
             <br />
@@ -854,7 +901,6 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                         name="area"
                         value={newTxPlan.area}
                         onChange={handleFormChange}
-                        
                       />
                     </Col>
                   </Form.Group>
@@ -893,8 +939,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                         <Form.Select
                           name="description"
                           value={selectedOption}
-                          onChange={handleFormChange}
-                          
+                          onChange={handleDescriptionChange}
                         >
                           <option value="" disabled>
                             Select Type of Work
@@ -936,6 +981,7 @@ function ModalTxPlan({ show, handleClose, patient, updatePatients }) {
                   className={`myDiv ${
                     theme === "dark" ? "bg-dark text-white" : ""
                   }`}
+                  hidden={role === "ptBank"} // Hide if role is "ptBank"
                 >
                   <Row className="text-center">
                     <Col>

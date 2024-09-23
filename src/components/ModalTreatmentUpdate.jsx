@@ -102,7 +102,7 @@ function ModalTreatmentUpdate({
     e.preventDefault();
     try {
       await changeTreatmentStatus(); // Ensure this completes before inserting new plan
-      console.log("updateTx", newTxPlan);
+      //console.log("updateTx", newTxPlan);
       const response = await insertTxPlan(newTxPlan);
       onUpdateNewTx(newTxPlan); // Notify parent about the new treatment plan
       handleClose(); // Close the modal after successful submission
@@ -117,7 +117,7 @@ function ModalTreatmentUpdate({
         ...treatment,
         status: -1,
       });
-      console.log(response);
+      //console.log(response);
       onUpdate({
         ...treatment,
         status: -1,
@@ -152,7 +152,7 @@ function ModalTreatmentUpdate({
         if (result.error) {
           setError(result.error);
         } else {
-          console.log(result.data);
+          //console.log(result.data);
           setTxtypes(result.data);
         }
       } catch (error) {

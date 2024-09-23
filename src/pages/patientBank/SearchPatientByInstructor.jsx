@@ -92,7 +92,7 @@ function SearchPatientByInstructor() {
                 onChange={handleTeamleaderChange}
               >
                 <option value="" disabled>
-                  เลือกอาจารย์ผู้รับมอบหมาย
+                  เลือกอาจารย์ทีมลีดเดอร์
                 </option>
                 {instructors.map((instructor) => (
                   <option

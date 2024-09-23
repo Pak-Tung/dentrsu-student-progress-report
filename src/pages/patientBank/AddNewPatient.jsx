@@ -1,34 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import NavBarPatientBank from "./NavbarPatientBank";
-import {
-  insertNewPatient,
-} from "../../features/apiCalls";
+import { insertNewPatient } from "../../features/apiCalls";
 import { Button, Form, Container, Row, Col, Alert } from "react-bootstrap";
-import { ThemeContext } from "../../ThemeContext"
-import Cookies from "js-cookie";
-import { formatDateFormISO, formatDate } from "../../utilities/dateUtils";
 
 function AddNewPatient() {
-  const [user, setUser] = useState(() => {
-    const cookieUser = Cookies.get("user");
-    return cookieUser ? JSON.parse(cookieUser) : {};
-  });
-
-  const userEmail = user.email;
-
   const [formData, setFormData] = useState({
     hn: "",
     name: "",
     tel: "",
-    teamleaderEmail: "",
-    studentEmail: "",
-    acceptedDate: '1899-01-01',//formatDateFormISO(new Date().toISOString()),
   });
 
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  // Effect to clear success message after 5 seconds
+  // Effect to clear success message after 2 seconds
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
@@ -39,14 +24,13 @@ function AddNewPatient() {
     }
   }, [successMessage]);
 
-
   // Handler for form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
 
   // Handler for form submission
@@ -56,25 +40,25 @@ function AddNewPatient() {
     try {
       const result = await insertNewPatient(formData); // Call the API to insert the patient
       console.log(result);
-      if (result.affectedRows === 1) {
-        setSuccessMessage("Patient created successfully!");
+      if (result.error) {
+        setError(result.error.message || "An error occurred while creating the patient.");
+        setSuccessMessage(null);
+      } else if (result.affectedRows === 1) {
+        setSuccessMessage("สร้างผู้ป่วยใหม่สำเร็จ!");
         setError(null);
         // Clear form after successful submission
         setFormData({
           hn: "",
           name: "",
           tel: "",
-          teamleaderEmail: "",
-          studentEmail: "",
-          acceptedDate: "",
         });
       } else {
-        setError(result.response.data.error.sqlMessage);
+        setError("ไม่สามารถสร้างผู้ป่วยใหม่ได้ กรุณาลองอีกครั้ง");
         setSuccessMessage(null);
       }
     } catch (error) {
       console.log("error", error);
-      setError("Error creating patient: " + error.sqlMessage);
+      setError("เกิดข้อผิดพลาดในการสร้างผู้ป่วย: " + (error.message || "Unknown error."));
       setSuccessMessage(null);
     }
   };
@@ -105,14 +89,14 @@ function AddNewPatient() {
               </Form.Group>
 
               <Form.Group controlId="name">
-                <Form.Label>ชื่อ นามสกุล ผู้ปวย</Form.Label>
+                <Form.Label>ชื่อ นามสกุล ผู้ป่วย</Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  placeholder="กรอกคำนำหน้า ชื่อ นามสกุล ผู้ปวย"
+                  placeholder="กรอกคำนำหน้า ชื่อ นามสกุล ผู้ป่วย"
                 />
               </Form.Group>
 
@@ -123,10 +107,9 @@ function AddNewPatient() {
                   name="tel"
                   value={formData.tel}
                   onChange={handleChange}
-                  
                   placeholder="กรอกหมายเลขโทรศัพท์"
                 />
-              </Form.Group>          
+              </Form.Group>
 
               <Button variant="dark" type="submit" className="mt-3">
                 บันทึกข้อมูล

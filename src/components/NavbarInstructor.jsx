@@ -42,10 +42,6 @@ function NavbarInstructor() {
             <NavDropdown.Item href="/txApproval">
               Treatment Approval
             </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="/newPatient">
-              Create New Patient
-            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Requirements" id="nav-approval" className="flex-fill">
             <NavDropdown.Item href="/reqApproval">Requirement Approval</NavDropdown.Item>

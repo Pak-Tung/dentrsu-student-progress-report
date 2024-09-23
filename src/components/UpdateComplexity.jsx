@@ -3,6 +3,14 @@ import { updatePatientbyhn } from "../features/apiCalls";
 import "../App.css";
 
 function UpdateComplexity({ patient, updateComplexity }) {
+  const [role, setRole] = useState("");
+  
+  useEffect(() => {
+    const savedRole = JSON.parse(localStorage.getItem("role"));
+    if (savedRole) {
+      setRole(savedRole);
+    }
+  }, []);
   const [updatePt, setUpdatePt] = useState({
     tel: "",
     teamleaderEmail: "",
@@ -63,6 +71,7 @@ function UpdateComplexity({ patient, updateComplexity }) {
             step="1"
             required
             style={{ margin: 0, padding: 0, width: 60 }}
+            {...(role === "root" || "student" ? {} : { disabled: true })}
           />
           <button type="submit" style={{ marginBottom: 0, marginTop: 0, paddingBottom: 0, paddingTop: 0, paddingLeft: 15, paddingRight: 15 }}>
             Save
