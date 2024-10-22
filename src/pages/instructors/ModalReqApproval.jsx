@@ -10,6 +10,14 @@ function ModalReqApproval({ show, handleClose, divisionReq, division, studentNam
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
+  const [role, setRole] = useState("");
+  useEffect(() => {
+    const savedRole = JSON.parse(localStorage.getItem("role"));
+    if (savedRole) {
+      setRole(savedRole);
+    }
+  }, []);
+
   const [options, setOptions] = useState([]);
   const [unitRSU, setUnitRSU] = useState("unit_RSU");
   const [unitDC, setUnitDC] = useState("unit_DC");
@@ -27,7 +35,7 @@ function ModalReqApproval({ show, handleClose, divisionReq, division, studentNam
   const [selectedOption, setSelectedOption] = useState("");
 
   const [formData, setFormData] = useState({
-    studentEmail: userEmail,
+    studentEmail: "",
     bookNo: "",
     pageNo: "",
     type: "",
@@ -48,7 +56,7 @@ function ModalReqApproval({ show, handleClose, divisionReq, division, studentNam
   useEffect(() => {
     if (divisionReq) {
       setFormData({
-        studentEmail: userEmail,
+        studentEmail: divisionReq.studentEmail || "",
         bookNo: divisionReq.bookNo || 0,
         pageNo: divisionReq.pageNo || 0,
         type: divisionReq.type || "",
@@ -58,7 +66,7 @@ function ModalReqApproval({ show, handleClose, divisionReq, division, studentNam
         HN: divisionReq.HN || "",
         patientName: divisionReq.patientName || "",
         isApproved: 0,
-        instructorEmail: divisionReq.instructorEmail || "",
+        instructorEmail: (role==="instructor" || role === "admin") ? divisionReq.instructorEmail : "",
         approvedDate: addSevenHoursToISOString(new Date().toISOString()),
         id: divisionReq.id || 0,
         unit_RSU: divisionReq.unit_RSU || "",

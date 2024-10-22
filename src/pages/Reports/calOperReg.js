@@ -93,7 +93,9 @@ export const calOperReg = (rqm, minReq) => {
         } else {
           totalClassIV += parseFloat(item.req_RSU);
           totalDiastemaClosure -= parseFloat(item.req_RSU);
+          totalClassIIIorIV += parseFloat(item.req_RSU);
           item.extra = "Class IV from Diastema";
+          item.extraCDA = "Class III or IV from Diastema";
         }
       } else if (item.type === "PRR") {
         totalPRR += parseFloat(item.req_RSU);

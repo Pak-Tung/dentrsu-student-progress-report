@@ -265,6 +265,8 @@ const SubmissionForm = ({ division }) => {
   };
 
   /******Calculate Oper ****************/
+  const [showOperReq, setShowOperReq] = useState(false);
+
   useEffect(() => {
     if (division === "oper") {
       setFormData((prevState) => ({
@@ -274,24 +276,26 @@ const SubmissionForm = ({ division }) => {
       }));
 
       if (
-        selectedOption === "Polishing" ||
-        selectedOption === "Sealant" ||
-        selectedOption === "PRR" ||
-        selectedOption === "Caries control" ||
-        selectedOption === "Emergency tx" ||
-        selectedOption === "Inlay" ||
-        selectedOption === "Onlay"
+        selectedOption === "Exam class II" ||
+        selectedOption === "Exam class V"
       ) {
         setFormData((prevState) => ({
           ...prevState,
           req_RSU: 1,
-          req_DC: 1,
+          req_DC: 0,
         }));
-      }
+      } else if (
+        selectedOption === "Oper chart" ||
+        selectedOption === "Recall completed case" ||
+        selectedOption === "Recall any"
+      ) {
+        setShowOperReq(true);
+      } 
     }
   }, [selectedOption, division]);
 
   /*******End of Oper Calculate ************/
+  
   useEffect(() => {
     if (division === "endo") {
       
@@ -791,7 +795,8 @@ const SubmissionForm = ({ division }) => {
                 division !== "diag" &&
                 !disableRadioArea &&
                 !disableSurArea &&
-                !disablePedoArea && (
+                !disablePedoArea &&
+                !showOperReq && (
                   <Col>
                     <InputGroupField
                       id="area"
