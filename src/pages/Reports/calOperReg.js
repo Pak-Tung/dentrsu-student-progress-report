@@ -51,6 +51,13 @@ export const calOperReg = (rqm, minReq) => {
   let totalPRR = 0;
   let totalPRRminus1 = 0;
 
+  //Calculate CDA
+  let totalClassI_CDA = 0;
+  let totalClassII_CDA = 0;
+  let totalClassIIIorIV = 0;
+  let totalClassV = 0;
+  let totalAnyClass = 0;
+
   //console.log("rqm", rqm);
 
   rqm.forEach((item) => {
@@ -207,12 +214,7 @@ export const calOperReg = (rqm, minReq) => {
     totalReq.RSU.Diastema_closure +
     totalReq.RSU.Veneer;
 
-  //Calculate CDA
-  let totalClassI_CDA = 0;
-  let totalClassII_CDA = 0;
-  let totalClassIIIorIV = 0;
-  let totalClassV = 0;
-  let totalAnyClass = 0;
+  
 
   rqm.forEach((item) => {
     if (item.isApproved === 1) {
