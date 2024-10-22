@@ -25,7 +25,7 @@ function ReportRadioReq(divisionR) {
   const [calRqm, setCalRqm] = useState([]);
   const [totalReq, setTotalReq] = useState({
     RSU: {
-      Full_mouth_periapical_radiograph: 1,
+      Full_mouth_periapical_radiograph: 0,
       Periapical_radiograph: 0,
       Bitewing_radiograph: 0,
       Extraoral_and_Special_technique_radiograph: 0,

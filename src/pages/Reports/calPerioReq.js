@@ -9,7 +9,7 @@ export const calPerioReq = (rqm, minReq) => {
       SRP_1st_Exam: 0,
     },
     CDA: {
-      Case_G: 0,
+      //Case_G: 0,
       Case_P: 0,
       CDA_Cases: 0,
       OHI_2n_Exam: 0,
@@ -58,30 +58,31 @@ export const calPerioReq = (rqm, minReq) => {
   rqm.forEach((item) => {
     if (item.isApproved === 1) {
       if (item.type === "Case G") {
-        totalCaseG_CDA += 1;
+        //totalCaseG_CDA += 1;
         item.extraCDA = "Case G";
       } else if (item.type === "Case P") {
         totalCaseP_CDA += 1;
         item.extraCDA = "Case P";
-      } else if (
-        item.area === "Completed recall" ||
-        item.area === "Only recall" ||
-        item.area === "Completed recheck"
-      ) {
-        totalCDACases += parseFloat(item.req_DC);
-        item.extraCDA = "CDA Cases";
-      } else if (item.type === "OHI 2nd exam") {
+      }  else if (item.type === "OHI 2nd exam") {
         totalOHI2ndExam += parseFloat(item.req_DC);
         item.extraCDA = "OHI 2nd exam";
       } else if (item.type === "SRP 2nd exam") {
         totalSRP2ndExam += parseFloat(item.req_DC);
         item.extraCDA = "SRP 2nd exam";
       }
+      if (
+        item.area === "Completed recall" ||
+        item.area === "Only recall" ||
+        item.area === "Completed recheck"
+      ) {
+        totalCDACases += 1;
+        item.extraCDA = "CDA Cases";
+      }
     }
   });
 
   totalReq.RSU.Case_G = totalCaseG;
-  totalReq.CDA.Case_G = totalCaseG_CDA;
+  //totalReq.CDA.Case_G = totalCaseG_CDA;
   totalReq.RSU.Case_P = totalCaseP;
   totalReq.CDA.Case_P = totalCaseP_CDA;
   totalReq.RSU.Complexities = totalComplexities;

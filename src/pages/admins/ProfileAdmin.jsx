@@ -102,7 +102,8 @@ function ProfileAdmin() {
             <div className="d-flex justify-content-center mb-4">
               <img
                 // src={userPicture}
-                src={"/images/admin.jpg"}
+                //{"/images/admin.jpg"}
+                src='https://img2.pic.in.th/pic/cat-cute.jpg'
                 alt={`Profile`}
                 className="rounded-circle"
                 width="180"

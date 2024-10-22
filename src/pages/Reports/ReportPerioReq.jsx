@@ -33,7 +33,7 @@ function ReportPerioReqTest(perioR) {
       SRP_1st_Exam: 0,
     },
     CDA: {
-      Case_G: 0,
+      //Case_G: 0,
       Case_P: 0,
       CDA_Cases: 0,
       OHI_2n_Exam: 0,
@@ -50,7 +50,7 @@ function ReportPerioReqTest(perioR) {
       SRP_1st_Exam: 1,
     },
     CDA: {
-      Case_G: 0,
+      //Case_G: 0,
       Case_P: 1,
       CDA_Cases: 9,
       OHI_2n_Exam: 1,
