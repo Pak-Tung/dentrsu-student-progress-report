@@ -12,61 +12,58 @@ import { getPatientsByStudentEmail } from "../../features/apiCalls";
 import PatientCard from "../../components/PatientCard";
 
 const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: loadingData.default,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 function AllPatients() {
-    const { theme } = useContext(ThemeContext);
-    const [user, setUser] = useState(() => {
-        const cookieUser = Cookies.get("user");
-        return cookieUser ? JSON.parse(cookieUser) : {};
-      });
-    
-      const userEmail = user.email;
+  const { theme } = useContext(ThemeContext);
+  const [user, setUser] = useState(() => {
+    const cookieUser = Cookies.get("user");
+    return cookieUser ? JSON.parse(cookieUser) : {};
+  });
 
-      const containerClass = theme === "dark" ? "container-dark" : "";
-      const alertClass = theme === "dark" ? "alert-dark" : "";
+  const userEmail = user.email;
+  const containerClass = theme === "dark" ? "container-dark" : "";
+  const alertClass = theme === "dark" ? "alert-dark" : "";
 
-      const [patients, setPatients] = useState([]);
-      const [loadingPatients, setLoadingPatients] = useState(true);
-      const [error, setError] = useState(null);
+  const [patients, setPatients] = useState([]);
+  const [loadingPatients, setLoadingPatients] = useState(true);
+  const [error, setError] = useState(null);
 
-      useEffect(() => {
-        const fetchStudentData = async () => {
-          if (userEmail) {
-            try {
-              const result = await getPatientsByStudentEmail(userEmail);
-              //console.log(result[0]);
-              setLoadingPatients(true);
-              if (result.error) {
-                setError(result.error);
-              } else if (result) {
-                setPatients(result);
-              } else {
-                setError("No patient data found");
-              }
-            } catch (error) {
-              setError("Error fetching patient data:", error);
-            } finally {
-                setLoadingPatients(false);
-            }
+  useEffect(() => {
+    const fetchStudentData = async () => {
+      if (userEmail) {
+        try {
+          setLoadingPatients(true);
+          const result = await getPatientsByStudentEmail(userEmail);
+
+          if (result.error) {
+            setError(result.error);
+          } else if (result.length > 0) {
+            setPatients(result);
+          } else {
+            setError("No patient data found");
           }
-        };
-    
-        fetchStudentData();
-      }, [userEmail]);
+        } catch (error) {
+          setError("Error fetching patient data: " + error.message);
+        } finally {
+          setLoadingPatients(false);
+        }
+      }
+    };
 
-      const updatePatients = (updateFn) => {
-        setPatients((prevPatients) => updateFn(prevPatients));
-      };
+    fetchStudentData();
+  }, [userEmail]);
 
-      
-
+  const updatePatients = (updateFn) => {
+    // Update the patients state
+    setPatients(updateFn);
+  };
 
   return (
     <>
@@ -94,12 +91,16 @@ function AllPatients() {
             <div className="d-flex justify-content-center">
               <Alert variant="danger" className={alertClass}>{error}</Alert>
             </div>
+          ) : patients && patients.length > 0 ? (
+            <div className="d-flex justify-content-center">
+              <PatientCard
+                patients={patients}
+                updatePatients={updatePatients}
+              />
+            </div>
           ) : (
             <div className="d-flex justify-content-center">
-                <PatientCard 
-                  patients={patients} 
-                  updatePatients={updatePatients} // Pass the update function
-                />
+              <Alert variant="info" className={alertClass}>No patients found.</Alert>
             </div>
           )}
         </>
@@ -107,7 +108,7 @@ function AllPatients() {
         <LoginByEmail />
       )}
     </>
-  )
+  );
 }
 
 export default AllPatients;

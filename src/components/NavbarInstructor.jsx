@@ -54,7 +54,7 @@ function NavbarInstructor() {
               Student Complete Status Approval
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Member" id="nav-member" className="flex-fill">
+          <NavDropdown title="Member" id="nav-member" className="flex-fill" >
             <NavDropdown.Item href="/memberInTeam">
               Member in Team
             </NavDropdown.Item>

@@ -100,6 +100,21 @@ function PatientCard({ patients = [], updatePatients }) {
     return txPlan.some((row) => row.status === 1);
   };
 
+  const handlePatientChange = (updatedPatient) => {
+    const updatedPatientsList = newPatients.map((patient) => {
+      if (patient.hn === updatedPatient.hn) {
+        return { ...patient, ...updatedPatient }; // Ensure all updated properties are included
+      }
+      return patient;
+    });
+  
+    setNewPatients(updatedPatientsList);
+    if (updatePatients) {
+      updatePatients(updatedPatientsList);
+    }
+  };
+
+
   return (
     <>
       <Container fluid="md" className={`status-by-div-container ${theme}`}>
@@ -159,7 +174,7 @@ function PatientCard({ patients = [], updatePatients }) {
                   >
                     <Badge
                       bg={
-                        patient.status === "4"
+                        patient.status === "4" || patient.status === "5"
                           ? "success"
                           : patient.status === "-1"
                           ? "danger"
@@ -167,8 +182,10 @@ function PatientCard({ patients = [], updatePatients }) {
                       }
                       pill
                     >
-                      {patient.status === "4"
-                        ? "COMPLETED"
+                      {patient.status === "5"
+                        ? "ORTHODONTIC REFERRAL"
+                        : patient.status === "4"
+                        ? "COMPLETED AND PENDING RECALL"
                         : patient.status === "-1"
                         ? "DISCHARGED"
                         : patient.status === "0"
@@ -230,7 +247,7 @@ function PatientCard({ patients = [], updatePatients }) {
           show={showModal}
           handleClose={handleClose}
           patient={selectedPatient}
-          updatePatients={updatePatients} // Pass the update function
+          updatedPatient={handlePatientChange} // Pass the update function
         />
       )}
     </>

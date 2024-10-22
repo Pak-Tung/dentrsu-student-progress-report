@@ -49,8 +49,8 @@ function ModalReqApproval({ show, handleClose, divisionReq, division, studentNam
     if (divisionReq) {
       setFormData({
         studentEmail: userEmail,
-        bookNo: divisionReq.bookNo || "",
-        pageNo: divisionReq.pageNo || "",
+        bookNo: divisionReq.bookNo || 0,
+        pageNo: divisionReq.pageNo || 0,
         type: divisionReq.type || "",
         area: divisionReq.area || "",
         req_RSU: divisionReq.req_RSU || 0,

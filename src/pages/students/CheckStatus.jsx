@@ -198,10 +198,10 @@ const CheckStatus = () => {
             </Row>
             <Row className="d-flex justify-content-center mb-2">
               <Col className="text-center" md={6}>
-                <h5>RSU Requirement</h5>
+                <h5>RSU Requirements</h5>
               </Col>
               <Col className="text-center" md={6}>
-                <h5>DC Requirement</h5>
+                <h5>CDA Requirements</h5>
               </Col>
             </Row>
             <Row className="d-flex justify-content-center mb-2">

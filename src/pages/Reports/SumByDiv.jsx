@@ -10,6 +10,15 @@ import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
+import ReportPerioReq from "./ReportPerioReq";
+import ReportOperReq from "./ReportOperReq";
+import ReportEndoReq from "./ReportEndoReq";
+import ReportProsthReq from "./ReportProsthReq";
+import ReportDiagReq from "./ReportDiagReq";
+import ReportRadioReq from "./ReportRadioReq";
+import ReportSurReq from "./ReportSurReq";
+import ReportOrthoReq from "./ReportOrthoReq";
+import ReportPedoReq from "./ReportPedoReq";
 
 const defaultOptions = {
   loop: true,
@@ -28,7 +37,7 @@ function SumByDiv({ division }) {
   if (Cookies.get("user") === undefined) {
     Cookies.set("user", JSON.stringify({}));
   } else {
-    console.log("User email", Cookies.get("user"));
+    //console.log("User email", Cookies.get("user"));
   }
 
   const user = JSON.parse(Cookies.get("user"));
@@ -47,8 +56,8 @@ function SumByDiv({ division }) {
       diag: "Oral Diagnosis",
       radio: "Oral Radiology",
       sur: "Oral Surgery",
-      pedo: "Pediatric Dentistry",
       ortho: "Orthodontic",
+      pedo: "Pediatric Dentistry",
     };
     setDivTitle(divisionTitles[division] || "Unknown Division");
   }, [division]);
@@ -81,13 +90,16 @@ function SumByDiv({ division }) {
     fetchMinReqData();
   }, [division]);
 
+  // Aggregate the requirement data for approved items
   const aggregatedData = rqm.reduce((acc, cur) => {
-    const { type, req_RSU, req_DC } = cur;
-    if (!acc[type]) {
-      acc[type] = { req_RSU: 0, req_DC: 0 };
+    if (cur.isApproved === 1) {
+      const { type, req_RSU, req_DC } = cur;
+      if (!acc[type]) {
+        acc[type] = { req_RSU: 0, req_DC: 0 };
+      }
+      acc[type].req_RSU += parseFloat(req_RSU);
+      acc[type].req_DC += parseFloat(req_DC);
     }
-    acc[type].req_RSU += parseFloat(req_RSU);
-    acc[type].req_DC += parseFloat(req_DC);
     return acc;
   }, {});
 
@@ -119,13 +131,23 @@ function SumByDiv({ division }) {
     <>
       <Container fluid="md" className={containerClass}>
         <ListGroup>
-          <ListGroup.Item variant={theme === 'dark' ? "secondary" : "dark"}>
-            <Row>
-              <Col>{divTitle} Requirement</Col>
-              <Col className="text-center">RSU Requirement</Col>
-              <Col className="text-center">Council Requirement</Col>
-            </Row>
-          </ListGroup.Item>
+          {division !== "perio" &&
+            division !== "oper" &&
+            division !== "prosth" &&
+            division !== "endo" &&
+            division !== "radio" &&
+            division !== "sur" &&
+            division !== "ortho" &&
+            division !== "pedo" &&
+            division !== "diag" && (
+              <ListGroup.Item variant={theme === "dark" ? "secondary" : "dark"}>
+                <Row>
+                  <Col>{divTitle} Requirement</Col>
+                  <Col className="text-center">RSU Requirement</Col>
+                  <Col className="text-center">CDA Requirement</Col>
+                </Row>
+              </ListGroup.Item>
+            )}
 
           {loadingStudent ? (
             <FadeIn>
@@ -139,39 +161,61 @@ function SumByDiv({ division }) {
             </FadeIn>
           ) : error ? (
             <div className="d-flex justify-content-center">
-              <Alert variant="danger" className={alertClass}>{error}</Alert>
+              <Alert variant="danger" className={alertClass}>
+                {error}
+              </Alert>
             </div>
-          ) : getOrderedTypes().map((type) => {
-            const { req_RSU, req_DC } = aggregatedData[type] || {
-              req_RSU: 0,
-              req_DC: 0,
-            };
-            const min_RSU = displayMinValue(type, "req_RSU");
-            const min_DC = displayMinValue(type, "req_DC");
-            return (
-              <ListGroup.Item key={type} className={listGroupItemClass}>
-                <Row>
-                  <Col>
-                    <h4>
-                      <Badge
-                        bg={getBadgeBg(req_RSU, req_DC, min_RSU, min_DC)}
-                      >
-                        {type}
-                      </Badge>
-                    </h4>
-                  </Col>
-                  <Col className="text-center">
-                    <b>{min_RSU !== null ? req_RSU : ""}</b>{" "}
-                    {min_RSU !== null ? "of " + min_RSU : ""}
-                  </Col>
-                  <Col className="text-center">
-                    <b>{min_DC !== null ? req_DC : ""}</b>{" "}
-                    {min_DC !== null ? "of " + min_DC : ""}
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            );
-          })}
+          ) : division === "oper" ? (
+            <ReportOperReq rqm={rqm} />
+          ) : division === "endo" ? (
+            <ReportEndoReq rqm={rqm} />
+          ) : division === "perio" ? (
+            <ReportPerioReq rqm={rqm} />
+          ) : division === "prosth" ? (
+            <ReportProsthReq rqm={rqm} />
+          ) : division === "diag" ? (
+            <ReportDiagReq rqm={rqm} />
+          ) : division === "radio" ? (
+            <ReportRadioReq rqm={rqm} />
+          ) : division === "ortho" ? (
+            <ReportOrthoReq rqm={rqm} />
+          ) : division === "pedo" ? (
+            <ReportPedoReq rqm={rqm} />
+          ) : division === "sur" ? (
+            <ReportSurReq rqm={rqm} />
+          ) : (
+            getOrderedTypes().map((type) => {
+              const { req_RSU, req_DC } = aggregatedData[type] || {
+                req_RSU: 0,
+                req_DC: 0,
+              };
+              const min_RSU = displayMinValue(type, "req_RSU");
+              const min_DC = displayMinValue(type, "req_DC");
+              return (
+                <ListGroup.Item key={type} className={listGroupItemClass}>
+                  <Row>
+                    <Col>
+                      <h4>
+                        <Badge
+                          bg={getBadgeBg(req_RSU, req_DC, min_RSU, min_DC)}
+                        >
+                          {type}
+                        </Badge>
+                      </h4>
+                    </Col>
+                    <Col className="text-center">
+                      <b>{min_RSU !== null ? req_RSU : ""}</b>{" "}
+                      {min_RSU !== null ? "of " + min_RSU : ""}
+                    </Col>
+                    <Col className="text-center">
+                      <b>{min_DC !== null ? req_DC : ""}</b>{" "}
+                      {min_DC !== null ? "of " + min_DC : ""}
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+              );
+            })
+          )}
         </ListGroup>
       </Container>
     </>

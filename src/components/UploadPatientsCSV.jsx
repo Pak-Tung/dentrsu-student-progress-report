@@ -109,6 +109,10 @@ const UploadPatientsCSV = () => {
                 <th>เลขที่บัตร</th>
                 <th>ชื่อ-นามสกุล</th>
                 <th>เบอร์โทรศัพท์</th>
+                <th>วันเกิด</th>
+                <th>ผู้ติดต่อกรณีฉุกเฉิน</th>
+                <th>เบอร์โทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน</th>
+                <th>ความสัมพันธ์กับผู้ป่วย</th>
                 <th>อาจารย์ผู้รับมอบหมาย</th>
               </tr>
             </thead>
@@ -141,6 +145,42 @@ const UploadPatientsCSV = () => {
                         handleEditField(index, "tel", e.target.value)
                       }
                     />
+                  </td>
+                  <td>
+                    <input
+                      type="date"
+                      value={patient.birthDate}
+                      onChange={(e) =>
+                        handleEditField(index, "birthDate", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={patient.emergencyContact}
+                      onChange={(e) =>
+                        handleEditField(index, "emergencyContact", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="tel"
+                      value={patient.emergencyTel}
+                      onChange={(e) =>
+                        handleEditField(index, "emergencyTel", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={patient.relationship}
+                      onChange={(e) =>
+                        handleEditField(index, "relationship", e.target.value)
+                      }
+                    />  
                   </td>
                   <td>
                     <input

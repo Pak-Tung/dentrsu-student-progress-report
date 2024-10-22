@@ -10,6 +10,7 @@ import ProfileInstructor from "../pages/instructors/ProfileInstructor";
 import ProfileRoot from "../pages/root/ProfileRoot";
 import ProfilePatientBank from "../pages/patientBank/ProfilePatientBank";
 import SelectRoleAdmin from "../pages/admins/SelectRoleAdmin";
+import ProfileSupervisor from "../pages/supervisor/ProfileSupervisor";
 import Cookies from "js-cookie";
 import LoginScreen from "./LoginScreen";
 import * as loadingData from "./loading.json";
@@ -83,9 +84,9 @@ function LoginByEmail() {
       if (email && token) {
         try {
           const users = await getAllUsers();
-          const userRecord = users.data.find((u) => u.email === email.toLowerCase());
-
-          
+          const userRecord = users.data.find(
+            (u) => u.email === email.toLowerCase()
+          );
 
           if (!userRecord) {
             throw new Error("User not found");
@@ -100,7 +101,9 @@ function LoginByEmail() {
               }
             } catch (error) {
               console.error("Error fetching student profile:", error);
-              alert(`Student profile not found (Browser Login with ${email}). Please contact administrator.`);
+              alert(
+                `Student profile not found (Browser Login with ${email}). Please contact administrator.`
+              );
               setLoading(false);
               return;
             }
@@ -108,17 +111,22 @@ function LoginByEmail() {
             userRecord.role === "instructor" ||
             userRecord.role === "admin" ||
             userRecord.role === "ptBank" ||
+            userRecord.role === "supervisor" ||
             userRecord.role === "root"
           ) {
             try {
-              const instructor = await getInstructorByEmail(email.toLowerCase());
+              const instructor = await getInstructorByEmail(
+                email.toLowerCase()
+              );
               if (instructor) {
                 userRecord.name = instructor[0].instructorName;
                 userRecord.division = instructor[0].division;
               }
             } catch (error) {
               console.error("Error fetching instructor profile:", error);
-              alert(`Profile not found (Browser Login with ${email}). Please contact administrator.`);
+              alert(
+                `Profile not found (Browser Login with ${email}). Please contact administrator.`
+              );
               setLoading(false);
               return;
             }
@@ -133,7 +141,9 @@ function LoginByEmail() {
           }
         } catch (error) {
           //console.error("Error fetching user profile:", error);
-          alert(`User profile not found (Browser Login with ${email}). Please contact administrator.`);
+          alert(
+            `User profile not found (Browser Login with ${email}). Please contact administrator.`
+          );
           setLoading(false);
         }
       } else {
@@ -159,14 +169,20 @@ function LoginByEmail() {
   const setCookiesAndLocalStorage = (userRecord) => {
     // Convert email to lowercase before saving
     const lowercaseEmail = userRecord.email.toLowerCase();
-    
+
     Cookies.set("role", JSON.stringify(userRecord.role), { expires: 30 });
-    Cookies.set("user", JSON.stringify({ ...userRecord, email: lowercaseEmail }), { expires: 30 });
-  
+    Cookies.set(
+      "user",
+      JSON.stringify({ ...userRecord, email: lowercaseEmail }),
+      { expires: 30 }
+    );
+
     localStorage.setItem("role", JSON.stringify(userRecord.role));
-    localStorage.setItem("user", JSON.stringify({ ...userRecord, email: lowercaseEmail }));
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ ...userRecord, email: lowercaseEmail })
+    );
   };
-  
 
   const renderProfile = () => {
     switch (role) {
@@ -180,6 +196,8 @@ function LoginByEmail() {
         return <Profile />;
       case "ptBank":
         return <ProfilePatientBank />;
+      case "supervisor":
+        return <ProfileSupervisor />;
       default:
         return <LoginScreen handleLoginSuccess={handleLoginSuccess} />;
     }

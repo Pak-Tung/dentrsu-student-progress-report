@@ -38,14 +38,15 @@ function Overview() {
 
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
-    : console.log("User email", Cookies.get("user"));
+    : console.log(""); //"User email",  Cookies.get("user"));
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
   const [student, setStudent] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("all");
-  const [selectedDivisionName, setSelectedDivisionName] = useState("Select Division");
+  const [selectedDivisionName, setSelectedDivisionName] =
+    useState("Select Division");
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -100,8 +101,8 @@ function Overview() {
       "diag",
       "radio",
       "sur",
-      "pedo",
       "ortho",
+      "pedo",
     ];
     if (selectedDivision === "all") {
       return (
@@ -135,12 +136,17 @@ function Overview() {
             <>
               <Navbar />
               <br />
-              <Container fluid="md" className={theme === "dark" ? "container-dark" : ""}>
+              <Container
+                fluid="md"
+                className={theme === "dark" ? "container-dark" : ""}
+              >
                 <Row className="d-flex justify-content-center">
                   <Col>
                     <div className="d-flex justify-content-center">
                       <DropdownButton
-                        variant={theme === "dark" ? "outline-light" : "outline-dark"}
+                        variant={
+                          theme === "dark" ? "outline-light" : "outline-dark"
+                        }
                         id="dropdown-basic-button"
                         title={selectedDivisionName}
                         onSelect={handleSelectDivision}

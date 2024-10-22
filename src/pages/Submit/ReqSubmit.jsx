@@ -37,7 +37,7 @@ function ReqSubmit() {
         console.log(error);
       } else {
         if (data) {
-          console.log(data);
+          //console.log(data);
           setStudent(data);
         } else {
           console.log("Data is undefined");

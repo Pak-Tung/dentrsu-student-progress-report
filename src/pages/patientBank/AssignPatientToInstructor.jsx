@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import NavBarPatientBank from "./NavbarPatientBank";
-import { Button, Form, Row, Col, Container } from "react-bootstrap";
+import NavbarPatientBank from "./NavbarPatientBank";
+import { Button, Form, Row, Col, Container, Alert } from "react-bootstrap";
 import { ThemeContext } from "../../ThemeContext";
 import Cookies from "js-cookie";
-import { getInstructorsByTeamleaderRole, updatePatientbyhn, getPatientByHn } from "../../features/apiCalls";
+import {
+  getInstructorsByTeamleaderRole,
+  updatePatientbyhn,
+  getPatientByHn,
+} from "../../features/apiCalls";
+import { calculateAge, convertToUTCPlus7 } from "../../utilities/dateUtils";
 
 function AssignPatientToInstructor() {
   const { theme } = useContext(ThemeContext);
@@ -16,6 +21,7 @@ function AssignPatientToInstructor() {
   const [hn, setHn] = useState("");
   const [patient, setPatient] = useState({});
   const [show, setShow] = useState(false);
+  const [age, setAge] = useState("");
 
   const initialUpdatePtState = {
     name: "",
@@ -30,6 +36,10 @@ function AssignPatientToInstructor() {
     completedDate: "",
     planApprovalBy: "",
     completedTxApprovalBy: "",
+    birthDate: "",
+    emergencyContact: "",
+    emergencyTel: "",
+    relationship: "",
   };
 
   const [updatePt, setUpdatePt] = useState(initialUpdatePtState);
@@ -47,22 +57,50 @@ function AssignPatientToInstructor() {
         complexity: patient.complexity || "",
         note: patient.note || "",
         status: patient.status || "",
-        acceptedDate: patient.acceptedDate ? patient.acceptedDate.split("T")[0] : "",
-        planApprovedDate: patient.planApprovedDate ? patient.planApprovedDate.split("T")[0] : "",
-        completedDate: patient.completedDate ? patient.completedDate.split("T")[0] : "",
+        acceptedDate: patient.acceptedDate
+          ? convertToUTCPlus7(patient.acceptedDate)
+          : "",
+        planApprovedDate: patient.planApprovedDate
+          ? convertToUTCPlus7(patient.planApprovedDate)
+          : "",
+        completedDate: patient.completedDate
+          ? convertToUTCPlus7(patient.completedDate)
+          : "",
         planApprovalBy: patient.planApprovalBy || "",
         completedTxApprovalBy: patient.completedTxApprovalBy || "",
+        birthDate: patient.birthDate
+          ? convertToUTCPlus7(patient.birthDate)
+          : "",
+        emergencyContact: patient.emergencyContact || "",
+        emergencyTel: patient.emergencyTel || "",
+        relationship: patient.relationship || "",
       });
       setSelectedTeamleader(patient.teamleaderEmail || "");
+      if (patient.birthDate) {
+        setAge(calculateAge(patient.birthDate));
+      }
     }
   }, [patient]);
 
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
+  // Effect to clear success message after 2 seconds
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   // Handler for fetching patient by HN
   const handleFetchPatientByHn = async () => {
     setShow(false);
+    setError(null);
+    setSuccessMessage(null);
     try {
       const result = await getPatientByHn(hn);
       if (result.error) {
@@ -86,11 +124,17 @@ function AssignPatientToInstructor() {
     const processedUpdatePt = {
       ...updatePt,
       acceptedDate:
-        updatePt.acceptedDate === "" || updatePt.acceptedDate === "-" ? null : updatePt.acceptedDate,
+        updatePt.acceptedDate === "" || updatePt.acceptedDate === "-"
+          ? null
+          : updatePt.acceptedDate,
       completedDate:
-        updatePt.completedDate === "" || updatePt.completedDate === "-" ? null : updatePt.completedDate,
+        updatePt.completedDate === "" || updatePt.completedDate === "-"
+          ? null
+          : updatePt.completedDate,
       planApprovedDate:
-        updatePt.planApprovedDate === "" || updatePt.planApprovedDate === "-" ? null : updatePt.planApprovedDate,
+        updatePt.planApprovedDate === "" || updatePt.planApprovedDate === "-"
+          ? null
+          : updatePt.planApprovedDate,
     };
 
     // Submit patient update form
@@ -102,6 +146,12 @@ function AssignPatientToInstructor() {
       } else {
         setSuccessMessage("บันทึกสำเร็จ!");
         setError(null);
+
+        // Clear the success message after 2 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 2000);
+
         // Clear form after successful submission
         setUpdatePt(initialUpdatePtState);
         setPatient({});
@@ -152,13 +202,11 @@ function AssignPatientToInstructor() {
 
   return (
     <>
-      <NavBarPatientBank />
+      <NavbarPatientBank />
 
       <Container className={`mt-4 ${containerClass}`}>
-        <Form
-          onSubmit={handlePatientUpdateFormSubmit}
-          className={`mt-4 ${containerClass}`}
-        >
+        <h2>แก้ไขข้อมูลผู้ป่วย</h2>
+        <Form onSubmit={handlePatientUpdateFormSubmit}>
           <Form.Group as={Row} className="mb-3">
             <Form.Label column md={3}>
               เลขที่บัตรผู้ป่วย
@@ -215,6 +263,66 @@ function AssignPatientToInstructor() {
 
               <Form.Group as={Row} className="mb-3">
                 <Form.Label column md={3}>
+                  วันเกิดผู้ป่วย: {age !== "" && `(อายุ ${age} ปี)`}
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="date"
+                    name="birthDate"
+                    value={updatePt.birthDate}
+                    onChange={handleUpdatePtFormChange}
+                    placeholder="วันเกิดผู้ป่วย"
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  ชื่อผู้ติดต่อกรณีฉุกเฉิน:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="emergencyContact"
+                    value={updatePt.emergencyContact}
+                    onChange={handleUpdatePtFormChange}
+                    placeholder="ชื่อผู้ติดต่อกรณีฉุกเฉิน"
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="emergencyTel"
+                    value={updatePt.emergencyTel}
+                    onChange={handleUpdatePtFormChange}
+                    placeholder="หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน"
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  ความสัมพันธ์กับผู้ป่วย:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="relationship"
+                    value={updatePt.relationship}
+                    onChange={handleUpdatePtFormChange}
+                    placeholder="ความสัมพันธ์กับผู้ป่วย"
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
                   หมายเหตุ:
                 </Form.Label>
                 <Col md={9}>
@@ -259,8 +367,16 @@ function AssignPatientToInstructor() {
             </>
           )}
         </Form>
-        {error && <div className="mt-3 text-danger">{error}</div>}
-        {successMessage && <div className="mt-3 text-success">{successMessage}</div>}
+        {error && (
+          <Alert variant="danger" className="mt-3">
+            {error}
+          </Alert>
+        )}
+        {successMessage && (
+          <Alert variant="success" className="mt-3">
+            {successMessage}
+          </Alert>
+        )}
       </Container>
     </>
   );

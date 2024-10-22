@@ -68,7 +68,7 @@ function NavBarPatientBank() {
         </NavDropdown>
 
         <NavDropdown title="โปรไฟล์" id="nav-profile-patient-bank" className="flex-fill">
-          <NavDropdown.Item href="/profilePatientBank">โปรไฟล์</NavDropdown.Item>
+          <NavDropdown.Item href="/">โปรไฟล์</NavDropdown.Item>
         </NavDropdown>
       </Nav>
     </Navbar.Collapse>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import NavBarPatientBank from "./NavbarPatientBank";
+import NavbarPatientBank from "./NavbarPatientBank";
+import NavbarSupervisor from "../supervisor/NavbarSupervisor";
 import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import { ThemeContext } from "../../ThemeContext";
 import Cookies from "js-cookie";
@@ -8,14 +9,24 @@ import {
   getPatientByHn,
   getAllStudents,
 } from "../../features/apiCalls";
+import { convertToUTCPlus7 } from "../../utilities/dateUtils";
 
 function SearchPatientByHN() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
 
+  const [role, setRole] = useState("");
+  useEffect(() => {
+    const savedRole = JSON.parse(localStorage.getItem("role"));
+    if (savedRole) {
+      setRole(savedRole);
+    }
+  }, []);
+
+  console.log(role);
+
   const [hn, setHn] = useState("");
   const [patient, setPatient] = useState({});
-
   const [show, setShow] = useState(false);
 
   const [updatePt, setUpdatePt] = useState({
@@ -31,6 +42,10 @@ function SearchPatientByHN() {
     completedDate: "",
     planApprovalBy: "",
     completedTxApprovalBy: "",
+    birthDate: "",
+    emergencyContact: "",
+    emergencyTel: "",
+    relationship: "",
   });
 
   useEffect(() => {
@@ -45,16 +60,22 @@ function SearchPatientByHN() {
         note: patient.note || "",
         status: patient.status || "",
         acceptedDate: patient.acceptedDate
-          ? patient.acceptedDate.split("T")[0]
+          ? convertToUTCPlus7(patient.acceptedDate)
           : "",
         planApprovalBy: patient.planApprovalBy || "",
         planApprovedDate: patient.planApprovedDate
-          ? patient.planApprovedDate.split("T")[0]
+          ? convertToUTCPlus7(patient.planApprovedDate)
           : "",
         completedDate: patient.completedDate
-          ? patient.completedDate.split("T")[0]
+          ? convertToUTCPlus7(patient.completedDate)
           : "",
         completedTxApprovalBy: patient.completedTxApprovalBy || "",
+        birthDate: patient.birthDate
+          ? convertToUTCPlus7(patient.birthDate)
+          : "",
+        emergencyContact: patient.emergencyContact || "",
+        emergencyTel: patient.emergencyTel || "",
+        relationship: patient.relationship || "",
       }));
     }
   }, [patient]);
@@ -130,7 +151,7 @@ function SearchPatientByHN() {
 
   return (
     <>
-      <NavBarPatientBank />
+      {role === "ptBank" ? <NavbarPatientBank /> : <NavbarSupervisor />}
       <Container className="mt-4">
         <Form className={`mt-4 ${containerClass}`}>
           <Form.Group as={Row} className="mb-3">
@@ -194,6 +215,90 @@ function SearchPatientByHN() {
                       }))
                     }
                     placeholder="เบอร์โทรศัพท์ผู้ป่วย"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  วันเกิดผู้ป่วย:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="birthDate"
+                    value={updatePt.birthDate}
+                    onChange={(e) =>
+                      setUpdatePt((prevPt) => ({
+                        ...prevPt,
+                        birthDate: e.target.value,
+                      }))
+                    }
+                    placeholder="วันเกิดผู้ป่วย"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  ชื่อผู้ติดต่อกรณีฉุกเฉิน:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="emergencyContact"
+                    value={updatePt.emergencyContact}
+                    onChange={(e) =>
+                      setUpdatePt((prevPt) => ({
+                        ...prevPt,
+                        emergencyContact: e.target.value,
+                      }))
+                    }
+                    placeholder="ชื่อผู้ติดต่อกรณีฉุกเฉิน"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  ความสัมพันธ์กับผู้ป่วย:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="relationship"
+                    value={updatePt.relationship}
+                    onChange={(e) =>
+                      setUpdatePt((prevPt) => ({
+                        ...prevPt,
+                        relationship: e.target.value,
+                      }))
+                    }
+                    placeholder="ความสัมพันธ์กับผู้ป่วย"
+                    readOnly
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3">
+                <Form.Label column md={3}>
+                  หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน:
+                </Form.Label>
+                <Col md={9}>
+                  <Form.Control
+                    type="text"
+                    name="emergencyTel"
+                    value={updatePt.emergencyTel}
+                    onChange={(e) =>
+                      setUpdatePt((prevPt) => ({
+                        ...prevPt,
+                        emergencyTel: e.target.value,
+                      }))
+                    }
+                    placeholder="หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน"
                     readOnly
                   />
                 </Col>

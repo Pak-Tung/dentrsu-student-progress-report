@@ -215,11 +215,11 @@ function StatusByDiv(division) {
                       <strong>Type:</strong> {req.type}
                     </Col>
                     <Col>
-                      <strong>Area:</strong> {req.area}
+                      <strong>Description:</strong> {req.area}
                     </Col>
                     <Col>
-                      <strong>RSU:</strong> {req.req_RSU} <br />
-                      <strong>DC:</strong> {req.req_DC}
+                      <strong>RSU:</strong> {req.req_RSU} {req.unit_RSU} <br />
+                      <strong>CDA:</strong> {req.req_DC} {req.unit_DC}
                     </Col>
                     <Col>
                       <strong>HN:</strong> {req.HN} <br />

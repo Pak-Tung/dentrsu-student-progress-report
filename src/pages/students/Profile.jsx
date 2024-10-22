@@ -193,14 +193,6 @@ function Profile() {
             </div>
           </div>
         )}
-
-        <Row>
-          <Col className="d-flex justify-content-center mb-2">
-            <Badge bg={student.status === "Complete" ? "success" : "danger"}>
-              {student.status === "Complete" ? "Complete" : "Incomplete"}
-            </Badge>
-          </Col>
-        </Row>
         {error ? (
           <div className="d-flex justify-content-center">
             <Alert variant="danger">{error}</Alert>

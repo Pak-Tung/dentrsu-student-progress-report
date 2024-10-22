@@ -19,6 +19,7 @@ function ButtonTxApproval({ patient, updateStatus }) {
   }, []);
 
   const [updatePt, setUpdatePt] = useState({
+    hn: "",
     tel: "",
     teamleaderEmail: "",
     studentEmail: "",
@@ -34,6 +35,7 @@ function ButtonTxApproval({ patient, updateStatus }) {
 
   useEffect(() => {
     setUpdatePt({
+      hn: patient.hn,
       tel: patient.tel,
       teamleaderEmail: patient.teamleaderEmail,
       studentEmail: patient.studentEmail,
@@ -77,7 +79,7 @@ function ButtonTxApproval({ patient, updateStatus }) {
       acceptedDate: updatePt.acceptedDate === "" ? null : updatePt.acceptedDate,
       completedDate:
         updatePt.completedDate === "" ? null : updatePt.completedDate,
-      status: role === "student" ? 1 : 2, // 1 = Treatment plan requested, 2 = Treatment plan approved
+      status: role === "student" ? "1" : "2", // 1 = Treatment plan requested, 2 = Treatment plan approved
       planApprovalBy: role === "student" ? "" : userEmail,
       planApprovedDate:
         role === "student" ? null : formatDateFormISO(new Date().toISOString()),
@@ -87,11 +89,9 @@ function ButtonTxApproval({ patient, updateStatus }) {
 
     try {
       const response = await updatePatientbyhn(patient.hn, processedUpdatePt);
-      console.log(response);
+      //console.log(response);
       // Optionally call updateStatus to update parent state
-      if (updateStatus) {
-        updateStatus(processedUpdatePt);
-      }
+      updateStatus(processedUpdatePt);
     } catch (error) {
       console.error("Error requesting treatment approval:", error);
     }
@@ -113,7 +113,11 @@ function ButtonTxApproval({ patient, updateStatus }) {
           borderRadius: 5,
           border: "none",
         }}
-        title={role === "student" ? "Click to request treatment plan approval" : "Click to approve treatment plan"}
+        title={
+          role === "student"
+            ? "Click to request treatment plan approval"
+            : "Click to approve treatment plan"
+        }
       >
         {role === "student" ? "Approval Request" : "Approve Plan"}
       </button>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button, Form, Row, Col, Container, Alert } from "react-bootstrap";
 import { ThemeContext } from "../../ThemeContext";
-import NavbarPatientBank from "./NavbarPatientBank";
-import NavbarSupervisor from "../supervisor/NavbarSupervisor";
+import NavbarSupervisor from "./NavbarSupervisor";  
 import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
@@ -22,7 +21,7 @@ const defaultOptions = {
   },
 };
 
-function SearchPatientByInstructor() {
+function InstructorOverview() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
@@ -61,37 +60,36 @@ function SearchPatientByInstructor() {
     fetchInstructors();
   }, []);
 
-    const [patients, setPatients] = useState([]);
+  const [patients, setPatients] = useState([]);
 
-    const [loadingPatients, setLoadingPatients] = useState(false);
+  const [loadingPatients, setLoadingPatients] = useState(false);
 
-    const handleFetchPatientByTeamleaderEmail = async () => {
-        setLoadingPatients(true);
-        try {
-            const result = await getPatientsByTeamleaderEmail(selectedTeamleader);
-            if (result) {
-                setLoadingPatients(false);
-                setPatients(result);
-            } else {        
-            setError(result.error);
-            setLoadingPatients(false);
-            }
-        } catch (error) {
-            console.error("Error fetching patients data:", error);
-            setError("Error fetching patients data.");
-            setLoadingPatients(false);
-        }
-        };
-
+  const handleFetchPatientByTeamleaderEmail = async () => {
+    setLoadingPatients(true);
+    try {
+      const result = await getPatientsByTeamleaderEmail(selectedTeamleader);
+      if (result) {
+        setLoadingPatients(false);
+        setPatients(result);
+      } else {
+        setError(result.error);
+        setLoadingPatients(false);
+      }
+    } catch (error) {
+      console.error("Error fetching patients data:", error);
+      setError("Error fetching patients data.");
+      setLoadingPatients(false);
+    }
+  };
   return (
     <>
-      {role === "ptBank" ? <NavbarPatientBank/>:<NavbarSupervisor />}
+      <NavbarSupervisor />
       <Container>
-        <h4>ค้นหาผู้ป่วยจากอาจารย์ที่ปรึกษา</h4>
+        <h4>Search by Team Leader</h4>
         <Form className={`mt-4 ${containerClass}`}>
           <Form.Group as={Row} className="mb-3">
             <Form.Label column md={2}>
-              อาจารย์ผู้รับมอบหมาย:
+              Team Leader:
             </Form.Label>
             <Col md={6}>
               <Form.Control
@@ -101,7 +99,7 @@ function SearchPatientByInstructor() {
                 onChange={handleTeamleaderChange}
               >
                 <option value="" disabled>
-                  เลือกอาจารย์ทีมลีดเดอร์
+                    Select Team Leader
                 </option>
                 {instructors.map((instructor) => (
                   <option
@@ -114,12 +112,14 @@ function SearchPatientByInstructor() {
               </Form.Control>
             </Col>
             <Col md={2}>
-              <Button variant="dark" onClick={handleFetchPatientByTeamleaderEmail}>
-                ค้นหาผู้ป่วย
+              <Button
+                variant="dark"
+                onClick={handleFetchPatientByTeamleaderEmail}
+              >
+                Search
               </Button>
             </Col>
           </Form.Group>
-
         </Form>
       </Container>
 
@@ -141,7 +141,6 @@ function SearchPatientByInstructor() {
         </div>
       ) : (
         <div className="d-flex justify-content-center">
-
           <PatientCard patients={patients} />
         </div>
       )}
@@ -149,4 +148,4 @@ function SearchPatientByInstructor() {
   );
 }
 
-export default SearchPatientByInstructor;
+export default InstructorOverview;

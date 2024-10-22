@@ -95,6 +95,7 @@ export const getReqByDivision = async (division) => {
 };
 
 export const insertDivisionReq = async (req, division) => {
+  //console.log("division", req);
   switch (division) {
     case "oper":
       division = "operReq";

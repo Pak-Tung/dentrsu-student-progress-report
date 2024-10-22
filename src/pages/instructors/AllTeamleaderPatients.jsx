@@ -42,9 +42,12 @@ function AllTeamleaderPatients() {
 
   // Status options and state for selected statuses
   const statusOptions = [
-    { value: -1, label: "Discharged" },
-    { value: 0, label: "Incomplete" },
-    { value: 1, label: "Completed" },
+    { value: "-1", label: "Discharged" },
+    { value: "0", label: "Charting" },
+    { value: "1", label: "Pending Treatment Plan Approve" },
+    { value: "2", label: "Treatment Plan Approved" },
+    { value: "3", label: "Pending Completed Case Approve" },
+    { value: "4", label: "Completed Case Approved" },
   ];
   const [selectedStatuses, setSelectedStatuses] = useState([]);
 

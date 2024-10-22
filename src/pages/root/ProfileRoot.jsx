@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import ProfileInstructor from "../instructors/ProfileInstructor";
 import ProfileAdmin from "../admins/ProfileAdmin";
 import ProfilePatientBank from "../patientBank/ProfilePatientBank";
+import ProfileSupervisor from "../supervisor/ProfileSupervisor";
 import Profile from "../students/Profile";
 import NavbarRoot from "./NavbarRoot";
 import ModalSetAdminDiv from "./ModalSetAdminDiv";
@@ -53,6 +54,8 @@ function ProfileRoot() {
     return <Profile />; // Render Profile component if role is 'student'
   } else if (role === "ptBank") {
     return <ProfilePatientBank />; // Render Profile component if role is 'ptBank'
+  } else if (role === "supervisor") {
+    return <ProfileSupervisor />; // Render Profile component if role is 'supervisor'
   }
 
   if (!userEmail) {
@@ -89,6 +92,9 @@ function ProfileRoot() {
         <Row className="d-flex justify-content-center">
           <Col className="d-flex justify-content-center">
             <div className="d-grid gap-2">
+              <Button variant="secondary" size="lg" onClick={() => handleSelectRole("supervisor")}>
+                SUPERVISOR
+              </Button>
               <Button variant="secondary" size="lg" onClick={() => handleSelectRole("admin")}>
                 ADMIN
               </Button>

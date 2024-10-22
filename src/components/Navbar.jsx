@@ -44,7 +44,7 @@ function NavbarStudent() {
             title="Submission" 
             id="nav-submit" 
             className="flex-fill" 
-            disabled
+            //disabled
           >
             <NavDropdown.Item href="/reqSubmit">Requirement</NavDropdown.Item>
             <NavDropdown.Divider />
@@ -56,7 +56,7 @@ function NavbarStudent() {
             title="Approval Status"
             id="nav-status"
             className="flex-fill"
-            disabled
+            //disabled
           >
             <NavDropdown.Item href="/reqStatus">Req Status</NavDropdown.Item>
             <NavDropdown.Divider />
@@ -68,7 +68,6 @@ function NavbarStudent() {
             title="Overview" 
             id="nav-overview" 
             className="flex-fill" 
-            disabled
           >
             <NavDropdown.Item href="/overview">
               Requirement Overview

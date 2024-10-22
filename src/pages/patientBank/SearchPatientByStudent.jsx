@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button, Form, Row, Col, Container, Alert } from "react-bootstrap";
 import { ThemeContext } from "../../ThemeContext";
-import NavBarPatientBank from "./NavbarPatientBank";
+import NavbarPatientBank from "./NavbarPatientBank";
+import NavbarSupervisor from "../supervisor/NavbarSupervisor";
 import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
@@ -24,6 +25,14 @@ function SearchPatientByStudent() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
+
+  const [role, setRole] = useState("");
+  useEffect(() => {
+    const savedRole = JSON.parse(localStorage.getItem("role"));
+    if (savedRole) {
+      setRole(savedRole);
+    }
+  }, []);
 
   const [student, setStudent] = useState({});
   const [studentId, setStudentId] = useState("");
@@ -74,7 +83,7 @@ function SearchPatientByStudent() {
 
   return (
     <>
-      <NavBarPatientBank />
+      {role === "ptBank" ? <NavbarPatientBank/>:<NavbarSupervisor />}
       <Container>
         <h4>ค้นหาผู้ป่วยด้วยรหัสนักศึกษา</h4>
         <Form className={`mt-4 ${containerClass}`}>
