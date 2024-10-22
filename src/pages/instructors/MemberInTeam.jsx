@@ -37,7 +37,8 @@ const defaultOptions2 = {
   },
 };
 
-function MemberInTeam() {
+function MemberInTeam(email) {
+  //console.log("instructorEmail", email.instructorEmail);
   const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
@@ -45,23 +46,41 @@ function MemberInTeam() {
   });
   const userEmail = user.email;
 
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    const savedRole = localStorage.getItem("role");
+    //console.log("Role", JSON.parse(savedRole));
+    if (savedRole) {
+      setRole(JSON.parse(savedRole));
+    }
+  }, []);
+
   const [studentData, setStudentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getStudentByTeamleaderEmail(userEmail);
-        setStudentData(result);
-      } catch (err) {
-        setError("Failed to fetch students");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [userEmail]);
+    if (role) {
+      const fetchData = async () => {
+        try {
+          const emailToUse =
+            role === "instructor" ? userEmail : email.instructorEmail;
+          const result = await getStudentByTeamleaderEmail(emailToUse);
+          //console.log('result', result);
+          setStudentData(result);
+          if(result === undefined || result.length === 0){
+            setError("No students found");
+          }
+        } catch (err) {
+          setError("Failed to fetch students");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [userEmail, role]);
 
   const sortedStudentData = [...studentData].sort((a, b) => {
     return a.startClinicYear - b.startClinicYear;
@@ -91,7 +110,7 @@ function MemberInTeam() {
 
   return (
     <>
-      <NavbarInstructor />
+      {role === "instructor" ? <NavbarInstructor /> : null}
       <Container fluid="md" className={containerClass}>
         {loading ? (
           <FadeIn>
@@ -104,12 +123,16 @@ function MemberInTeam() {
             </div>
           </FadeIn>
         ) : error ? (
-          <Alert variant="danger" className={alertClass}>{error}</Alert>
+          <Alert variant="danger" className={alertClass}>
+            {error}
+          </Alert>
         ) : (
           <>
-            <div className="d-flex justify-content-center mb-4">
-              <h4>Member In Team: ({studentData.length} students) </h4>
-            </div>
+            {role === "instructor" ? (
+              <div className="d-flex justify-content-center mb-4">
+                <h4>Member In Team: ({studentData.length} students) </h4>
+              </div>
+            ) : null}
             <ListGroup>
               {sortedStudentData.map((student, index) => (
                 <ListGroup.Item
