@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { api } from "./mainApi";
+const host = api();
 
-const url = 'http://localhost:3001'; //'; // Your backend endpoint
+const url = host;//'http://localhost:3001'; //'; // Your backend endpoint
 
 export const sendOTP = async (userEmail, userOTP) => {
   try {
