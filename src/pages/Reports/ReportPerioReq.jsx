@@ -90,15 +90,15 @@ function ReportPerioReqTest(perioR) {
       <ListGroup>
         <ListGroup.Item variant="dark">
           <Row>
-            <Col>Periodontic Requirement</Col>
-            <Col className="text-center">Requirement</Col>
+            <Col xs={12} md={8}>Periodontic Requirement</Col>
+            <Col xs={12} md={4} className="text-center">Requirement</Col>
           </Row>
         </ListGroup.Item>
 
         <ListGroup.Item key={"title_RSU"} className={listGroupItemClass}>
           <Row>
-            <Col>|---RSU Requirement----------</Col>
-            <Col className="text-center">---RSU---</Col>
+            <Col xs={12} md={8}>RSU Requirement</Col>
+            <Col xs={12} md={4} className="text-center">Total/(Minimum)</Col>
           </Row>
           {Object.entries(totalReq.RSU).map(([key, value]) => {
             // if (
@@ -112,14 +112,14 @@ function ReportPerioReqTest(perioR) {
             //   return null;
             return (
               <Row key={key}>
-                <Col>
+                <Col xs={12} md={8}>
                   <h4>
                     <Badge bg={value >= minReq.RSU[key] ? "success" : "danger"}>
                       {key.replace(/_/g, " ")}
                     </Badge>
                   </h4>
                 </Col>
-                <Col className="text-center">
+                <Col xs={12} md={4} className="text-center">
                   {value} / ({minReq.RSU[key]})
                 </Col>
               </Row>
@@ -129,21 +129,21 @@ function ReportPerioReqTest(perioR) {
       </ListGroup>
       <ListGroup.Item key={"title_CDA"} className={listGroupItemClass}>
         <Row>
-          <Col>|---CDA Requirement----------</Col>
-          <Col className="text-center">---CDA---</Col>
+          <Col xs={12} md={8}>CDA Requirement</Col>
+          <Col xs={12} md={4} className="text-center">Total/(Minimum)</Col>
         </Row>
         {Object.entries(totalReq.CDA).map(([key, value]) => {
           //if (value === 0) return null;
           return (
             <Row key={key}>
-              <Col>
+              <Col xs={12} md={8}>
                 <h4>
                   <Badge bg={value >= minReq.CDA[key] ? "success" : "danger"}>
                     {key.replace(/_/g, " ")}
                   </Badge>
                 </h4>
               </Col>
-              <Col className="text-center">
+              <Col xs={12} md={4} className="text-center">
                 {value} / ({minReq.CDA[key]})
               </Col>
             </Row>
@@ -163,9 +163,6 @@ function ReportPerioReqTest(perioR) {
                 ? "click to hide patient detail..."
                 : "click for more patient detail..."}
             </Col>
-            <Col></Col>
-            <Col></Col>
-            <Col></Col>
           </Row>
         </ListGroup.Item>
 

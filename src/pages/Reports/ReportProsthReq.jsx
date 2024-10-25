@@ -101,8 +101,8 @@ function ReportProsthReq(divisionR) {
       <ListGroup>
         <ListGroup.Item variant="dark">
           <Row>
-            <Col>Prosthodontic Requirement</Col>
-            <Col className="text-center">Requirement</Col>
+            <Col xs={12} md={8}>Prosthodontic Requirement</Col>
+            <Col xs={12} md={4} className="text-center">Requirement</Col>
           </Row>
         </ListGroup.Item>
 
@@ -111,14 +111,14 @@ function ReportProsthReq(divisionR) {
             if(key === "Bridge_3_units"){return null;}
             return (
               <Row key={key}>
-                <Col>
+                <Col xs={12} md={8}>
                   <h4>
                     <Badge bg={value >= minReq.RSU[key] ? "success" : "danger"}>
                       {key.replace(/_/g, " ")}
                     </Badge>
                   </h4>
                 </Col>
-                <Col className="text-center">
+                <Col xs={12} md={4} className="text-center">
                   {value} / ({minReq.RSU[key]})
                 </Col>
               </Row>
@@ -139,9 +139,6 @@ function ReportProsthReq(divisionR) {
               ? "click to hide patient detail..."
               : "click for more patient detail..."}
           </Col>
-          <Col></Col>
-          <Col></Col>
-          <Col></Col>
         </Row>
       </ListGroup.Item>
 

@@ -41,4 +41,7 @@
     left: 30%;
   }
 
-  
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+  }

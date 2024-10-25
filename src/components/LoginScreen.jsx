@@ -10,7 +10,8 @@ function LoginScreen({ handleLoginSuccess }) {
     <Container>
       <Row className="d-flex justify-content-center">
         <Col className="text-center">
-        <h3>Comprehensive Dental Care Clinic</h3>
+          <h4>Comprehensive Dental Care Clinic</h4>
+          <br />
           <h2>DentRSU Connect</h2>
         </Col>
       </Row>
@@ -22,18 +23,26 @@ function LoginScreen({ handleLoginSuccess }) {
       <br />
       <Row className="d-flex justify-content-center">
         <Col className="text-center">
-          <p>Only <b>"@rsu.ac.th"</b>  Account</p>
+          <p>
+            Only <b>"@rsu.ac.th"</b> Account
+          </p>
         </Col>
       </Row>
       <Row className="d-flex justify-content-center">
-        <Col md={4}></Col>
-        <Col md={4} className="d-flex justify-content-center">
+        <Col></Col>
+        <Col
+          xs={12}
+          sm={10}
+          md={8}
+          lg={6}
+          className="d-flex justify-content-center"
+        >
           <div className="d-grid gap-2">
             {/* <EmailVerificationButton handleLoginSuccess={handleLoginSuccess} /> */}
             <EmailOTP handleLoginSuccess={handleLoginSuccess} />
           </div>
         </Col>
-        <Col md={4}></Col>
+        <Col></Col>
       </Row>
     </Container>
   );

@@ -38,7 +38,7 @@ function Overview() {
 
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
-    : console.log(""); //"User email",  Cookies.get("user"));
+    : console.log("");
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
@@ -106,25 +106,16 @@ function Overview() {
     ];
     if (selectedDivision === "all") {
       return (
-        <Container fluid="md">
+        <Container fluid>
           {divNames.map((divName) => (
             <React.Fragment key={divName}>
-              <Row className="d-flex justify-content-center">
-                <SumByDiv division={divName} />
-              </Row>
-              <br />
+              <SumByDiv division={divName} />
             </React.Fragment>
           ))}
         </Container>
       );
     } else {
-      return (
-        <Container fluid="md">
-          <Row className="d-flex justify-content-center">
-            <SumByDiv division={selectedDivision} key={selectedDivision} />
-          </Row>
-        </Container>
-      );
+      return <SumByDiv division={selectedDivision} key={selectedDivision} />;
     }
   };
 
@@ -134,14 +125,13 @@ function Overview() {
         <>
           {success ? (
             <>
-              <Navbar />
-              <br />
+              <Navbar sticky="top" />
               <Container
-                fluid="md"
-                className={theme === "dark" ? "container-dark" : ""}
+                fluid
+                className={`${theme === "dark" ? "container-dark" : ""} px-3`}
               >
-                <Row className="d-flex justify-content-center">
-                  <Col>
+                <Row className="d-flex justify-content-center mb-3">
+                  <Col xs={12} sm={8} md={6} lg={4} xl={3}>
                     <div className="d-flex justify-content-center">
                       <DropdownButton
                         variant={
@@ -159,7 +149,6 @@ function Overview() {
                           <Dropdown.Item
                             key={division.id}
                             eventKey={division.shortName}
-                            // className={theme === "dark" ? "text-dark-mode" : ""}
                           >
                             {division.fullName}
                           </Dropdown.Item>
@@ -168,12 +157,9 @@ function Overview() {
                     </div>
                   </Col>
                 </Row>
-                <br />
-                <Row className="d-flex justify-content-center">
-                  <div className="d-flex justify-content-center">
-                    {renderDivisionComponent()}
-                  </div>
-                </Row>
+
+                {renderDivisionComponent()}
+
                 <br />
               </Container>
             </>
@@ -181,7 +167,7 @@ function Overview() {
             <FadeIn>
               <div>
                 {!loading ? (
-                  <Container>
+                  <Container fluid>
                     <Row className="d-flex justify-content-center">
                       <Lottie
                         options={defaultOptions}
@@ -191,7 +177,7 @@ function Overview() {
                     </Row>
                   </Container>
                 ) : (
-                  <Container>
+                  <Container fluid>
                     <Row className="d-flex justify-content-center">
                       <Lottie
                         options={defaultOptions2}
