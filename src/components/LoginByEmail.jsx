@@ -89,6 +89,7 @@ function LoginByEmail() {
           );
 
           if (!userRecord) {
+            localStorage.clear();
             throw new Error("User not found");
           }
 
@@ -145,6 +146,8 @@ function LoginByEmail() {
             `User profile not found (Browser Login with ${email}). Please contact administrator.`
           );
           setLoading(false);
+          localStorage.clear();
+          window.location.reload();
         }
       } else {
         setLoading(false);
@@ -158,23 +161,15 @@ function LoginByEmail() {
     }
   }, [isLoggedIn, email, token]);
 
-  // const setCookiesAndLocalStorage = (userRecord) => {
-  //   Cookies.set("role", JSON.stringify(userRecord.role), { expires: 7 });
-  //   Cookies.set("user", JSON.stringify(userRecord), { expires: 7 });
-
-  //   localStorage.setItem("role", JSON.stringify(userRecord.role));
-  //   localStorage.setItem("user", JSON.stringify(userRecord));
-  // };
-
   const setCookiesAndLocalStorage = (userRecord) => {
     // Convert email to lowercase before saving
     const lowercaseEmail = userRecord.email.toLowerCase();
 
-    Cookies.set("role", JSON.stringify(userRecord.role), { expires: 30 });
+    Cookies.set("role", JSON.stringify(userRecord.role), { expires: 1 });
     Cookies.set(
       "user",
       JSON.stringify({ ...userRecord, email: lowercaseEmail }),
-      { expires: 30 }
+      { expires: 1 }
     );
 
     localStorage.setItem("role", JSON.stringify(userRecord.role));

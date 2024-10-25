@@ -3,7 +3,6 @@ import NavbarPatientBank from "./NavbarPatientBank";
 import NavbarSupervisor from "../supervisor/NavbarSupervisor";
 import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import { ThemeContext } from "../../ThemeContext";
-import Cookies from "js-cookie";
 import {
   getInstructorsByTeamleaderRole,
   getPatientByHn,
