@@ -162,18 +162,17 @@ function AddNewPatient() {
     <>
       <NavbarPatientBank />
 
-      <Container className={`mt-4 ${containerClass}`}>
-        <Row className="justify-content-center">
-          <Col md={6}>
+      <Container fluid className={`${containerClass}`}>
+  
             <h2>เพิ่มบัตรผู้ป่วยใหม่</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             {successMessage && (
               <Alert variant="success">{successMessage}</Alert>
             )}
-            <Form onSubmit={handleSubmit}>
+            <Form className="container-md mt-3 border" onSubmit={handleSubmit}>
               <Row>
-                <Col md={4}>
-                  <Form.Group controlId="hn" className="mb-3">
+                <Col md={4} >
+                  <Form.Group controlId="hn">
                     <Form.Label>เลขที่บัตรผู้ป่วย</Form.Label>
                     <Form.Control
                       type="text"
@@ -326,8 +325,7 @@ function AddNewPatient() {
                 บันทึกข้อมูล
               </Button>
             </Form>
-          </Col>
-        </Row>
+
       </Container>
     </>
   );

@@ -137,12 +137,31 @@ function DivisionAdvisee() {
   return (
     <>
       <NavbarAdmin />
-      <Container fluid="md">
+      <Container fluid>
         <Row>
           <Col className="d-flex justify-content-center mb-4">
             <h4 className="mb-4">{fullNameDivision(division)} Advisee</h4>
           </Col>
         </Row>
+        <ListGroup>
+          <ListGroup.Item>
+            <Row>
+              <Col md={4}>
+                <strong>Student Name</strong>
+              </Col>
+              <Col md={1}>
+                <strong>Year</strong>
+              </Col>
+              <Col md={1}>
+                <strong>Bay</strong>
+              </Col>
+              <Col md={3}>
+                <strong>Advisor</strong>
+              </Col>
+              <Col></Col>
+            </Row>
+          </ListGroup.Item>
+        </ListGroup>
 
         {loading ? (
           <div className="d-flex justify-content-center">
@@ -165,20 +184,20 @@ function DivisionAdvisee() {
             {students.map((student) => (
               <ListGroup.Item key={student.studentId}>
                 <Row>
-                  <Col md={3}>
+                  <Col md={4}>
                     <h5>
                       {student.title}. {student.studentName}
                     </h5>
                   </Col>
-                  <Col md={2}>
-                    Year:{" "}
+                  <Col md={1}>
+                    {" "}
                     <strong>
                       {calculateStudentYear(student.startClinicYear)}th
                     </strong>
                   </Col>
-                  <Col md={2}>
+                  <Col md={1}>
                     <p>
-                      Bay:{" "}
+                      {" "}
                       <strong>
                         M{student.floor}
                         {student.bay}
@@ -187,10 +206,10 @@ function DivisionAdvisee() {
                     </p>
                   </Col>
                   <Col md={3}>
-                    Advisor:{" "}
+                    {" "}
                     {getInstructorName(divInstructionEmail(division, student))}
                   </Col>
-                  <Col md={2} className="d-flex justify-content-center mb-4">
+                  <Col>
                     <Button
                       variant="primary"
                       onClick={() => handleAssignAdvisor(student)}

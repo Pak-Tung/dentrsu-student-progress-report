@@ -81,7 +81,7 @@ function DivisionAdvisor() {
   return (
     <>
       <NavbarAdmin />
-      <Container fluid="md">
+      <Container fluid>
         <Row className="justify-content-center mb-4">
           <Col className="text-center">
             <h4 className="mb-4">{fullNameDivision(division)} Advisor</h4>
@@ -110,14 +110,14 @@ function DivisionAdvisor() {
                 className="myDiv"
               >
                 <Row>
-                  <Col md={3}></Col>
+                  <Col md={2}></Col>
                   <Col md={4}>
                     <h5>
                       {index + 1}. {instructor.title}{" "}
                       {instructor.instructorName}
                     </h5>
                   </Col>
-                  <Col md={2}>
+                  <Col md={4}>
                     <p>
                       Teamleader:{" "}
                       <strong>
@@ -126,7 +126,7 @@ function DivisionAdvisor() {
                       </strong>
                     </p>
                   </Col>
-                  <Col md={3}></Col>
+                  <Col md={2}></Col>
                 </Row>
               </ListGroup.Item>
             ))}

@@ -120,7 +120,7 @@ function EditApprovedReq() {
                   <strong>Unit</strong>
                 </Col>
                 <Col md={2}>
-                  <strong>Minimum DC Requirement</strong>
+                  <strong>Minimum CDA Requirement</strong>
                 </Col>
                 <Col md={2}>
                   <strong>Unit</strong>

@@ -86,14 +86,11 @@ function SearchPatientByInstructor() {
   return (
     <>
       {role === "ptBank" ? <NavbarPatientBank/>:<NavbarSupervisor />}
-      <Container>
+      <Container className={`${containerClass}`}>
         <h4>ค้นหาผู้ป่วยจากอาจารย์ที่ปรึกษา</h4>
-        <Form className={`mt-4 ${containerClass}`}>
+        <Form className='mt-4'>
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={2}>
-              อาจารย์ผู้รับมอบหมาย:
-            </Form.Label>
-            <Col md={6}>
+            <Col md={8}>
               <Form.Control
                 as="select"
                 name="teamleaderEmail"
@@ -113,7 +110,7 @@ function SearchPatientByInstructor() {
                 ))}
               </Form.Control>
             </Col>
-            <Col md={2}>
+            <Col>
               <Button variant="dark" onClick={handleFetchPatientByTeamleaderEmail}>
                 ค้นหาผู้ป่วย
               </Button>

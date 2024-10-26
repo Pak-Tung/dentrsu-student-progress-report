@@ -88,9 +88,7 @@ function SearchPatientByStudent() {
         <h4>ค้นหาผู้ป่วยด้วยรหัสนักศึกษา</h4>
         <Form className={`mt-4 ${containerClass}`}>
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={2}>
-              รหัสนักศึกษา
-            </Form.Label>
+
             <Col md={8}>
               <Form.Control
                 type="text"
@@ -101,7 +99,7 @@ function SearchPatientByStudent() {
                 placeholder="กรอก รหัสนักศึกษา เพื่อค้นหาผู้ป่วย"
               />
             </Col>
-            <Col md={2}>
+            <Col>
               <Button variant="dark" onClick={handleFetchPatientByStudentId}>
                 ค้นหาผู้ป่วย
               </Button>

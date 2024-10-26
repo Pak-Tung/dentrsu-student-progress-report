@@ -151,23 +151,20 @@ function SearchPatientByHN() {
   return (
     <>
       {role === "ptBank" ? <NavbarPatientBank /> : <NavbarSupervisor />}
-      <Container className="mt-4">
-        <Form className={`mt-4 ${containerClass}`}>
+      <Container className={`${containerClass}`}>
+        <Form className="mt-4">
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
-              เลขที่บัตรผู้ป่วย
-            </Form.Label>
-            <Col md={7}>
+            <Col md={8}>
               <Form.Control
                 type="text"
                 name="hn"
                 value={hn}
                 onChange={(e) => setHn(e.target.value)}
                 required
-                placeholder="เลขที่บัตรผู้ป่วย"
+                placeholder="กรอกเลขที่บัตรผู้ป่วย"
               />
             </Col>
-            <Col md={2}>
+            <Col>
               <Button variant="dark" onClick={handleFetchPatientByHn}>
                 ค้นหาผู้ป่วยจากเลขที่บัตร
               </Button>

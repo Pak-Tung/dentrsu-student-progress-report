@@ -84,7 +84,7 @@ function DivisionReqOfStudent() {
   return (
     <>
       <NavbarAdmin />
-      <Container className="mt-5">
+      <Container className="mt-4">
         <div className="d-flex justify-content-center mb-4">
           <h2>Student {fullNameDivision(division)} Requirement</h2>
         </div>

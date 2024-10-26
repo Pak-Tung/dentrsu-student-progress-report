@@ -10,7 +10,7 @@ function AddMultiNewPatient() {
     <NavbarPatientBank />
     <Container>
         <Row className="justify-content-center">
-            <Col md={10}>
+            <Col md={12}>
                 <h2>เพิ่มผู้ป่วยใหม่ด้วยไฟล์ CSV</h2>
                 <Alert variant="info">
                     คำแนะนำ: ไฟล์ประกอบด้วย 8 คอลัมน์ คือ 

@@ -186,7 +186,7 @@ function SumByDivAndStudentEmail({ division, studentEmail }) {
 
   return (
     <>
-      <Container fluid="md" className={containerClass}>
+      <Container fluid className={containerClass}>
         <ListGroup>
           {division !== "perio" &&
             division !== "oper" &&

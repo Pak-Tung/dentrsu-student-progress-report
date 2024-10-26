@@ -204,11 +204,11 @@ function AssignPatientToInstructor() {
     <>
       <NavbarPatientBank />
 
-      <Container className={`mt-4 ${containerClass}`}>
+      <Container className={`${containerClass}`}>
         <h2>แก้ไขข้อมูลผู้ป่วย</h2>
-        <Form onSubmit={handlePatientUpdateFormSubmit}>
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column md={3}>
+        <Form onSubmit={handlePatientUpdateFormSubmit} className="container-md mt-3 border">
+          <Form.Group as={Row} >
+            <Form.Label column>
               เลขที่บัตรผู้ป่วย
             </Form.Label>
             <Col md={7}>
@@ -221,20 +221,20 @@ function AssignPatientToInstructor() {
                 placeholder="เลขที่บัตรผู้ป่วย"
               />
             </Col>
-            <Col md={2}>
+            <Col>
               <Button variant="outline-dark" onClick={handleFetchPatientByHn}>
                 ค้นหาผู้ป่วย
               </Button>
             </Col>
           </Form.Group>
-
+          <br />
           {show && (
             <>
-              <Form.Group as={Row} className="mb-3">
+              <Form.Group as={Row} className="mb-3"> 
                 <Form.Label column md={3}>
                   ชื่อ นามสกุล ผู้ปวย
                 </Form.Label>
-                <Col md={9}>
+                <Col>
                   <Form.Control
                     type="text"
                     name="name"

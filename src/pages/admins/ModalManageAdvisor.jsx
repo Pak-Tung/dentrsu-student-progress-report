@@ -160,7 +160,7 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
             </Alert>
           </Container>
         ) : (
-          <Container>
+          <Container fluid>
             <Row>
               <Col className="d-flex justify-content-center">
                 <h4>Current Advisees of {instructor.instructorName}</h4>
