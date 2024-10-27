@@ -125,7 +125,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
               placeholder="Enter @rsu.ac.th email"
               name="userEmail"
               value={userEmail}
-              onChange={(e) => setUserEmail(e.target.value)}
+              onChange={(e) => setUserEmail(e.target.value.toLowerCase())} // Convert to lowercase
               disabled={userExists || loading}
               required
               className={themeClass}
@@ -145,7 +145,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
                 required
                 className={themeClass}
                 disabled={loading}
-                type="number"
+                type="password"
               />
             </Col>
           </Row>

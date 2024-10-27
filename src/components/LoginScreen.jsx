@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 
 function LoginScreen({ handleLoginSuccess, setOtpVerified }) {
   return (
-    <Container>
+    <Container fluid>
       <Row className="d-flex justify-content-center">
         <Col className="text-center">
           <h4>Comprehensive Dental Care Clinic</h4>
