@@ -9,6 +9,7 @@ import {
   getAllStudents,
 } from "../../features/apiCalls";
 import { convertToUTCPlus7 } from "../../utilities/dateUtils";
+import Cookies from "js-cookie";
 
 function SearchPatientByHN() {
   const { theme } = useContext(ThemeContext);
@@ -16,13 +17,11 @@ function SearchPatientByHN() {
 
   const [role, setRole] = useState("");
   useEffect(() => {
-    const savedRole = JSON.parse(localStorage.getItem("role"));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }
   }, []);
-
-  console.log(role);
 
   const [hn, setHn] = useState("");
   const [patient, setPatient] = useState({});

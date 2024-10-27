@@ -6,29 +6,30 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import ProfileInstructor from "../instructors/ProfileInstructor";
 import ProfileAdmin from "./ProfileAdmin";
+import Cookies from "js-cookie";
 
 function SelectRoleAdmin() {
   const [user, setUser] = useState({});
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
+    const savedUser = Cookies.get("user");
     if (savedUser) {
       try {
         setUser(JSON.parse(savedUser));
       } catch (error) {
-        console.error("Error parsing user data from localStorage:", error);
+        console.error("Error parsing user data from Cookies:", error);
       }
     }
 
-    const savedRole = localStorage.getItem("role");
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }
   }, []);
 
   const handleSelectRole = (selectedRole) => {
-    localStorage.setItem("role", JSON.stringify(selectedRole));
+    Cookies.set("role", selectedRole);
     setRole(selectedRole);
     //console.log("Selected Role:", selectedRole);
   };

@@ -114,9 +114,11 @@ function ModalEditUser({ show, handleClose, user }) {
                     value={formData.role}
                   >
                     <option value="root">root</option>
+                    <option value="supervisor">supervisor</option>
                     <option value="admin">admin</option>
                     <option value="instructor">instructor</option>
                     <option value="student">student</option>
+
                   </Form.Select>
                 </InputGroup>
               </Col>

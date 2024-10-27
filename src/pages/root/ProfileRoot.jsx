@@ -12,17 +12,18 @@ import Profile from "../students/Profile";
 import NavbarRoot from "./NavbarRoot";
 import ModalSetAdminDiv from "./ModalSetAdminDiv";
 import LoginByEmail from "../../components/LoginByEmail";
+import Cookies from "js-cookie";
 
 function ProfileRoot() {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
+    const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
   });
 
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    const savedRole = localStorage.getItem("role");
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }
@@ -33,7 +34,7 @@ function ProfileRoot() {
   const userEmail = user.email;
 
   const handleSelectRole = (selectedRole) => {
-    localStorage.setItem('role', JSON.stringify(selectedRole));
+    Cookies.set("role", selectedRole);
     setRole(selectedRole);
     if (selectedRole === "admin") {
       handleShow();

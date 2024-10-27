@@ -45,10 +45,7 @@ function ProfileAdmin() {
           } else if (result[0]) {
             setInstructor(result[0]);
             Cookies.set("instructor", result[0], { expires: 7 });
-            localStorage.setItem(
-              "division",
-              JSON.stringify(result[0].division)
-            );
+            Cookies.set("division", result[0].division, { expires: 7 });
           } else {
             setError("Instructor data is undefined");
           }
@@ -66,12 +63,10 @@ function ProfileAdmin() {
     Cookies.remove("user");
     Cookies.remove("role");
     Cookies.remove("instructor");
-    localStorage.removeItem("user");
-    localStorage.removeItem("instructor");
-    localStorage.removeItem("role");
-    localStorage.removeItem("division");
-    localStorage.removeItem("email");
-    localStorage.removeItem("token");
+    Cookies.remove("division");
+    Cookies.remove("email");
+    Cookies.remove("token");
+    Cookies.remove("otpVerified");
     setUser({});
     navigate("/");
     window.location.reload();

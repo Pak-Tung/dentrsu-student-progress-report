@@ -13,75 +13,40 @@ import SelectRoleAdmin from "../pages/admins/SelectRoleAdmin";
 import ProfileSupervisor from "../pages/supervisor/ProfileSupervisor";
 import Cookies from "js-cookie";
 import LoginScreen from "./LoginScreen";
-import * as loadingData from "./loading.json";
-import * as successData from "./success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
-import { Container, Row } from "react-bootstrap";
+import EmailOTP from "./EmailOTP"; // Import the EmailOTP component
 import LoadingComponent from "./LoadingComponent";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
-const defaultOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: successData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
-// Custom hook for managing local storage state
-function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error(`Error reading localStorage key "${key}":`, error);
-      return initialValue;
-    }
-  });
-
-  const setValue = (value) => {
-    try {
-      const valueToStore =
-        value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error);
-    }
-  };
-
-  return [storedValue, setValue];
-}
-
 function LoginByEmail() {
-  const [token, setToken] = useLocalStorage("token", null);
-  const [email, setEmail] = useLocalStorage("email", null);
-  const [role, setRole] = useLocalStorage("role", "");
-  const [user, setUser] = useLocalStorage("user", {});
+  const [email, setEmail] = useState('');
+  const [token, setToken] = useState('');
+  const [role, setRole] = useState(Cookies.get("role"));
+  const [user, setUser] = useState(
+    Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null
+  );
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true); // Initially true to show the loading animation
   const [success, setSuccess] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(Cookies.get('otpVerified') || false); // New state for OTP verification
 
   const handleLoginSuccess = () => {
-    setToken(localStorage.getItem("token"));
-    setEmail(localStorage.getItem("email"));
     setIsLoggedIn(true);
   };
 
   useEffect(() => {
+    if (otpVerified) {
+      const savedEmail = Cookies.get("email");
+      const savedToken = Cookies.get("token");
+      setEmail(savedEmail);
+      setToken(savedToken);
+    }
+  }, [otpVerified]);
+
+  //console.log("otpVerified", otpVerified); // Log the value of otpVerified
+  //console.log("user", user); // Log the value of user
+
+  useEffect(() => {
     const fetchUserProfile = async () => {
-      if (email && token) {
+      if (email && token && otpVerified) {
         try {
           const users = await getAllUsers();
           const userRecord = users.data.find(
@@ -89,7 +54,6 @@ function LoginByEmail() {
           );
 
           if (!userRecord) {
-            localStorage.clear();
             throw new Error("User not found");
           }
 
@@ -109,11 +73,9 @@ function LoginByEmail() {
               return;
             }
           } else if (
-            userRecord.role === "instructor" ||
-            userRecord.role === "admin" ||
-            userRecord.role === "ptBank" ||
-            userRecord.role === "supervisor" ||
-            userRecord.role === "root"
+            ["instructor", "admin", "ptBank", "supervisor", "root"].includes(
+              userRecord.role
+            )
           ) {
             try {
               const instructor = await getInstructorByEmail(
@@ -134,19 +96,21 @@ function LoginByEmail() {
           }
 
           if (userRecord) {
-            setCookiesAndLocalStorage(userRecord);
-            setUser(userRecord);
+            setCookies(userRecord);
             setRole(userRecord.role);
+            setUser(userRecord);
             setSuccess(true);
             setLoading(false);
           }
         } catch (error) {
-          //console.error("Error fetching user profile:", error);
           alert(
             `User profile not found (Browser Login with ${email}). Please contact administrator.`
           );
           setLoading(false);
-          localStorage.clear();
+          Cookies.remove("token");
+          Cookies.remove("email");
+          Cookies.remove("role");
+          Cookies.remove("user");
           window.location.reload();
         }
       } else {
@@ -154,28 +118,21 @@ function LoginByEmail() {
       }
     };
 
-    if (isLoggedIn || (email && token)) {
+    if (isLoggedIn || (email && token && otpVerified)) {
       fetchUserProfile();
     } else {
       setLoading(false);
     }
-  }, [isLoggedIn, email, token]);
+  }, [isLoggedIn, email, token, otpVerified]); // Added otpVerified as a dependency
 
-  const setCookiesAndLocalStorage = (userRecord) => {
-    // Convert email to lowercase before saving
+  const setCookies = (userRecord) => {
     const lowercaseEmail = userRecord.email.toLowerCase();
 
-    Cookies.set("role", JSON.stringify(userRecord.role), { expires: 1 });
+    Cookies.set("role", userRecord.role, { expires: 1 });
     Cookies.set(
       "user",
       JSON.stringify({ ...userRecord, email: lowercaseEmail }),
       { expires: 1 }
-    );
-
-    localStorage.setItem("role", JSON.stringify(userRecord.role));
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ ...userRecord, email: lowercaseEmail })
     );
   };
 
@@ -194,38 +151,24 @@ function LoginByEmail() {
       case "supervisor":
         return <ProfileSupervisor />;
       default:
-        return <LoginScreen handleLoginSuccess={handleLoginSuccess} />;
+        return (
+          <LoginScreen
+            handleLoginSuccess={handleLoginSuccess}
+            setOtpVerified={setOtpVerified}
+          />
+        );
     }
   };
 
   return (
     <>
-      {user && role ? (
-        <>
-          {success ? (
-            renderProfile()
-          ) : (
-            <FadeIn>
-              <div>
-                {loading ? (
-                  <LoadingComponent />
-                ) : (
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions2}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                )}
-              </div>
-            </FadeIn>
-          )}
-        </>
+      {email && role ? (
+        renderProfile()
       ) : (
-        <LoginScreen handleLoginSuccess={handleLoginSuccess} />
+        <LoginScreen
+          handleLoginSuccess={handleLoginSuccess}
+          setOtpVerified={setOtpVerified}
+        />
       )}
     </>
   );

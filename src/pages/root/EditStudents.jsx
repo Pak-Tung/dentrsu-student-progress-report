@@ -102,7 +102,9 @@ function EditStudents() {
             calculateStudentYear(student.startClinicYear)
           )
         )
-      ).map((year) => ({
+      )
+      .sort((a, b) => a - b) // Sort in ascending order
+      .map((year) => ({
         label: `${year}th Year`,
         value: year,
       })),
@@ -126,15 +128,17 @@ function EditStudents() {
   const bayOptions = useMemo(
     () => [
       { label: "All", value: null },
-      ...Array.from(new Set(students.map((student) => student.bay))).map(
-        (bay) => ({
-          label: `Bay ${bay}`,
+      ...Array.from(new Set(students.map((student) => student.bay)))
+        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })) // Sort in natural ascending order
+        .map((bay) => ({
+          label: bay,
           value: bay,
-        })
-      ),
+        })),
     ],
     [students]
   );
+  
+  
 
   const filteredStudents = useMemo(
     () =>

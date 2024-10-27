@@ -15,7 +15,7 @@ function ReqSubmit() {
 
   }
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(Cookies.get("user"));
 
   const userEmail = user.email;
 

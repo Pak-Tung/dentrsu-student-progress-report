@@ -7,6 +7,7 @@ import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -19,7 +20,7 @@ const defaultOptions = {
 
 function MinimumReq() {
   const { theme } = useContext(ThemeContext);
-  const division = localStorage.getItem("division");
+  const division = Cookies.get("division");
 
   const fullNameDivision = useCallback((division) => {
     const divisionMap = {

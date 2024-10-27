@@ -51,6 +51,7 @@ function UserManagement() {
     { id: 2, role: "instructor" },
     { id: 3, role: "student" },
     { id: 4, role: "root" },
+    { id: 5, role: "supervisor" },
   ];
 
   useEffect(() => {

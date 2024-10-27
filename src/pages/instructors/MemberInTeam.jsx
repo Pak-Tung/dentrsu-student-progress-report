@@ -18,6 +18,7 @@ import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -41,7 +42,7 @@ function MemberInTeam(email) {
   //console.log("instructorEmail", email.instructorEmail);
   const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
+    const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
   });
   const userEmail = user.email;
@@ -49,10 +50,9 @@ function MemberInTeam(email) {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    const savedRole = localStorage.getItem("role");
-    //console.log("Role", JSON.parse(savedRole));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
-      setRole(JSON.parse(savedRole));
+      setRole(savedRole);
     }
   }, []);
 
@@ -110,7 +110,7 @@ function MemberInTeam(email) {
 
   return (
     <>
-      {role === "instructor" ? <NavbarInstructor /> : null}
+      {role === "instructor" || role === "root" || role === "admin" ? <NavbarInstructor /> : null}
       <Container fluid="md" className={containerClass}>
         {loading ? (
           <FadeIn>

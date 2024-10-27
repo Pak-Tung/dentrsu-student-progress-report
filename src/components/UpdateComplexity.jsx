@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { updatePatientbyhn } from "../features/apiCalls";
 import "../App.css";
+import Cookies from "js-cookie";
 
 function UpdateComplexity({ patient, updateComplexity }) {
   const [role, setRole] = useState("");
   
   useEffect(() => {
-    const savedRole = JSON.parse(localStorage.getItem("role"));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }

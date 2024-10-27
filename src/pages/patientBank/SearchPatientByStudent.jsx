@@ -11,6 +11,7 @@ import {
   getStudentById,
   getPatientsByStudentEmail,
 } from "../../features/apiCalls";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -28,7 +29,7 @@ function SearchPatientByStudent() {
 
   const [role, setRole] = useState("");
   useEffect(() => {
-    const savedRole = JSON.parse(localStorage.getItem("role"));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }

@@ -12,6 +12,7 @@ import {
   getPatientsByTeamleaderEmail,
   getInstructorsByTeamleaderRole,
 } from "../../features/apiCalls";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -30,7 +31,7 @@ function SearchPatientByInstructor() {
 
   const [role, setRole] = useState("");
   useEffect(() => {
-    const savedRole = JSON.parse(localStorage.getItem("role"));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }

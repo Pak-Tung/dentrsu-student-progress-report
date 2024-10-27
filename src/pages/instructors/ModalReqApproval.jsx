@@ -12,7 +12,7 @@ function ModalReqApproval({ show, handleClose, divisionReq, division, studentNam
 
   const [role, setRole] = useState("");
   useEffect(() => {
-    const savedRole = JSON.parse(localStorage.getItem("role"));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }

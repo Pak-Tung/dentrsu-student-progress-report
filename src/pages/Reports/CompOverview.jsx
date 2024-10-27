@@ -29,7 +29,7 @@ function CompOverview() {
 
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
-    : console.log("User email", Cookies.get("user"));
+    : JSON.parse(Cookies.get("user"));
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 

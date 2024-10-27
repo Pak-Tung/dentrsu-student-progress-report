@@ -1,11 +1,10 @@
 import React from "react";
-import EmailVerificationButton from "./EmailVerificationButton";
 import EmailOTP from "./EmailOTP";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-function LoginScreen({ handleLoginSuccess }) {
+function LoginScreen({ handleLoginSuccess, setOtpVerified }) {
   return (
     <Container>
       <Row className="d-flex justify-content-center">
@@ -29,7 +28,7 @@ function LoginScreen({ handleLoginSuccess }) {
         </Col>
       </Row>
       <Row className="d-flex justify-content-center">
-        <Col></Col>
+
         <Col
           xs={12}
           sm={10}
@@ -38,11 +37,10 @@ function LoginScreen({ handleLoginSuccess }) {
           className="d-flex justify-content-center"
         >
           <div className="d-grid gap-2">
-            {/* <EmailVerificationButton handleLoginSuccess={handleLoginSuccess} /> */}
-            <EmailOTP handleLoginSuccess={handleLoginSuccess} />
+            <EmailOTP handleLoginSuccess={handleLoginSuccess} setOtpVerified={setOtpVerified} />
           </div>
         </Col>
-        <Col></Col>
+
       </Row>
     </Container>
   );

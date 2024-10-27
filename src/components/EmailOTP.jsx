@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import "../App.css";
 import { ThemeContext } from "../ThemeContext";
 import { sendOTP } from "../features/apiEmailOTP";
+import Cookies from "js-cookie";
 
 const InputGroupField = ({
   id,
@@ -37,7 +38,8 @@ const InputGroupField = ({
   </InputGroup>
 );
 
-function EmailOTP({ handleLoginSuccess }) {
+
+function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
   const { theme } = useContext(ThemeContext);
   const themeClass = theme === "dark" ? "form-control-dark" : "";
 
@@ -69,22 +71,25 @@ function EmailOTP({ handleLoginSuccess }) {
 
     try {
       const response = await sendOTP(userEmail, userOTP);
-      //console.log(response);
 
-      if (response === "OTP via email") {
+      if (response && response === "OTP via email") {
         setUserExists(true);
         setMessage(
           "OTP has been sent to your email. Please check your inbox and enter the OTP."
         );
       } else if (
+        response &&
         response.status === 200 &&
         response.message === "OTP verified successfully."
       ) {
+        console.log(response);
         const token = response.token;
         const email = response.userEmail;
-        localStorage.setItem("token", token);
-        localStorage.setItem("email", email);
+        Cookies.set("token", token, { expires: 1 });
+        Cookies.set("email", email, { expires: 1 });
+        Cookies.set("otpVerified", true, { expires: 1 });
         setMessage("OTP verified successfully. Logging you in...");
+        setOtpVerified(true); // Notify parent component that OTP was verified
         handleLoginSuccess();
       } else {
         setError(

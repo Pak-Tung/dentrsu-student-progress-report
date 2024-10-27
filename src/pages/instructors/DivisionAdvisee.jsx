@@ -21,6 +21,7 @@ import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -43,12 +44,12 @@ const defaultOptions2 = {
 function DivisionAdvisee() {
   const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
+    const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
   });
   const userEmail = user.email;
 
-  const division = localStorage.getItem("division");
+  const division = Cookies.get("division");
 
   const [instructor, setInstructor] = useState(null);
   const [studentData, setStudentData] = useState([]);

@@ -10,11 +10,12 @@ import {
   Form,
   Modal,
 } from "react-bootstrap";
+import Cookies from "js-cookie";
 
 function ModalAssignAdvisor({ show, handleClose, student }) {
   const [division, setDivision] = useState(() => {
-    const savedDivision = localStorage.getItem("division");
-    return savedDivision ? JSON.parse(savedDivision) : "";
+    const savedDivision = Cookies.get("division");
+    return savedDivision ? savedDivision : "";
   });
 
   const [instructors, setInstructors] = useState([]);

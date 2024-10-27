@@ -38,13 +38,13 @@ function Overview() {
 
   Cookies.get("user") === undefined
     ? Cookies.set("user", JSON.stringify({}))
-    : console.log("");
+    : JSON.parse(Cookies.get("user"));
   const user = JSON.parse(Cookies.get("user"));
   const userEmail = user.email;
 
   const [student, setStudent] = useState([]);
   const [divisions, setDivisions] = useState([]);
-  const [selectedDivision, setSelectedDivision] = useState("all");
+  const [selectedDivision, setSelectedDivision] = useState(null);
   const [selectedDivisionName, setSelectedDivisionName] =
     useState("Select Division");
 
@@ -93,6 +93,9 @@ function Overview() {
   };
 
   const renderDivisionComponent = () => {
+    if (!selectedDivision) {
+      return null;
+    }
     const divNames = [
       "oper",
       "endo",
@@ -157,6 +160,8 @@ function Overview() {
                     </div>
                   </Col>
                 </Row>
+
+                {!selectedDivision && (<Row className="d-flex justify-content-center mb-3"><Col xs={12} className="text-center"><h5>Select division to display</h5></Col></Row>)}
 
                 {renderDivisionComponent()}
 

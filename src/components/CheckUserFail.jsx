@@ -5,17 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import LoginScreen from "./LoginScreen";
 
+function CheckUserFail({ handleLoginError }) {
+  handleLoginError();
 
-
-function CheckUserFail({handleLoginError}) {
-
-    handleLoginError();
-
-  return (
-   
-            <LoginScreen/>
-     
-  )
+  return <LoginScreen />;
 }
 
 export default CheckUserFail;

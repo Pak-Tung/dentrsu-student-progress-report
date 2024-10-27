@@ -164,7 +164,7 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
         const response = await updateDivReqById(divisionReq.id, updatedFormData, division);
         if (response.affectedRows === 1) {
           alert("Form submitted successfully!");
-          localStorage.setItem("selectedDivision", division);
+          Cookies.set("selectedDivision", division, { expires: 1 });
           handleClose();
         }
       } catch (error) {

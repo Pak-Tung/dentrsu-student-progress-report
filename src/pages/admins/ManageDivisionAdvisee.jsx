@@ -7,6 +7,7 @@ import {
   Spinner,
   Alert,
   Button,
+  Form,
 } from "react-bootstrap";
 import NavbarAdmin from "./NavbarAdmin";
 import { getAllStudents, getAllInstructors } from "../../features/apiCalls";
@@ -15,6 +16,7 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -27,14 +29,17 @@ const defaultOptions = {
 
 function DivisionAdvisee() {
   const [division, setDivision] = useState(() => {
-    const savedDivision = localStorage.getItem("division");
-    return savedDivision ? JSON.parse(savedDivision) : "";
+    const savedDivision = Cookies.get("division");
+    return savedDivision ? savedDivision : "";
   });
 
   const [students, setStudents] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [studentYearFilter, setStudentYearFilter] = useState("");
+  const [floorFilter, setFloorFilter] = useState("");
+  const [bayFilter, setBayFilter] = useState("");
 
   useEffect(() => {
     const fetchStudentsData = async () => {
@@ -55,7 +60,6 @@ function DivisionAdvisee() {
     const fetchInstructorsData = async () => {
       try {
         const result = await getAllInstructors();
-        //console.log("result", result);
         setInstructors(result);
       } catch (err) {
         setError("Failed to fetch instructors");
@@ -134,6 +138,15 @@ function DivisionAdvisee() {
   };
   const handleShow = () => setShow(true);
 
+  const filteredStudents = students.filter((student) => {
+    const studentYear = calculateStudentYear(student.startClinicYear);
+    return (
+      (studentYearFilter === "" || studentYear === parseInt(studentYearFilter)) &&
+      (floorFilter === "" || student.floor === parseInt(floorFilter)) &&
+      (bayFilter === "" || student.bay === bayFilter)
+    );
+  });
+
   return (
     <>
       <NavbarAdmin />
@@ -141,6 +154,65 @@ function DivisionAdvisee() {
         <Row>
           <Col className="d-flex justify-content-center mb-4">
             <h4 className="mb-4">{fullNameDivision(division)} Advisee</h4>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={4}>
+            <Form.Group controlId="studentYearFilter">
+              <Form.Label>Filter by Student Year</Form.Label>
+              <Form.Control
+                as="select"
+                value={studentYearFilter}
+                onChange={(e) => setStudentYearFilter(e.target.value)}
+              >
+                <option value="">All</option>
+                {[...new Set(students.map((student) => calculateStudentYear(student.startClinicYear)))]
+                  .sort((a, b) => a - b)
+                  .map((year) => (
+                    <option key={year} value={year}>
+                      {year}th Year
+                    </option>
+                  ))}
+              </Form.Control>
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group controlId="floorFilter">
+              <Form.Label>Filter by Floor</Form.Label>
+              <Form.Control
+                as="select"
+                value={floorFilter}
+                onChange={(e) => setFloorFilter(e.target.value)}
+              >
+                <option value="">All</option>
+                {[...new Set(students.map((student) => student.floor))]
+                  .sort((a, b) => a - b)
+                  .map((floor) => (
+                    <option key={floor} value={floor}>
+                      Floor {floor}
+                    </option>
+                  ))}
+              </Form.Control>
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group controlId="bayFilter">
+              <Form.Label>Filter by Bay</Form.Label>
+              <Form.Control
+                as="select"
+                value={bayFilter}
+                onChange={(e) => setBayFilter(e.target.value)}
+              >
+                <option value="">All</option>
+                {[...new Set(students.map((student) => student.bay))]
+                  .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }))
+                  .map((bay) => (
+                    <option key={bay} value={bay}>
+                      Bay {bay}
+                    </option>
+                  ))}
+              </Form.Control>
+            </Form.Group>
           </Col>
         </Row>
         <ListGroup>
@@ -181,7 +253,7 @@ function DivisionAdvisee() {
           </Alert>
         ) : (
           <ListGroup>
-            {students.map((student) => (
+            {filteredStudents.map((student) => (
               <ListGroup.Item key={student.studentId}>
                 <Row>
                   <Col md={4}>
@@ -190,14 +262,12 @@ function DivisionAdvisee() {
                     </h5>
                   </Col>
                   <Col md={1}>
-                    {" "}
                     <strong>
                       {calculateStudentYear(student.startClinicYear)}th
                     </strong>
                   </Col>
                   <Col md={1}>
                     <p>
-                      {" "}
                       <strong>
                         M{student.floor}
                         {student.bay}
@@ -206,7 +276,6 @@ function DivisionAdvisee() {
                     </p>
                   </Col>
                   <Col md={3}>
-                    {" "}
                     {getInstructorName(divInstructionEmail(division, student))}
                   </Col>
                   <Col>

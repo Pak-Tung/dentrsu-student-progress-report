@@ -28,13 +28,13 @@ function ProfileInstructor() {
 
   const savedUser = Cookies.get("user");
   const [user, setUser] = useState(savedUser ? JSON.parse(savedUser) : {});
-  console.log(user);
+  //console.log(user);
   const userEmail = user.email;
   const userName = user.name;
   const userPicture = user.picture;
 
-  const savedInstructor = localStorage.getItem("instructor");
-  const [instructor, setInstructor] = useState(savedInstructor ? JSON.parse(savedInstructor) : {});
+  const savedInstructor = Cookies.get("instructor");
+  const [instructor, setInstructor] = useState(savedInstructor ? savedInstructor : {});
 
   useEffect(() => {
     if (userEmail) {
@@ -44,10 +44,10 @@ function ProfileInstructor() {
           if (result.error) {
             setError(result.error);
           } else if (result[0]) {
+            //console.log(result[0]);
             setInstructor(result[0]);
-            Cookies.set("instructor", JSON.stringify(result[0]), { expires: 7 });
-            localStorage.setItem("instructor", JSON.stringify(result[0]));
-            localStorage.setItem("division", result[0].division);
+            Cookies.set("instructor", JSON.stringify(result[0]), { expires: 1 });
+            Cookies.set("division", result[0].division, { expires: 1 });
           } else {
             setError("Instructor data is undefined");
           }
@@ -66,12 +66,10 @@ function ProfileInstructor() {
     Cookies.remove("user");
     Cookies.remove("role");
     Cookies.remove("instructor");
-    localStorage.removeItem("user");
-    localStorage.removeItem("instructor");
-    localStorage.removeItem("role");
-    localStorage.removeItem("division");
-    localStorage.removeItem("email");
-    localStorage.removeItem("token");
+    Cookies.remove("division");
+    Cookies.remove("email");
+    Cookies.remove("token");
+    Cookies.remove("otpVerified");
     setUser({});
     navigate("/");
     window.location.reload();

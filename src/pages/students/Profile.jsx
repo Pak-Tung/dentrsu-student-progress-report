@@ -60,7 +60,7 @@ function Profile() {
         setLoading(true);
         try {
           const result = await getStudentByEmail(userEmail);
-          console.log(result);
+          //console.log(result);
           if (result.error) {
             setError(result.error);
           } else if (result[0]) {
@@ -113,6 +113,10 @@ function Profile() {
     Cookies.remove("user");
     Cookies.remove("role");
     Cookies.remove("instructor");
+    Cookies.remove("division");
+    Cookies.remove("email");
+    Cookies.remove("token");
+    Cookies.remove("otpVerified");
     localStorage.clear();
     setUser({});
     navigate("/");

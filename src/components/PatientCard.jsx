@@ -12,6 +12,7 @@ import "../App.css";
 import { getAllStudents, getTxPlanByPatientHn } from "../features/apiCalls";
 import { ThemeContext } from "../ThemeContext";
 import { formatDate } from "../utilities/dateUtils";
+import Cookies from "js-cookie";
 
 function PatientCard({ patients = [], updatePatients }) {
   const { theme } = useContext(ThemeContext);
@@ -19,7 +20,7 @@ function PatientCard({ patients = [], updatePatients }) {
   const [txPlans, setTxPlans] = useState({}); // State to store TxPlans
 
   useEffect(() => {
-    const savedRole = JSON.parse(localStorage.getItem("role"));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }

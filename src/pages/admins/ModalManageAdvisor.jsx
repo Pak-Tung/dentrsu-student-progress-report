@@ -19,6 +19,7 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -31,8 +32,8 @@ const defaultOptions = {
 
 function ModalManageAdvisor({ show, handleClose, instructor }) {
   const [division, setDivision] = useState(() => {
-    const savedDivision = localStorage.getItem("division");
-    return savedDivision ? JSON.parse(savedDivision) : "";
+    const savedDivision = Cookies.get("division");
+    return savedDivision ? savedDivision : "";
   });
 
 

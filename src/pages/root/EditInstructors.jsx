@@ -69,7 +69,7 @@ function EditInstructors() {
       endo: "Endodontic",
       perio: "Periodontic",
       prosth: "Prosthodontic",
-      diag: "Diagnostic",
+      diag: "Oral Medicine & Occlusion",
       radio: "Radiology",
       sur: "Oral Surgery",
       pedo: "Pediatric Dentistry",
@@ -84,12 +84,11 @@ function EditInstructors() {
   // Extract unique division from instructor.division to populate type dropdown
   const divisionOptions = [
     { label: "All", value: null },
-    ...Array.from(
-      new Set(instructors.map((instructor) => instructor.division))
-    ).map((division) => ({
-      label: fullNameDivision(division),
-      value: division,
-    })),
+    ...Array.from(new Set(instructors.map((instructor) => instructor.division)))
+      .map((division) => ({
+        label: fullNameDivision(division),
+        value: division,
+      })),
   ];
 
   return (

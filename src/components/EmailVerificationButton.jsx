@@ -27,8 +27,8 @@ const EmailVerificationButton = ({handleLoginSuccess}) => {
         const emailLowerCase = email.toLowerCase();
         //console.log("token", token);
         //console.log("email", emailLowerCase);
-        localStorage.setItem("token", token);
-        localStorage.setItem("email", emailLowerCase);
+        //localStorage.setItem("token", token);
+        //localStorage.setItem("email", emailLowerCase);
         handleLoginSuccess();
       } catch (error) {
         console.error(error);

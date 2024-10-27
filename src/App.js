@@ -28,7 +28,6 @@ import RequestComplete from "./pages/instructors/RequestComplete";
 import ProfileAdmin from "./pages/admins/ProfileAdmin";
 import AllPatients from "./pages/students/AllPatients";
 import AllTeamleaderPatients from "./pages/instructors/AllTeamleaderPatients";
-import TreatmentPlanApproval from "./pages/instructors/TreatmentPlanApproval";
 import TreatmentApproval from "./pages/instructors/TreatmentApproval";
 import UploadPatientsCSV from "./components/UploadPatientsCSV";
 import CreateNewPatient from "./components/CreateNewPatient";
@@ -68,7 +67,6 @@ function App() {
         <Route path="/profileAdmin" element={<ProfileAdmin />} />
 
         <Route path="/txApproval" element={<TreatmentApproval />} />
-        <Route path="/txPlanApproval" element={<TreatmentPlanApproval />} />
         <Route path="/reqApprovedEdit" element={<EditApprovedReq />} />
         <Route path="/editReqOfDivision" element={<EditDivisionReq />} />
         <Route path="/reqDivOfAllStudent" element={<DivisionReqOfStudent />} />

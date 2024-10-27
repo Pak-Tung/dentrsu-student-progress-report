@@ -28,8 +28,8 @@ const defaultOptions = {
 
 function DivisionReqOfStudent() {
   const [division, setDivision] = useState(() => {
-    const savedDivision = localStorage.getItem("division");
-    return savedDivision ? JSON.parse(savedDivision) : "";
+    const savedDivision = Cookies.get("division");
+    return savedDivision ? savedDivision : "";
   });
 
   const [studentData, setStudentData] = useState(null);

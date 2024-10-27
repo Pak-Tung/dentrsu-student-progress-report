@@ -16,6 +16,7 @@ import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 
+
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -40,7 +41,7 @@ function TreatmentApproval() {
   const [loadingTreatments, setLoadingTreatments] = useState(true);
 
   useEffect(() => {
-    const savedRole = JSON.parse(localStorage.getItem("role"));
+    const savedRole = Cookies.get("role");
     if (savedRole) {
       setRole(savedRole);
     }

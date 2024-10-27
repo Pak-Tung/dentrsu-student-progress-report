@@ -32,7 +32,7 @@ function ReqStatus() {
   const [student, setStudent] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState(() => {
-    return localStorage.getItem("selectedDivision") || "oper";
+    return Cookies.get("selectedDivision")||"oper";
   });
   const [requirementLabel, setRequirementLabel] = useState(
     "Operative Requirement"
@@ -89,7 +89,7 @@ function ReqStatus() {
   const handleDivisionChange = (e) => {
     const selectedValue = e.target.value;
     setSelectedDivision(selectedValue);
-    localStorage.setItem("selectedDivision", selectedValue);
+    Cookies.set("selectedDivision", selectedValue);
     const selectedDivisionObj = divisions.find(
       (division) => division.shortName === selectedValue
     );
