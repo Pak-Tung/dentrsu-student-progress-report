@@ -78,7 +78,7 @@ function NavbarStudent() {
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/checkStatus">
-              Student Status
+              Overall Requirement Chart
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown 
