@@ -94,7 +94,7 @@ function ProfileRoot() {
           <Col className="d-flex justify-content-center">
             <div className="d-grid gap-2">
               <Button variant="secondary" size="lg" onClick={() => handleSelectRole("supervisor")}>
-                SUPERVISOR
+                BOARD
               </Button>
               <Button variant="secondary" size="lg" onClick={() => handleSelectRole("admin")}>
                 ADMIN

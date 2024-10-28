@@ -278,3 +278,14 @@ export const getCompleteReqsPercentageByDivision = async (email) => {
   return completeReqsPercentageByDivision;
 };
 
+// export const calTotalDivReqByWeight = (totalReq, weight) => {
+//   const totalDivReq = {};
+//   for (const division in totalReq) {
+//     totalDivReq[division] = {};
+//     for (const req in totalReq[division]) {
+//       totalDivReq[division][req] = totalReq[division][req] * weight[req];
+//     }
+//   }
+//   return totalDivReq;
+// };
+

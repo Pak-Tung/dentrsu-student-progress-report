@@ -98,7 +98,7 @@ function ProfileSupervisor() {
       <NavbarSupervisor />
       <div className="container mt-5">
         <div className="d-flex justify-content-center mb-4">
-          <h2>SYSTEM SUPERVISOR</h2>
+          <h2>BOARD</h2>
         </div>
         {loading ? (
           <div className="d-flex justify-content-center">
