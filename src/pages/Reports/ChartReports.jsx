@@ -59,20 +59,10 @@ const ShortLabels = [
   "Pedo",
 ];
 
-const defaultOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: successData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
 function ChartReports({ studentEmail }) {
   const { theme } = useContext(ThemeContext);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(false);
 
   const [userEmail, setUserEmail] = useState(studentEmail);
   const [student, setStudent] = useState({});
@@ -80,10 +70,10 @@ function ChartReports({ studentEmail }) {
   const [rqm, setRqm] = useState({});
   const [minReq, setMinReq] = useState(allMinDivReq);
 
-  const [completeReqsPercentage, setCompleteReqsPercentage] = useState({});
   const [compReq, setCompReq] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
     const fetchStudentData = async () => {
       if (userEmail) {
         try {
@@ -122,8 +112,6 @@ function ChartReports({ studentEmail }) {
   useEffect(() => {
     const fetchAllData = async () => {
       if (userEmail) {
-        setLoading(true);
-        setSuccess(false);
         try {
           const rqmData = {};
           for (const division of divisions) {
@@ -140,8 +128,6 @@ function ChartReports({ studentEmail }) {
         } catch (error) {
           setError("Error fetching data: " + error.message);
         } finally {
-          setLoading(false);
-          setSuccess(true);
         }
       }
     };
@@ -155,8 +141,6 @@ function ChartReports({ studentEmail }) {
   });
 
   useEffect(() => {
-    setLoading(true);
-    setSuccess(false);
     if (Object.keys(rqm).length && Object.keys(minReq).length) {
       setTotalDivReq({
         RSU: {
@@ -185,9 +169,6 @@ function ChartReports({ studentEmail }) {
     }
   }, [rqm, minReq]);
 
-  const [totalDivReq_RSU, setTotalDivReq_RSU] = useState({});
-  const [totalDivReq_DC, setTotalDivReq_DC] = useState({});
-  const [totalMinDivReq, setTotalMinDivReq] = useState({});
   const [percentReq, setPercentReq] = useState({});
 
   const calculateTotalMinRequirements = (minReqs) => {
@@ -212,8 +193,6 @@ function ChartReports({ studentEmail }) {
 
     return totalMinDivReq;
   };
-
-  const [totalFinalDivReq, setTotalFinalDivReq] = useState({});
 
   function calculateTotalDivRequirements(totalDivReqs) {
     let totalReqs = {};
@@ -252,25 +231,20 @@ function ChartReports({ studentEmail }) {
       };
     }
 
-    setCompleteReqsPercentage(percentReq);
     return percentReq;
   };
 
   useEffect(() => {
     if (Object.keys(totalDivReq).length && Object.keys(minReq).length) {
       const totalMinReq = calculateTotalMinRequirements(minReq);
-      setTotalMinDivReq(totalMinReq);
-
       const total = calculateTotalDivRequirements(totalDivReq);
-      setTotalFinalDivReq(total);
-      const percent = calculatePercentRequirements(
-        totalFinalDivReq,
-        totalMinReq
-      );
+
+      const percent = calculatePercentRequirements(total, totalMinReq);
       setPercentReq(percent);
-      setLoading(false);
-      setSuccess(true);
     }
+
+    // Data is ready; set loading to false
+    setLoading(false);
   }, [totalDivReq, minReq]);
 
   function transformPercentToNestedArray(percent, shortLabels) {
@@ -290,7 +264,7 @@ function ChartReports({ studentEmail }) {
       });
       percentageAll.push(values);
     });
-
+    
     return percentageAll;
   }
 
@@ -311,12 +285,11 @@ function ChartReports({ studentEmail }) {
         const result = await getCompcaseReqByStudentEmail(student.studentEmail);
         if (result && !result.error) {
           setCompReq(result);
-          setSuccess(true);
         }
       } catch (error) {
         console.error("Error fetching comp case requirements:", error);
       } finally {
-        setLoading(false);
+        setLoading(true);
       }
     }
   }, [student.studentEmail]);
@@ -357,7 +330,17 @@ function ChartReports({ studentEmail }) {
 
   return (
     <>
-      {success ? (
+      {loading ? (
+        <FadeIn>
+          <div>
+            <Container fluid>
+              <Row className="d-flex justify-content-center">
+                <Lottie options={defaultOptions} height={140} width={140} />
+              </Row>
+            </Container>
+          </div>
+        </FadeIn>
+      ) : (
         <Container className={theme === "dark" ? "container-dark" : ""}>
           <Row>
             <Col className="text-center" md={12}>
@@ -422,24 +405,6 @@ function ChartReports({ studentEmail }) {
             </Col>
           </Row>
         </Container>
-      ) : (
-        <FadeIn>
-          <div>
-            {!loading ? (
-              <Container fluid>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            ) : (
-              <Container fluid>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions2} height={140} width={140} />
-                </Row>
-              </Container>
-            )}
-          </div>
-        </FadeIn>
       )}
     </>
   );
