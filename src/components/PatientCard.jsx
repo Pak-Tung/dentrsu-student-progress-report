@@ -1,12 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  Badge,
-  Alert,
-} from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Badge, Alert } from "react-bootstrap";
 import ModalTxPlan from "./ModalTxPlan";
 import "../App.css";
 import { getAllStudents, getTxPlanByPatientHn } from "../features/apiCalls";
@@ -62,7 +55,9 @@ function PatientCard({ patients = [], updatePatients }) {
     if (email === "") {
       return "-";
     } else {
-      const student = students.find((student) => student.studentEmail === email);
+      const student = students.find(
+        (student) => student.studentEmail === email
+      );
       return student ? student.studentName : email;
     }
   };
@@ -85,7 +80,11 @@ function PatientCard({ patients = [], updatePatients }) {
             txPlanData[patient.hn] = result;
           }
         } catch (error) {
-          console.error("Error fetching tx plan data for patient HN:", patient.hn, error.message);
+          console.error(
+            "Error fetching tx plan data for patient HN:",
+            patient.hn,
+            error.message
+          );
         }
       }
       setTxPlans(txPlanData);
@@ -108,42 +107,45 @@ function PatientCard({ patients = [], updatePatients }) {
       }
       return patient;
     });
-  
+
     setNewPatients(updatedPatientsList);
     if (updatePatients) {
       updatePatients(updatedPatientsList);
     }
   };
 
-
   return (
     <>
       <Container fluid="md" className={`status-by-div-container ${theme}`}>
         {newPatients.length > 0 && (
-          <Row className="text-center">
-            <Col md={3}>
-              <strong>Total: {newPatients.length} patients</strong>
-            </Col>
-            <Col md={2}>
-              <strong>Accepted Date</strong> <br />
-            </Col>
-            <Col md={2}>
-              <strong>TxPlan Approved Date</strong>
-              <br />
-            </Col>
-            <Col md={2}>
-              <strong>Completed Date</strong>
-              <br />
-            </Col>
-            <Col md={1}>
-              <strong>Complexity</strong>
-              <br />
-            </Col>
-            <Col md={2}>
-              <strong>{role === "student" ? "Note" : "Operator"}</strong>
-              <br />
-            </Col>
-          </Row>
+          <>
+            <Row className="text-center">
+              <Col md={3}>
+                <strong>Total: {newPatients.length} patients</strong>
+              </Col>
+              <Col md={2}>
+                <strong>Accepted Date</strong> <br />
+              </Col>
+              <Col md={2}>
+                <strong>TxPlan Approved Date</strong>
+                <br />
+              </Col>
+              <Col md={2}>
+                <strong>Completed Date</strong>
+                <br />
+              </Col>
+              <Col md={1}>
+                <strong>Complexity</strong>
+                <br />
+              </Col>
+              {role !== "student" && (
+                <Col md={2}>
+                  <strong>Operator</strong>
+                  <br />
+                </Col>
+              )}
+            </Row>
+          </>
         )}
 
         {error && (
@@ -223,13 +225,18 @@ function PatientCard({ patients = [], updatePatients }) {
                         {patient.complexity}
                         <br />
                       </Col>
-                      <Col className="text-center" md={2}>
-                        {role === "student"
-                          ? patient.note
-                          : getStudentName(patient.studentEmail)}
-                        <br />
-                      </Col>
+                      {role !== "student" && (
+                        <Col className="text-center">
+                          {getStudentName(patient.studentEmail)}
+                          <br />
+                        </Col>
+                      )}
                     </Row>
+                      <Row>
+                        <Col md={12}>
+                          Note: <strong> {patient.note}</strong>
+                        </Col>
+                      </Row>
                   </ListGroup.Item>
                 );
               })

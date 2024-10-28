@@ -27,14 +27,10 @@ function CompSubmit() {
                 <h4>Complete Case Submission</h4>
               </Col>
             </Row>
-            <Row>
-              <Col></Col>
-              <Col md={6} className="text-center">
-                <CompForm />
-              </Col>
-              <Col></Col>
-            </Row>
           </Container>
+          <div className="d-flex justify-content-center">
+            <CompForm />
+          </div>
         </>
       ) : (
         <div>
