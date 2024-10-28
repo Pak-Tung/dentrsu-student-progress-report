@@ -18,6 +18,7 @@ import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import SumByDivAndStudentEmail from "../Reports/SumByDivAndStudentEmail";
+import ChartReports from "../Reports/ChartReports";
 
 const defaultOptions = {
   loop: true,
@@ -37,10 +38,12 @@ function StudentAllReq() {
 
   const [student, setStudent] = useState(null);
   const [divisions, setDivisions] = useState([]);
-  const [selectedDivision, setSelectedDivision] = useState("all");
+  const [selectedDivision, setSelectedDivision] = useState(null);
   const [selectedDivisionName, setSelectedDivisionName] =
     useState("Select Division");
   const [studentId, setStudentId] = useState("");
+  // Add this state for toggling ChartReports visibility
+  const [showChartReports, setShowChartReports] = useState(true);
 
   useEffect(() => {
     const fetchDivisionsData = async () => {
@@ -91,6 +94,7 @@ function StudentAllReq() {
   };
 
   const renderDivisionComponent = () => {
+    if (!selectedDivision) return null;
     const divNames = [
       "oper",
       "endo",
@@ -188,6 +192,30 @@ function StudentAllReq() {
             fluid="md"
             className={theme === "dark" ? "container-dark" : ""}
           >
+            {/* Toggle Button */}
+            <Row className="d-flex justify-content-center mb-3">
+              <Button
+                variant={theme === "dark" ? "secondary" : "dark"}
+                onClick={() => setShowChartReports((prev) => !prev)}
+              >
+                {showChartReports
+                  ? "Hide Charts"
+                  : "Show Overall Requirement Charts"}
+              </Button>
+            </Row>
+
+            {/* Conditionally Render ChartReports */}
+            {showChartReports && student?.studentEmail && (
+              <ChartReports studentEmail={student.studentEmail} />
+            )}
+
+            {!selectedDivision && (
+              <Row className="d-flex justify-content-center mb-3">
+                <Col xs={12} className="text-center">
+                  <h5>Select division to display requirement by items</h5>
+                </Col>
+              </Row>
+            )}
             <Row className="d-flex justify-content-center">
               <Col>
                 <div className="d-flex justify-content-center">

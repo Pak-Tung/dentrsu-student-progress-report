@@ -17,16 +17,19 @@ import SumByDivAndStudentEmail from "../Reports/SumByDivAndStudentEmail";
 import CompByStudentEmail from "../Reports/CompByStudentEmail";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
+import ChartReports from "../Reports/ChartReports";
 
 function ModalStudent({ show, handleClose, student }) {
   const { theme } = useContext(ThemeContext);
   const [req, setReq] = useState([]);
   const [divisions, setDivisions] = useState([]);
-  const [selectedDivision, setSelectedDivision] = useState("all");
-  const [selectedDivisionName, setSelectedDivisionName] =
-    useState("Select Division");
+  const [selectedDivision, setSelectedDivision] = useState(null);
+  const [selectedDivisionName, setSelectedDivisionName] = useState("Select Division");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Add this state for toggling ChartReports visibility
+  const [showChartReports, setShowChartReports] = useState(true);
 
   useEffect(() => {
     const fetchReqData = async () => {
@@ -69,6 +72,9 @@ function ModalStudent({ show, handleClose, student }) {
   };
 
   const renderDivisionComponent = () => {
+    if (!selectedDivision) {
+      return null;
+    }
     const divisionComponents = {
       all: (
         <Container fluid="md">
@@ -139,9 +145,7 @@ function ModalStudent({ show, handleClose, student }) {
     <Modal show={show} onHide={handleClose} fullscreen={true} className={modalClass}>
       <Modal.Header closeButton className={modalHeaderFooterClass}>
         <Modal.Title className="text-center">
-          {student
-            ? `${student.studentId} ${student.title} ${student.studentName}`
-            : "Student Details"}
+          {student ? `${student.studentId} ${student.title} ${student.studentName}` : "Student Details"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={modalClass}>
@@ -152,9 +156,7 @@ function ModalStudent({ show, handleClose, student }) {
                 <div className="d-flex justify-content-center">
                   <p>
                     Year:
-                    <strong>
-                      {calculateStudentYear(student.startClinicYear)}th
-                    </strong>{" "}
+                    <strong>{calculateStudentYear(student.startClinicYear)}th</strong>{" "}
                     {"   "}
                     Bay:
                     <strong>
@@ -166,9 +168,7 @@ function ModalStudent({ show, handleClose, student }) {
                       bg={student.status === "Complete" ? "success" : "danger"}
                       className={badgeClass}
                     >
-                      {student.status === "Complete"
-                        ? "Complete"
-                        : "Incomplete"}
+                      {student.status === "Complete" ? "Complete" : "Incomplete"}
                     </Badge>
                   </p>
                 </div>
@@ -177,6 +177,23 @@ function ModalStudent({ show, handleClose, student }) {
               )}
             </Col>
           </Row>
+
+          {/* Toggle Button */}
+          <Row className="d-flex justify-content-center mb-3">
+            <Button
+              variant={theme === 'dark' ? 'secondary' : 'dark'}
+              onClick={() => setShowChartReports((prev) => !prev)}
+            >
+              {showChartReports ? 'Hide Charts' : 'Show Overall Requirement Charts'}
+            </Button>
+          </Row>
+
+          {/* Conditionally Render ChartReports */}
+          {showChartReports && student?.studentEmail && (
+            <ChartReports studentEmail={student.studentEmail} />
+          )}
+
+          {/* Rest of your component rendering */}
           <Row className="d-flex justify-content-center">
             <Col>
               <div className="d-flex justify-content-center">
@@ -184,18 +201,12 @@ function ModalStudent({ show, handleClose, student }) {
                   id="dropdown-basic-button"
                   title={selectedDivisionName}
                   onSelect={handleSelectDivision}
-                  //className={dropdownClass}
                   variant={theme === 'dark' ? "secondary" : "dark"}
                 >
                   <Dropdown.Item eventKey="all">All Divisions</Dropdown.Item>
-                  <Dropdown.Item eventKey="completeCases">
-                    Complete Cases
-                  </Dropdown.Item>
+                  <Dropdown.Item eventKey="completeCases">Complete Cases</Dropdown.Item>
                   {divisions.map((division) => (
-                    <Dropdown.Item
-                      key={division.id}
-                      eventKey={division.shortName}
-                    >
+                    <Dropdown.Item key={division.id} eventKey={division.shortName}>
                       {division.fullName}
                     </Dropdown.Item>
                   ))}
@@ -204,6 +215,13 @@ function ModalStudent({ show, handleClose, student }) {
             </Col>
           </Row>
           <br />
+          {!selectedDivision && (
+            <Row className="d-flex justify-content-center mb-3">
+              <Col xs={12} className="text-center">
+                <h5>Select division to display requirement by items</h5>
+              </Col>
+            </Row>
+          )}
           <Row className="d-flex justify-content-center">
             <div className="d-flex justify-content-center">
               {renderDivisionComponent()}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { getStudentByEmail } from "../../features/apiCalls";
 import { Container, Row, Col, Badge, Button } from "react-bootstrap";
+import Cookies from "js-cookie";
 import "../../Navbar.css";
 import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
@@ -60,6 +61,7 @@ const ShortLabels = [
 ];
 
 function ChartReports({ studentEmail }) {
+  const role = Cookies.get("role");
   const { theme } = useContext(ThemeContext);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -264,7 +266,7 @@ function ChartReports({ studentEmail }) {
       });
       percentageAll.push(values);
     });
-    
+
     return percentageAll;
   }
 
@@ -342,25 +344,27 @@ function ChartReports({ studentEmail }) {
         </FadeIn>
       ) : (
         <Container className={theme === "dark" ? "container-dark" : ""}>
-          <Row>
-            <Col className="text-center" md={12}>
-              <h2>
-                {student.title + " " + student.studentName + " "}
-                <Badge
-                  bg={
-                    student.status === "Complete"
-                      ? "success"
-                      : theme === "dark"
-                      ? "badge-dark"
-                      : "danger"
-                  }
-                >
-                  {student.status === "Complete" ? "Complete" : "Incomplete"}
-                </Badge>
-              </h2>
-              <hr />
-            </Col>
-          </Row>
+          {role === "student" && (
+            <Row>
+              <Col className="text-center" md={12}>
+                <h2>
+                  {student.title + " " + student.studentName + " "}
+                  <Badge
+                    bg={
+                      student.status === "Complete"
+                        ? "success"
+                        : theme === "dark"
+                        ? "badge-dark"
+                        : "danger"
+                    }
+                  >
+                    {student.status === "Complete" ? "Complete" : "Incomplete"}
+                  </Badge>
+                </h2>
+                <hr />
+              </Col>
+            </Row>
+          )}
           <Row className="d-flex justify-content-center mb-2">
             <Col className="text-center" md={12}>
               <h5>RSU Requirements</h5>
@@ -394,16 +398,18 @@ function ChartReports({ studentEmail }) {
             </Col>
             <Col md={2}></Col>
           </Row>
-          <Row>
-            <Col className="d-flex justify-content-center mb-2">
-              <Button
-                onClick={handleRequest}
-                className={theme === "dark" ? "button-dark" : ""}
-              >
-                Request Complete Status
-              </Button>
-            </Col>
-          </Row>
+          {role === "student" && (
+            <Row>
+              <Col className="d-flex justify-content-center mb-2">
+                <Button
+                  onClick={handleRequest}
+                  className={theme === "dark" ? "button-dark" : ""}
+                >
+                  Request Complete Status
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Container>
       )}
     </>
