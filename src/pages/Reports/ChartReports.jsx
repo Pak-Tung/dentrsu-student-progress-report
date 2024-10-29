@@ -219,22 +219,23 @@ function ChartReports({ studentEmail }) {
 
   const calculatePercentRequirements = (totalReqs, minReqs) => {
     const percentReq = {};
-
+  
     for (const division in totalReqs) {
       percentReq[division] = {
         RSU:
           minReqs[division]?.RSU > 0
-            ? (totalReqs[division].RSU / minReqs[division].RSU) * 100
+            ? Math.min((totalReqs[division].RSU / minReqs[division].RSU) * 100, 100.0)
             : 0,
         CDA:
           minReqs[division]?.CDA > 0
-            ? (totalReqs[division].CDA / minReqs[division].CDA) * 100
+            ? Math.min((totalReqs[division].CDA / minReqs[division].CDA) * 100, 100.0)
             : 0,
       };
     }
-
+  
     return percentReq;
   };
+  
 
   useEffect(() => {
     if (Object.keys(totalDivReq).length && Object.keys(minReq).length) {
