@@ -66,4 +66,19 @@
   opacity: 1 !important; /* Ensure full opacity */
 }
 
+.center-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+}
+
+.center-div {
+  width: 50%;
+  height: 50%;
+}
+
+.mt-5 {
+  margin-top: 5 !important;
+}
 
