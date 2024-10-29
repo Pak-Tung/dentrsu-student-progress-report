@@ -253,7 +253,7 @@ function Profile() {
                     theme === "dark" ? "bg-dark text-white" : ""
                   }`}
                 >
-                  {teamLeader.title}. {teamLeader.instructorName}
+                  {teamLeader.title}{teamLeader.instructorName}
                 </li>
               </ul>
               <div
