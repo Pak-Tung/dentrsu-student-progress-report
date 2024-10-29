@@ -45,3 +45,7 @@
     position: sticky;
     top: 0;
   }
+
+  .logo-navbar-div {
+    margin-left: 10px;
+  }

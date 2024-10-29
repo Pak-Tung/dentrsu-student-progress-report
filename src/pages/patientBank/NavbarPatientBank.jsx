@@ -22,56 +22,69 @@ function NavBarPatientBank() {
   }, []);
   return (
     <Navbar
-    expand="md"
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <Navbar.Brand href="/">DentRSU Connect</Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="ml-auto w-100 justify-content-between">
-        <NavDropdown 
-          title="บัตรผู้ป่วย" 
-          id="nav-charts" 
-          className="flex-fill"
-        >
-          <NavDropdown.Item href="/addNewPatient">
-            เพิ่มผู้ป่วยใหม่
-          </NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="/assignPatientToInstructor">
-            แก้ไขข้อมูลผู้ป่วย
-          </NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="/addMultiNewPatient">
-            เพิ่มผู้ป่วยเป็นกลุ่ม
-          </NavDropdown.Item>
-        </NavDropdown>
-        <NavDropdown 
-          title="ค้นหาผู้ป่วย" 
-          id="nav-patients" 
-          className="flex-fill"
-        >
-          <NavDropdown.Item href="/searchPatientByHn">
-            ค้นหาโดยเลขที่บัตรผู้ป่วย
-          </NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="/searchPatientByStudent">
-            ค้นหาโดยรหัสนักศึกษาผู้รับเคส
-          </NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="/searchPatientByInstructor">
-            ค้นหาโดยอาจารย์ที่ปรึกษา
-          </NavDropdown.Item>
+      expand="md"
+      className="navbar navbar-expand-lg navbar-light bg-light"
+    >
+      <div className="logo-navbar-div">
+        <Navbar.Brand href="/">
+          <img
+            src="/logo_navbar.png"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="DentRSU Connect"
+          />
+        </Navbar.Brand>
+      </div>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="ml-auto w-100 justify-content-between">
+          <NavDropdown
+            title="บัตรผู้ป่วย"
+            id="nav-charts"
+            className="flex-fill"
+          >
+            <NavDropdown.Item href="/addNewPatient">
+              เพิ่มผู้ป่วยใหม่
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/assignPatientToInstructor">
+              แก้ไขข้อมูลผู้ป่วย
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/addMultiNewPatient">
+              เพิ่มผู้ป่วยเป็นกลุ่ม
+            </NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown
+            title="ค้นหาผู้ป่วย"
+            id="nav-patients"
+            className="flex-fill"
+          >
+            <NavDropdown.Item href="/searchPatientByHn">
+              ค้นหาโดยเลขที่บัตรผู้ป่วย
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/searchPatientByStudent">
+              ค้นหาโดยรหัสนักศึกษาผู้รับเคส
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="/searchPatientByInstructor">
+              ค้นหาโดยอาจารย์ที่ปรึกษา
+            </NavDropdown.Item>
+          </NavDropdown>
 
-        </NavDropdown>
-
-        <NavDropdown title="โปรไฟล์" id="nav-profile-patient-bank" className="flex-fill">
-          <NavDropdown.Item href="/">โปรไฟล์</NavDropdown.Item>
-        </NavDropdown>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-  )
+          <NavDropdown
+            title="โปรไฟล์"
+            id="nav-profile-patient-bank"
+            className="flex-fill"
+          >
+            <NavDropdown.Item href="/">โปรไฟล์</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+  );
 }
 
 export default NavBarPatientBank;

@@ -22,21 +22,47 @@ function NavbarRoot() {
   }, []);
 
   return (
-    <Navbar expand="md" className="navbar navbar-expand-lg navbar-light bg-light">
-      <Navbar.Brand href="/">ROOT: {user.email ? user.email : "User.email@rsu.ac.th"}</Navbar.Brand>
+    <Navbar
+      expand="md"
+      className="navbar navbar-expand-lg navbar-light bg-light"
+    >
+      <div className="logo-navbar-div">
+        <Navbar.Brand href="/">
+          <img
+            src="/logo_navbar.png"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="DentRSU Connect"
+          />
+          {user.email ? " " + user.email : "User.email@rsu.ac.th"}
+        </Navbar.Brand>
+      </div>{" "}
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto w-100 justify-content-between">
-          <NavDropdown title="User Management" id="nav-userManagement" className="flex-fill">
+          <NavDropdown
+            title="User Management"
+            id="nav-userManagement"
+            className="flex-fill"
+          >
             <NavDropdown.Item href="/addUser">User</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/editInstructors">Instructors</NavDropdown.Item>
+            <NavDropdown.Item href="/editInstructors">
+              Instructors
+            </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/editStudents">Students</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/uploadPatientsCSV">Patients</NavDropdown.Item>
+            <NavDropdown.Item href="/uploadPatientsCSV">
+              Patients
+            </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Division Management" id="nav-divisionManagement" className="flex-fill">
+          <NavDropdown
+            title="Division Management"
+            id="nav-divisionManagement"
+            className="flex-fill"
+          >
             <NavDropdown.Item href="/addDivision">Division</NavDropdown.Item>
           </NavDropdown>
           <Nav.Item className="flex-fill">

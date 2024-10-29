@@ -25,7 +25,17 @@ function NavbarSupervisor() {
         expand="md"
         className="navbar navbar-expand-lg navbar-light bg-light"
       >
-        <Navbar.Brand href="/">DentRSU Connect</Navbar.Brand>
+        <div className="logo-navbar-div">
+        <Navbar.Brand href="/">
+          <img
+            src="/logo_navbar.png"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="DentRSU Connect"
+          />
+        </Navbar.Brand>
+      </div>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto w-100 justify-content-between">

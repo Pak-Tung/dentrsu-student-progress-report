@@ -31,17 +31,29 @@ function NavbarStudent() {
       expand="md"
       className={`navbar navbar-expand-lg navbar-${theme} bg-${theme}`}
     >
-      <Navbar.Brand href="/">DentRSU Connect</Navbar.Brand>
+      <div className="logo-navbar-div">
+        <Navbar.Brand href="/">
+          <img
+            src="/logo_navbar.png"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="DentRSU Connect"
+          />
+        </Navbar.Brand>
+      </div>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto w-100 justify-content-between">
           <NavDropdown title="Patients" id="nav-patients" className="flex-fill">
-            <NavDropdown.Item href="/allPatients">All patients</NavDropdown.Item>
+            <NavDropdown.Item href="/allPatients">
+              All patients
+            </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown 
-            title="Submission" 
-            id="nav-submit" 
-            className="flex-fill" 
+          <NavDropdown
+            title="Submission"
+            id="nav-submit"
+            className="flex-fill"
             //disabled
           >
             <NavDropdown.Item href="/reqSubmit">Requirement</NavDropdown.Item>
@@ -62,11 +74,7 @@ function NavbarStudent() {
               Complete cases
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown 
-            title="Overview" 
-            id="nav-overview" 
-            className="flex-fill" 
-          >
+          <NavDropdown title="Overview" id="nav-overview" className="flex-fill">
             <NavDropdown.Item href="/overview">
               Requirement Overview
             </NavDropdown.Item>
@@ -79,11 +87,7 @@ function NavbarStudent() {
               Overall Requirement Chart
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown 
-            title="Profile" 
-            id="nav-profile" 
-            className="flex-fill"
-          >
+          <NavDropdown title="Profile" id="nav-profile" className="flex-fill">
             <NavDropdown.Item href="/">Profile</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={toggleTheme}>

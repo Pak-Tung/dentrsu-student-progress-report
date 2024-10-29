@@ -28,7 +28,17 @@ function NavbarInstructor() {
       expand="md"
       className={`navbar navbar-expand-lg navbar-${theme} bg-${theme}`}
     >
-      <Navbar.Brand href="/">DentRSU Connect</Navbar.Brand>
+      <div className="logo-navbar-div">
+        <Navbar.Brand href="/">
+          <img
+            src="/logo_navbar.png"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="DentRSU Connect"
+          />
+        </Navbar.Brand>
+      </div>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto w-100 justify-content-between">
@@ -41,8 +51,14 @@ function NavbarInstructor() {
               Treatment Approval
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Requirements" id="nav-approval" className="flex-fill">
-            <NavDropdown.Item href="/reqApproval">Requirement Approval</NavDropdown.Item>
+          <NavDropdown
+            title="Requirements"
+            id="nav-approval"
+            className="flex-fill"
+          >
+            <NavDropdown.Item href="/reqApproval">
+              Requirement Approval
+            </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compApproval">
               Complete cases Approval
@@ -52,7 +68,7 @@ function NavbarInstructor() {
               Student Complete Status Approval
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Member" id="nav-member" className="flex-fill" >
+          <NavDropdown title="Member" id="nav-member" className="flex-fill">
             <NavDropdown.Item href="/memberInTeam">
               Member in Team
             </NavDropdown.Item>
