@@ -80,7 +80,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
       } else if (
         response &&
         response.status === 200 &&
-        response.message === "OTP verified successfully."
+        userOTP !==  ""
       ) {
         //console.log(response);
         const token = response.token;
@@ -91,10 +91,15 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
         setMessage("OTP verified successfully. Logging you in...");
         setOtpVerified(true); // Notify parent component that OTP was verified
         handleLoginSuccess();
-      } else {
+      } else if (response && response === "OTP verification failed. Incorrect OTP.") {
         setError(
           "OTP verification failed. Please check your OTP and try again."
         );
+      } else {
+        setError(
+          error.response.data.message || "An error occurred. Please try again."
+        );
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
