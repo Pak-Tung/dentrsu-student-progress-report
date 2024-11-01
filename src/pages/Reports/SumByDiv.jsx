@@ -66,6 +66,7 @@ function SumByDiv({ division }) {
     const fetchData = async () => {
       try {
         const result = await getDivReqByStudentEmail(userEmail, division);
+        //console.log(division, "Req Data:", result);
         setRqm(result);
       } catch (error) {
         setError("Error fetching data:", error);

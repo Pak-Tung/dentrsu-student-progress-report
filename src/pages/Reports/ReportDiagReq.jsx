@@ -16,7 +16,7 @@ const defaultOptions = {
   },
 };
 
-function ReportDiagReq({ divisionR }) {
+function ReportDiagReq(divisionR) {
   const { theme } = useContext(ThemeContext);
   const [show, setShow] = useState(false);
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
@@ -136,9 +136,7 @@ function ReportDiagReq({ divisionR }) {
           <Col xs={12} md={8}>
             <strong>CDA Requirement</strong>
           </Col>
-          <Col xs={12} md={4} className="text-center">
-            
-          </Col>
+          <Col xs={12} md={4} className="text-center"></Col>
         </Row>
         {Object.entries(totalReq.CDA).map(([key, value]) => {
           return (

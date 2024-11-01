@@ -45,16 +45,6 @@ export const getTotalReqByDivisionAndType = async (email) => {
   const reqOrtho = sumRequirements(reqResults[7]);
   const reqPedo = sumRequirements(reqResults[8]);
 
-  //   console.log("Oper Requirements:", reqOper);
-  //   console.log("Perio Requirements:", reqPerio);
-  //   console.log("Endo Requirements:", reqEndo);
-  //   console.log("Prosth Requirements:", reqProsth);
-  //   console.log("Diag Requirements:", reqDiag);
-  //   console.log("Radio Requirements:", reqRadio);
-  //   console.log("Sur Requirements:", reqSur);
-  //   console.log("Ortho Requirements:", reqOrtho);
-  //   console.log("Pedo Requirements:", reqPedo);
-
   return [
     reqOper,
     reqPerio,

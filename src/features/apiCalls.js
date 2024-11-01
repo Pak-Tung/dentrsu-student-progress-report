@@ -1,13 +1,13 @@
-import axios from "axios";
-import { api } from "./mainApi";
-const host = api();
+//import apiClient from "apiClient";
+import  apiClient  from "./mainApi";
+//const host = apiClient();
 
 //const host = 'https://dentrsu-0b0ffade06fd.herokuapp.com';//'http://localhost:3001'; //
 
 export const getJwtToken = async (user) => {
   try {
-    const response = await axios.post(
-      `${host}/api/students/create-token`,
+    const response = await apiClient.post(
+      `/api/students/create-token`,
       user
     );
     return response;
@@ -18,7 +18,7 @@ export const getJwtToken = async (user) => {
 
 export const getAllUsers = async () => {
   try {
-    const response = await axios.get(`${host}/api/students/api/users`);
+    const response = await apiClient.get(`/api/students/api/users`);
     return response;
   } catch (error) {
     return error;
@@ -27,7 +27,7 @@ export const getAllUsers = async () => {
 
 export const getAllStudents = async () => {
   try {
-    const response = await axios.get(`${host}/api/students`);
+    const response = await apiClient.get(`/api/students`);
     return response;
   } catch (error) {
     return error;
@@ -36,8 +36,8 @@ export const getAllStudents = async () => {
 
 export const getStudentByEmail = async (studentEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/studentEmail/${studentEmail}`
+    const response = await apiClient.get(
+      `/api/students/studentEmail/${studentEmail}`
     );
     return response.data;
   } catch (error) {
@@ -47,7 +47,7 @@ export const getStudentByEmail = async (studentEmail) => {
 
 export const getStudentById = async (studentId) => {
   try {
-    const response = await axios.get(`${host}/api/students/${studentId}`);
+    const response = await apiClient.get(`/api/students/${studentId}`);
     return response.data;
   } catch (error) {
     return error;
@@ -56,7 +56,7 @@ export const getStudentById = async (studentId) => {
 
 export const insertStudent = async (student) => {
   try {
-    const response = await axios.post(`${host}/api/students`, student);
+    const response = await apiClient.post(`/api/students`, student);
     return response.data;
   } catch (error) {
     return error;
@@ -65,8 +65,8 @@ export const insertStudent = async (student) => {
 
 export const updateStudent = async (studentId, student) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/${studentId}`,
+    const response = await apiClient.put(
+      `/api/students/${studentId}`,
       student
     );
     return response.data;
@@ -77,7 +77,7 @@ export const updateStudent = async (studentId, student) => {
 
 export const deleteStudent = async (studentId) => {
   try {
-    const response = await axios.delete(`${host}/api/students/${studentId}`);
+    const response = await apiClient.delete(`/api/students/${studentId}`);
     return response.data;
   } catch (error) {
     return error;
@@ -86,7 +86,7 @@ export const deleteStudent = async (studentId) => {
 
 export const getReqByDivision = async (division) => {
   try {
-    const response = await axios.get(`${host}/api/students/reqs/${division}`);
+    const response = await apiClient.get(`/api/students/reqs/${division}`);
     //console.log("responseAPI", response);
     return response.data;
   } catch (error) {
@@ -128,8 +128,8 @@ export const insertDivisionReq = async (req, division) => {
       break;
   }
   try {
-    const response = await axios.post(
-      `${host}/api/students/reqs/${division}`,
+    const response = await apiClient.post(
+      `/api/students/reqs/${division}`,
       req
     );
     return response.data;
@@ -140,7 +140,7 @@ export const insertDivisionReq = async (req, division) => {
 
 export const insertOperReq = async (req) => {
   try {
-    const response = await axios.post(`${host}/api/students/reqs/operReq`, req);
+    const response = await apiClient.post(`/api/students/reqs/operReq`, req);
     return response.data;
   } catch (error) {
     console.log("errorAPI", error);
@@ -150,8 +150,8 @@ export const insertOperReq = async (req) => {
 
 export const getOperReqByStudentEmail = async (studentEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/reqs/operReq/${studentEmail}`
+    const response = await apiClient.get(
+      `/api/students/reqs/operReq/${studentEmail}`
     );
     return response.data;
   } catch (error) {
@@ -161,8 +161,8 @@ export const getOperReqByStudentEmail = async (studentEmail) => {
 
 export const getOperReqById = async (id, req) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/reqs/operReq/id/${id}`,
+    const response = await apiClient.get(
+      `/api/students/reqs/operReq/id/${id}`,
       req
     );
     return response.data;
@@ -173,8 +173,8 @@ export const getOperReqById = async (id, req) => {
 
 export const updateOperReqById = async (id, req) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/reqs/operReqUpdate/id/${id}`,
+    const response = await apiClient.put(
+      `/api/students/reqs/operReqUpdate/id/${id}`,
       req
     );
     return response.data;
@@ -185,7 +185,7 @@ export const updateOperReqById = async (id, req) => {
 
 export const getAllDivisions = async () => {
   try {
-    const response = await axios.get(`${host}/api/students/divisions/division`);
+    const response = await apiClient.get(`/api/students/divisions/division`);
     //console.log("responseAPI", response);
     return response.data;
   } catch (error) {
@@ -227,8 +227,8 @@ export const getDivReqByStudentEmail = async (studentEmail, division) => {
   }
   try {
     //console.log("division in API", division);
-    const response = await axios.get(
-      `${host}/api/students/reqs/${division}/${studentEmail}`
+    const response = await apiClient.get(
+      `/api/students/reqs/${division}/${studentEmail}`
     );
     return response.data;
   } catch (error) {
@@ -269,8 +269,8 @@ export const getDivReqById = async (id, division) => {
       break;
   }
   try {
-    const response = await axios.get(
-      `${host}/api/students/reqs/${division}/id/${id}`
+    const response = await apiClient.get(
+      `/api/students/reqs/${division}/id/${id}`
     );
     return response.data;
   } catch (error) {
@@ -311,8 +311,8 @@ export const updateDivReqById = async (id, req, division) => {
       break;
   }
   try {
-    const response = await axios.put(
-      `${host}/api/students/reqs/${division}/id/${id}`,
+    const response = await apiClient.put(
+      `/api/students/reqs/${division}/id/${id}`,
       req
     );
     return response.data;
@@ -324,7 +324,7 @@ export const updateDivReqById = async (id, req, division) => {
 //Instructors
 export const getAllInstructors = async () => {
   try {
-    const response = await axios.get(`${host}/api/students/all/instructors`);
+    const response = await apiClient.get(`/api/students/all/instructors`);
     return response.data;
   } catch (error) {
     return error;
@@ -333,8 +333,8 @@ export const getAllInstructors = async () => {
 
 export const getInstructorByEmail = async (instructorEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/instructors/instructorEmail/${instructorEmail}`
+    const response = await apiClient.get(
+      `/api/students/instructors/instructorEmail/${instructorEmail}`
     );
     return response.data;
   } catch (error) {
@@ -377,8 +377,8 @@ export const getDivReqByInstructorEmail = async (instructorEmail, division) => {
   }
   try {
     //console.log("division in API", division);
-    const response = await axios.get(
-      `${host}/api/students/reqs/${division}/instructorEmail/${instructorEmail}`
+    const response = await apiClient.get(
+      `/api/students/reqs/${division}/instructorEmail/${instructorEmail}`
     );
     //"/reqs/operReq/instructorEmail/:instructorEmail"
     return response.data;
@@ -389,7 +389,7 @@ export const getDivReqByInstructorEmail = async (instructorEmail, division) => {
 
 export const getUserByEmail = async (userEmail) => {
   try {
-    const response = await axios.get(`${host}/api/students/users/${userEmail}`);
+    const response = await apiClient.get(`/api/students/users/${userEmail}`);
     return response.data;
   } catch (error) {
     return error;
@@ -398,7 +398,7 @@ export const getUserByEmail = async (userEmail) => {
 
 export const getCompcasesDetails = async () => {
   try {
-    const response = await axios.get(`${host}/api/students/compcases/details`);
+    const response = await apiClient.get(`/api/students/compcases/details`);
     return response.data;
   } catch (error) {
     return error;
@@ -407,8 +407,8 @@ export const getCompcasesDetails = async () => {
 
 export const getInstructorsByTeamleaderRole = async (roleId) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/instructors/teamleaderRole/${roleId}`
+    const response = await apiClient.get(
+      `/api/students/instructors/teamleaderRole/${roleId}`
     );
     return response.data;
   } catch (error) {
@@ -419,8 +419,8 @@ export const getInstructorsByTeamleaderRole = async (roleId) => {
 export const insertCompletedCase = async (compCase) => {
   //console.log("compCase", compCase);
   try {
-    const response = await axios.post(
-      `${host}/api/students/reqs/c/compcases`,
+    const response = await apiClient.post(
+      `/api/students/reqs/c/compcases`,
       compCase
     );
     return response.data;
@@ -431,8 +431,8 @@ export const insertCompletedCase = async (compCase) => {
 
 export const getCompcaseReqByStudentEmail = async (studentEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/compcases/studentEmail/${studentEmail}`
+    const response = await apiClient.get(
+      `/api/students/compcases/studentEmail/${studentEmail}`
     );
     return response.data;
   } catch (error) {
@@ -442,8 +442,8 @@ export const getCompcaseReqByStudentEmail = async (studentEmail) => {
 
 export const updateCompReqById = async (id, req) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/reqs/c/compcases/id/${id}`,
+    const response = await apiClient.put(
+      `/api/students/reqs/c/compcases/id/${id}`,
       req
     );
     return response.data;
@@ -454,8 +454,8 @@ export const updateCompReqById = async (id, req) => {
 
 export const getCompReqByInstructorEmail = async (instructorEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/compcases/instructorEmail/${instructorEmail}`
+    const response = await apiClient.get(
+      `/api/students/compcases/instructorEmail/${instructorEmail}`
     );
     return response.data;
   } catch (error) {
@@ -465,8 +465,8 @@ export const getCompReqByInstructorEmail = async (instructorEmail) => {
 
 export const getStudentByTeamleaderEmail = async (teamleaderEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/students/teamleaderEmail/${teamleaderEmail}`
+    const response = await apiClient.get(
+      `/api/students/students/teamleaderEmail/${teamleaderEmail}`
     );
     return response.data;
   } catch (error) {
@@ -510,8 +510,8 @@ export const getStudentByDivInstructorEmail = async (
       break;
   }
   try {
-    const response = await axios.get(
-      `${host}/api/students/students/${division}/${instructorEmail}`
+    const response = await apiClient.get(
+      `/api/students/students/${division}/${instructorEmail}`
     );
     return response.data;
   } catch (error) {
@@ -521,8 +521,8 @@ export const getStudentByDivInstructorEmail = async (
 
 export const getAllReqByDivision = async (division) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/reqs/division/${division}`
+    const response = await apiClient.get(
+      `/api/students/reqs/division/${division}`
     );
     //console.log("responseAPI", response);
     return response.data;
@@ -536,8 +536,8 @@ export const updateInstructorDivByInstructorEmail = async (
   division
 ) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/instructors/division/instructorEmail/${instructorEmail}`,
+    const response = await apiClient.put(
+      `/api/students/instructors/division/instructorEmail/${instructorEmail}`,
       division
     );
     return response.data;
@@ -548,8 +548,8 @@ export const updateInstructorDivByInstructorEmail = async (
 
 export const getInstructorsByDivision = async (division) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/instructors/${division}`
+    const response = await apiClient.get(
+      `/api/students/instructors/${division}`
     );
     return response.data;
   } catch (error) {
@@ -559,7 +559,7 @@ export const getInstructorsByDivision = async (division) => {
 
 export const insertUser = async (user) => {
   try {
-    const response = await axios.post(`${host}/api/students/add/users`, user);
+    const response = await apiClient.post(`/api/students/add/users`, user);
     return response.data;
   } catch (error) {
     return error;
@@ -568,8 +568,8 @@ export const insertUser = async (user) => {
 
 export const updateMinReqById = async (id, req) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/reqs/minReq/id/${id}`,
+    const response = await apiClient.put(
+      `/api/students/reqs/minReq/id/${id}`,
       req
     );
     return response.data;
@@ -583,8 +583,8 @@ export const updateStudentDivInstructorByDivInstructorEmail = async (
   formData
 ) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/students/division/instructorEmail/${studentId}`,
+    const response = await apiClient.put(
+      `/api/students/students/division/instructorEmail/${studentId}`,
       formData
     );
     return response.data;
@@ -595,8 +595,8 @@ export const updateStudentDivInstructorByDivInstructorEmail = async (
 
 export const insertInstructor = async (instructor) => {
   try {
-    const response = await axios.post(
-      `${host}/api/students/add/instructors`,
+    const response = await apiClient.post(
+      `/api/students/add/instructors`,
       instructor
     );
     return response.data;
@@ -607,8 +607,8 @@ export const insertInstructor = async (instructor) => {
 
 export const updateUserById = async (id, user) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/update/users/${id}`,
+    const response = await apiClient.put(
+      `/api/students/update/users/${id}`,
       user
     );
     return response.data;
@@ -619,8 +619,8 @@ export const updateUserById = async (id, user) => {
 
 export const updateInstructorByInstructorId = async (id, instructor) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/update/instructors/instructorId/${id}`,
+    const response = await apiClient.put(
+      `/api/students/update/instructors/instructorId/${id}`,
       instructor
     );
     return response.data;
@@ -632,8 +632,8 @@ export const updateInstructorByInstructorId = async (id, instructor) => {
 export const updateRequestByStudentEmail = async (studentEmail, request) => {
   //console.log("request", request);
   try {
-    const response = await axios.put(
-      `${host}/api/students/update/requests/studentEmail/${studentEmail}`,
+    const response = await apiClient.put(
+      `/api/students/update/requests/studentEmail/${studentEmail}`,
       request
     );
     return response.data;
@@ -645,8 +645,8 @@ export const updateRequestByStudentEmail = async (studentEmail, request) => {
 export const updateStatusByStudentEmail = async (studentEmail, status) => {
   //console.log("status", status);
   try {
-    const response = await axios.put(
-      `${host}/api/students/update/status/studentEmail/${studentEmail}`,
+    const response = await apiClient.put(
+      `/api/students/update/status/studentEmail/${studentEmail}`,
       status
     );
     return response.data;
@@ -657,8 +657,8 @@ export const updateStatusByStudentEmail = async (studentEmail, status) => {
 
 export const deleteCompReqById = async (id) => {
   try {
-    const response = await axios.delete(
-      `${host}/api/students/reqs/d/compcases/id/${id}`
+    const response = await apiClient.delete(
+      `/api/students/reqs/d/compcases/id/${id}`
     );
     return response.data;
   } catch (error) {
@@ -668,8 +668,8 @@ export const deleteCompReqById = async (id) => {
 
 export const updateUserPictureByEmail = async (email, imgUrl) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/update/picture/studentEmail/${email}`,
+    const response = await apiClient.put(
+      `/api/students/update/picture/studentEmail/${email}`,
       imgUrl
     );
     return response.data;
@@ -681,8 +681,8 @@ export const updateUserPictureByEmail = async (email, imgUrl) => {
 //////////////////////////////////////////
 export const getPatientsByStudentEmail = async (studentEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/patients/studentEmail/${studentEmail}`
+    const response = await apiClient.get(
+      `/api/students/patients/studentEmail/${studentEmail}`
     );
     return response.data;
   } catch (error) {
@@ -692,8 +692,8 @@ export const getPatientsByStudentEmail = async (studentEmail) => {
 
 export const getPatientsByTeamleaderEmail = async (teamleaderEmail) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/patients/teamleaderEmail/${teamleaderEmail}`
+    const response = await apiClient.get(
+      `/api/students/patients/teamleaderEmail/${teamleaderEmail}`
     );
     return response.data;
   } catch (error) {
@@ -703,7 +703,7 @@ export const getPatientsByTeamleaderEmail = async (teamleaderEmail) => {
 
 export const getPatientByHn = async (hn) => {
   try {
-    const response = await axios.get(`${host}/api/students/patients/hn/${hn}`);
+    const response = await apiClient.get(`/api/students/patients/hn/${hn}`);
     return response.data;
   } catch (error) {
     return error;
@@ -712,8 +712,8 @@ export const getPatientByHn = async (hn) => {
 
 export const getTxPlanByPatientHn = async (hn) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/patients/txplan/hn/${hn}`
+    const response = await apiClient.get(
+      `/api/students/patients/txplan/hn/${hn}`
     );
     return response.data;
   } catch (error) {
@@ -723,8 +723,8 @@ export const getTxPlanByPatientHn = async (hn) => {
 
 export const insertTxPlan = async (txPlan) => {
   try {
-    const response = await axios.post(
-      `${host}/api/students/patients/txplan`,
+    const response = await apiClient.post(
+      `/api/students/patients/txplan`,
       txPlan
     );
     return response.data;
@@ -735,8 +735,8 @@ export const insertTxPlan = async (txPlan) => {
 
 export const updatePatientbyhn = async (hn, patient) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/patients/update/hn/${hn}`,
+    const response = await apiClient.put(
+      `/api/students/patients/update/hn/${hn}`,
       patient
     );
     return response.data;
@@ -748,8 +748,8 @@ export const updatePatientbyhn = async (hn, patient) => {
 export const updateTreatmentById = async (id, treatment) => {
   console.log("id", treatment);
   try {
-    const response = await axios.put(
-      `${host}/api/students/patients/update/treatment/id/${id}`,
+    const response = await apiClient.put(
+      `/api/students/patients/update/treatment/id/${id}`,
       treatment
     );
     return response.data;
@@ -762,8 +762,8 @@ export const getTreatmentsByApprovedInstructorEmail = async (
   instructorEmail
 ) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/patients/treatments/approvedInstructorEmail/${instructorEmail}`
+    const response = await apiClient.get(
+      `/api/students/patients/treatments/approvedInstructorEmail/${instructorEmail}`
     );
     return response.data;
   } catch (error) {
@@ -773,8 +773,8 @@ export const getTreatmentsByApprovedInstructorEmail = async (
 
 export const getPatientNameByHn = async (hn) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/patient/name/hn/${hn}`
+    const response = await apiClient.get(
+      `/api/students/patient/name/hn/${hn}`
     );
     return response.data;
   } catch (error) {
@@ -784,8 +784,8 @@ export const getPatientNameByHn = async (hn) => {
 
 export const updateTreatmentStatusById = async (id, status) => {
   try {
-    const response = await axios.put(
-      `${host}/api/students/patients/treatments/update/status/id/${id}`,
+    const response = await apiClient.put(
+      `/api/students/patients/treatments/update/status/id/${id}`,
       status
     );
     return response.data;
@@ -796,8 +796,8 @@ export const updateTreatmentStatusById = async (id, status) => {
 
 export const getTxtypesByDivision = async (division) => {
   try {
-    const response = await axios.get(
-      `${host}/api/students/txtypes/division/${division}`
+    const response = await apiClient.get(
+      `/api/students/txtypes/division/${division}`
     );
     return response;
   } catch (error) {
@@ -806,8 +806,8 @@ export const getTxtypesByDivision = async (division) => {
 };
 export const insertNewPatient = async (patient) => {
   try {
-    const response = await axios.post(
-      `${host}/api/students/patients/new`,
+    const response = await apiClient.post(
+      `/api/students/patients/new`,
       patient
     );
     return response.data;
@@ -819,8 +819,8 @@ export const insertNewPatient = async (patient) => {
 export const insertPatientsDataCsv = async (patients) => {
   try {
     //console.log("patients", patients);
-    const response = await axios.post(
-      `${host}/api/students/patients/csv`,
+    const response = await apiClient.post(
+      `/api/students/patients/csv`,
       patients
     );
     return response.data;

@@ -60,6 +60,28 @@ function MemberInTeam(email) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   if (role) {
+  //     const fetchData = async () => {
+  //       try {
+  //         const emailToUse =
+  //           role === "instructor" ? userEmail : email.instructorEmail;
+  //         const result = await getStudentByTeamleaderEmail(emailToUse);
+  //         //console.log('result', result);
+  //         setStudentData(result);
+  //         if(result === undefined || result.length === 0){
+  //           setError("No students found");
+  //         }
+  //       } catch (err) {
+  //         setError("Failed to fetch students");
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+  //     fetchData();
+  //   }
+  // }, [userEmail, role]);
+
   useEffect(() => {
     if (role) {
       const fetchData = async () => {
@@ -67,13 +89,19 @@ function MemberInTeam(email) {
           const emailToUse =
             role === "instructor" ? userEmail : email.instructorEmail;
           const result = await getStudentByTeamleaderEmail(emailToUse);
-          //console.log('result', result);
-          setStudentData(result);
-          if(result === undefined || result.length === 0){
+
+          if (Array.isArray(result)) {
+            setStudentData(result);
+            if (result.length === 0) {
+              setError("No students found");
+            }
+          } else {
+            setStudentData([]);
             setError("No students found");
           }
         } catch (err) {
           setError("Failed to fetch students");
+          setStudentData([]); // Ensure studentData is an array even on error
         } finally {
           setLoading(false);
         }
@@ -110,7 +138,9 @@ function MemberInTeam(email) {
 
   return (
     <>
-      {role === "instructor" || role === "root" || role === "admin" ? <NavbarInstructor /> : null}
+      {role === "instructor" || role === "root" || role === "admin" ? (
+        <NavbarInstructor />
+      ) : null}
       <Container fluid="md" className={containerClass}>
         {loading ? (
           <FadeIn>
@@ -143,7 +173,11 @@ function MemberInTeam(email) {
                   <Row>
                     <Col md={2}>
                       <Image
-                        src={student.image}
+                        src={
+                          student.image
+                            ? student.image
+                            : "https://img5.pic.in.th/file/secure-sv1/avataaarss.png"
+                        }
                         roundedCircle
                         fluid
                         width="75"

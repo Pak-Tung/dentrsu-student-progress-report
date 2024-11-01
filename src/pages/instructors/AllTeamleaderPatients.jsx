@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import NavbarInstructor from "../../components/NavbarInstructor";
-import { Container, Row, Col, Alert, Dropdown, Form } from "react-bootstrap";
+import { Container, Row, Col, Alert, Dropdown } from "react-bootstrap";
 import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import LoginByEmail from "../../components/LoginByEmail";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
-import { getPatientsByTeamleaderEmail } from "../../features/apiCalls";
+import { getPatientsByTeamleaderEmail, getStudentByTeamleaderEmail } from "../../features/apiCalls";
 import PatientCard from "../../components/PatientCard";
-import { getStudentByTeamleaderEmail } from "../../features/apiCalls";
 
 const defaultOptions = {
   loop: true,
@@ -23,7 +22,7 @@ const defaultOptions = {
 
 function AllTeamleaderPatients() {
   const { theme } = useContext(ThemeContext);
-  const [user, setUser] = useState(() => {
+  const [user] = useState(() => {
     const cookieUser = Cookies.get("user");
     return cookieUser ? JSON.parse(cookieUser) : {};
   });
@@ -34,13 +33,12 @@ function AllTeamleaderPatients() {
 
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
-  const [loadingPatients, setLoadingPatients] = useState(true);
+  const [loadingPatients, setLoadingPatients] = useState(false);
   const [error, setError] = useState(null);
   const [filterStudent, setFilterStudent] = useState("All");
   const [students, setStudents] = useState([]);
   const [allStudents, setAllStudents] = useState([]);
 
-  // Status options and state for selected statuses
   const statusOptions = [
     { value: "-1", label: "Discharged" },
     { value: "0", label: "Charting" },
@@ -55,17 +53,20 @@ function AllTeamleaderPatients() {
     const fetchData = async () => {
       if (userEmail) {
         try {
-          const result = await getStudentByTeamleaderEmail(userEmail);
           setLoadingPatients(true);
+          const result = await getStudentByTeamleaderEmail(userEmail);
           if (result.error) {
             setError(result.error);
-          } else if (result) {
+            setAllStudents([]);
+          } else if (Array.isArray(result)) {
             setAllStudents(result);
           } else {
+            setAllStudents([]);
             setError("No student data found");
           }
         } catch (error) {
-          setError("Error fetching student data:", error);
+          setError(`Error fetching student data: ${error.message}`);
+          setAllStudents([]);
         } finally {
           setLoadingPatients(false);
         }
@@ -79,24 +80,29 @@ function AllTeamleaderPatients() {
     const fetchData = async () => {
       if (userEmail) {
         try {
-          const result = await getPatientsByTeamleaderEmail(userEmail);
           setLoadingPatients(true);
+          const result = await getPatientsByTeamleaderEmail(userEmail);
           if (result.error) {
             setError(result.error);
-          } else if (result) {
+            setPatients([]);
+            setFilteredPatients([]);
+          } else if (Array.isArray(result)) {
             setPatients(result);
-            setFilteredPatients(result); // Set the full list initially
+            setFilteredPatients(result);
 
-            // Extract unique students
             const uniqueStudents = [
               ...new Set(result.map((patient) => patient.studentEmail)),
             ];
             setStudents(uniqueStudents);
           } else {
+            setPatients([]);
+            setFilteredPatients([]);
             setError("No patient data found");
           }
         } catch (error) {
-          setError("Error fetching patient data:", error);
+          setError(`Error fetching patient data: ${error.message}`);
+          setPatients([]);
+          setFilteredPatients([]);
         } finally {
           setLoadingPatients(false);
         }
@@ -129,14 +135,12 @@ function AllTeamleaderPatients() {
   const applyFilters = (student, statuses) => {
     let filtered = patients;
 
-    // Filter by selected statuses
     if (statuses.length > 0) {
       filtered = filtered.filter((patient) =>
         statuses.includes(patient.status)
       );
     }
 
-    // Filter by student
     if (student !== "All") {
       filtered = filtered.filter((patient) => patient.studentEmail === student);
     }
@@ -170,12 +174,10 @@ function AllTeamleaderPatients() {
             </Row>
             <Row className="justify-content-center">
               <Col md={3} className="text-center">
-                {/* Dropdown with checkboxes for status filtering */}
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
                     Filter Status
                   </Dropdown.Toggle>
-
                   <Dropdown.Menu>
                     {statusOptions.map((status) => (
                       <Dropdown.Item
@@ -193,7 +195,6 @@ function AllTeamleaderPatients() {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-
               <Col md={3} className="text-center">
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
@@ -236,7 +237,7 @@ function AllTeamleaderPatients() {
           ) : (
             <div className="d-flex justify-content-center">
               <PatientCard
-                patients={filteredPatients} // Display the filtered list
+                patients={filteredPatients}
                 updatePatients={setPatients}
               />
             </div>

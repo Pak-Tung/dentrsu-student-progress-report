@@ -82,7 +82,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
         response.status === 200 &&
         response.message === "OTP verified successfully."
       ) {
-        console.log(response);
+        //console.log(response);
         const token = response.token;
         const email = response.userEmail;
         Cookies.set("token", token, { expires: 1 });

@@ -6,8 +6,7 @@ import {
   getTreatmentsByApprovedInstructorEmail,
   updateTreatmentStatusById,
 } from "../../features/apiCalls";
-import { Container, Row, Col, ListGroup, Alert, Button } from "react-bootstrap";
-
+import { Container, Row, Col, ListGroup, Alert } from "react-bootstrap";
 import { ThemeContext } from "../../ThemeContext";
 import "../../App.css";
 import { formatDateFormISO } from "../../utilities/dateUtils";
@@ -15,7 +14,6 @@ import LoginByEmail from "../../components/LoginByEmail";
 import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
-
 
 const defaultOptions = {
   loop: true,
@@ -28,7 +26,7 @@ const defaultOptions = {
 
 function TreatmentApproval() {
   const { theme } = useContext(ThemeContext);
-  const [user, setUser] = useState(() => {
+  const [user] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
   });
@@ -38,7 +36,7 @@ function TreatmentApproval() {
   const containerClass = theme === "dark" ? "container-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
   const [error, setError] = useState(null);
-  const [loadingTreatments, setLoadingTreatments] = useState(true);
+  const [loadingTreatments, setLoadingTreatments] = useState(false); // Initialize to false
 
   useEffect(() => {
     const savedRole = Cookies.get("role");
@@ -50,42 +48,57 @@ function TreatmentApproval() {
   const [treatments, setTreatments] = useState([]);
 
   useEffect(() => {
-    const fetchTreatments = async () => {
-      try {
-        setLoadingTreatments(true);
-        const result = await getTreatmentsByApprovedInstructorEmail(userEmail);
+    if (userEmail) {
+      const fetchTreatments = async () => {
+        try {
+          setLoadingTreatments(true);
+          const result = await getTreatmentsByApprovedInstructorEmail(userEmail);
 
-        if (result.error) {
-          console.error(result.error);
-        } else {
-          setTreatments(result);
+          if (result.error) {
+            console.error(result.error);
+            setError(result.error);
+            setTreatments([]);
+          } else if (Array.isArray(result)) {
+            setTreatments(result);
+          } else {
+            console.error("Unexpected data format from treatments API");
+            setError("Unexpected data format from treatments API");
+            setTreatments([]);
+          }
+        } catch (error) {
+          console.error("Error fetching treatments: " + error.message);
+          setError("Error fetching treatments: " + error.message);
+          setTreatments([]);
+        } finally {
           setLoadingTreatments(false);
         }
-      } catch (error) {
-        console.error("Error fetching treatments: " + error.message);
-      }
-    };
-    fetchTreatments();
+      };
+      fetchTreatments();
+    }
   }, [userEmail]);
 
   const [students, setStudents] = useState([]);
 
-  const fetchStudents = async () => {
-    try {
-      const result = await getAllStudents();
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setStudents(result.data.result);
-      }
-    } catch (error) {
-      setError("Error fetching students: " + error.message);
-    }
-  };
-
   useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const result = await getAllStudents();
+        if (result.error) {
+          setError(result.error);
+          setStudents([]);
+        } else if (result && result.data && Array.isArray(result.data.result)) {
+          setStudents(result.data.result);
+        } else {
+          setError("Unexpected data format from students API");
+          setStudents([]);
+        }
+      } catch (error) {
+        setError("Error fetching students: " + error.message);
+        setStudents([]);
+      }
+    };
     fetchStudents();
-  }, [treatments]);
+  }, []);
 
   const getStudentName = (email) => {
     const student = students.find((student) => student.studentEmail === email);
@@ -93,30 +106,31 @@ function TreatmentApproval() {
   };
 
   const handleTreatmentApproval = async (treatment) => {
-    console.log("Treatment approved: ", treatment);
-    treatment.status = 2; // Set treatment status to 'approved'
+    const updatedTreatment = { ...treatment, status: 2 }; // Create a copy with updated status
     const isConfirmed = window.confirm(
       "Are you sure you want to approve this treatment?"
     );
     if (!isConfirmed) return;
 
     try {
-      const result = await updateTreatmentStatusById(treatment.id, treatment);
+      const result = await updateTreatmentStatusById(updatedTreatment.id, updatedTreatment);
       if (result.error) {
-        alert(`Error: ${result.error}`);
+        setError(`Error: ${result.error}`);
       } else {
         const updatedTreatments = treatments.map((tx) => {
-          if (tx.id === treatment.id) {
-            return { ...tx, status: 2 }; // Update the status of the approved treatment
+          if (tx.id === updatedTreatment.id) {
+            return updatedTreatment; // Replace with updated treatment
           }
           return tx;
         });
         setTreatments(updatedTreatments);
       }
     } catch (error) {
-      alert(`An unexpected error occurred: ${error.message}`);
+      setError(`An unexpected error occurred: ${error.message}`);
     }
   };
+
+  const pendingTreatments = treatments.filter((treatment) => treatment.status === 1);
 
   return (
     <>
@@ -147,92 +161,89 @@ function TreatmentApproval() {
               fluid="md"
               className={`status-by-div-container ${theme}`}
             >
-              <Row className="text-center">
-                <Col md={2}>
-                  <strong>Patient</strong>
-                </Col>
-                <Col md={1}>
-                  <strong>Area</strong>
-                </Col>
-                <Col md={4}>
-                  <strong>Description</strong>
-                </Col>
-                <Col md={1}>
-                  <strong>Start</strong>
-                </Col>
-                <Col md={1}>
-                  <strong>Completed</strong>
-                </Col>
-                <Col md={2} className="text-center">
-                  <strong>Operator</strong>
-                </Col>
-                <Col md={1} className="text-center"></Col>
-              </Row>
-
-              <ListGroup>
-                {treatments.length > 0 ? (
-                  treatments
-                    .filter((treatment) => treatment.status === 1) // Filter treatments awaiting approval
-                    .map((treatment) => {
-                      return (
-                        <ListGroup.Item key={treatment.id}>
-                          <Row>
-                            <Col md={2}>
-                              {treatment.hn} {treatment.patientName}
-                            </Col>
-                            <Col className="text-center" md={1}>
-                              {treatment.area} <br />
-                            </Col>
-                            <Col md={4}>
-                              {treatment.description}
-                              <br />
-                            </Col>
-                            <Col className="text-center" md={1}>
-                              {formatDateFormISO(treatment.startDate)}
-                              <br />
-                            </Col>
-                            <Col className="text-center" md={1}>
-                              {formatDateFormISO(treatment.completeDate)}
-                            </Col>
-                            <Col className="text-center" md={2}>
-                              {getStudentName(treatment.operatorEmail)}
-                              <br />
-                            </Col>
-                            <Col className="text-center" md={1}>
-                              {role !== "student" && (
-                                <button
-                                  onClick={() =>
-                                    handleTreatmentApproval(treatment)
-                                  }
-                                  style={{
-                                    marginBottom: 0,
-                                    marginTop: 0,
-                                    paddingBottom: 0,
-                                    paddingTop: 0,
-                                    paddingLeft: 15,
-                                    paddingRight: 15,
-                                    backgroundColor: "green",
-                                    color: "white",
-                                    borderRadius: 5,
-                                    border: "none",
-                                  }}
-                                >
-                                  Approve
-                                </button>
-                              )}
-                            </Col>
-                          </Row>
-                        </ListGroup.Item>
-                      );
-                    })
-                ) : (
-                  <div className="d-flex justify-content-center">
-                    <Alert variant="danger" className={alertClass}>
-                      {"No Requests found"}
-                    </Alert>
-                  </div>
-                )}
-              </ListGroup>
+              {pendingTreatments.length > 0 ? (
+                <>
+                  <Row className="text-center">
+                    <Col md={2}>
+                      <strong>Patient</strong>
+                    </Col>
+                    <Col md={1}>
+                      <strong>Area</strong>
+                    </Col>
+                    <Col md={4}>
+                      <strong>Description</strong>
+                    </Col>
+                    <Col md={1}>
+                      <strong>Start</strong>
+                    </Col>
+                    <Col md={1}>
+                      <strong>Completed</strong>
+                    </Col>
+                    <Col md={2} className="text-center">
+                      <strong>Operator</strong>
+                    </Col>
+                    <Col md={1} className="text-center"></Col>
+                  </Row>
+                  <ListGroup>
+                    {pendingTreatments.map((treatment) => (
+                      <ListGroup.Item key={treatment.id}>
+                        <Row>
+                          <Col md={2}>
+                            {treatment.hn} {treatment.patientName}
+                          </Col>
+                          <Col className="text-center" md={1}>
+                            {treatment.area} <br />
+                          </Col>
+                          <Col md={4}>
+                            {treatment.description}
+                            <br />
+                          </Col>
+                          <Col className="text-center" md={1}>
+                            {formatDateFormISO(treatment.startDate)}
+                            <br />
+                          </Col>
+                          <Col className="text-center" md={1}>
+                            {formatDateFormISO(treatment.completeDate)}
+                          </Col>
+                          <Col className="text-center" md={2}>
+                            {getStudentName(treatment.operatorEmail)}
+                            <br />
+                          </Col>
+                          <Col className="text-center" md={1}>
+                            {role !== "student" && (
+                              <button
+                                onClick={() =>
+                                  handleTreatmentApproval(treatment)
+                                }
+                                style={{
+                                  marginBottom: 0,
+                                  marginTop: 0,
+                                  paddingBottom: 0,
+                                  paddingTop: 0,
+                                  paddingLeft: 15,
+                                  paddingRight: 15,
+                                  backgroundColor: "green",
+                                  color: "white",
+                                  borderRadius: 5,
+                                  border: "none",
+                                }}
+                              >
+                                Approve
+                              </button>
+                            )}
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </>
+              ) : (
+                <div className="d-flex justify-content-center">
+                  <Alert variant="info" className={alertClass}>
+                    No Requests found
+                  </Alert>
+                </div>
+              )}
             </Container>
           )}
         </>

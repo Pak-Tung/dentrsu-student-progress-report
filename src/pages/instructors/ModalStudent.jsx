@@ -9,10 +9,7 @@ import {
   Col,
   Badge,
 } from "react-bootstrap";
-import {
-  getReqByDivision,
-  getAllDivisions,
-} from "../../features/apiCalls";
+import { getReqByDivision, getAllDivisions } from "../../features/apiCalls";
 import SumByDivAndStudentEmail from "../Reports/SumByDivAndStudentEmail";
 import CompByStudentEmail from "../Reports/CompByStudentEmail";
 import "../../DarkMode.css";
@@ -24,7 +21,8 @@ function ModalStudent({ show, handleClose, student }) {
   const [req, setReq] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState(null);
-  const [selectedDivisionName, setSelectedDivisionName] = useState("Select Division");
+  const [selectedDivisionName, setSelectedDivisionName] =
+    useState("Select Division");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -48,13 +46,28 @@ function ModalStudent({ show, handleClose, student }) {
     }
   }, [selectedDivision]);
 
+  // useEffect(() => {
+  //   const fetchDivisionsData = async () => {
+  //     try {
+  //       const result = await getAllDivisions();
+  //       setDivisions(result);
+  //     } catch (err) {
+  //       console.error("Failed to fetch divisions", err);
+  //     }
+  //   };
+
+  //   fetchDivisionsData();
+  // }, []);
+
   useEffect(() => {
     const fetchDivisionsData = async () => {
       try {
         const result = await getAllDivisions();
-        setDivisions(result);
+        console.log("Divisions fetched:", result);
+        setDivisions(Array.isArray(result) ? result : []);
       } catch (err) {
         console.error("Failed to fetch divisions", err);
+        setDivisions([]);
       }
     };
 
@@ -137,15 +150,23 @@ function ModalStudent({ show, handleClose, student }) {
   };
 
   const modalClass = theme === "dark" ? "modal-dark" : "";
-  const modalHeaderFooterClass = theme === "dark" ? "modal-header-dark modal-footer-dark" : "";
+  const modalHeaderFooterClass =
+    theme === "dark" ? "modal-header-dark modal-footer-dark" : "";
   const dropdownClass = theme === "dark" ? "dropdown-dark" : "";
   const badgeClass = theme === "dark" ? "badge-dark" : "";
 
   return (
-    <Modal show={show} onHide={handleClose} fullscreen={true} className={modalClass}>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      fullscreen={true}
+      className={modalClass}
+    >
       <Modal.Header closeButton className={modalHeaderFooterClass}>
         <Modal.Title className="text-center">
-          {student ? `${student.studentId} ${student.title} ${student.studentName}` : "Student Details"}
+          {student
+            ? `${student.studentId} ${student.title} ${student.studentName}`
+            : "Student Details"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={modalClass}>
@@ -156,7 +177,9 @@ function ModalStudent({ show, handleClose, student }) {
                 <div className="d-flex justify-content-center">
                   <p>
                     Year:
-                    <strong>{calculateStudentYear(student.startClinicYear)}th</strong>{" "}
+                    <strong>
+                      {calculateStudentYear(student.startClinicYear)}th
+                    </strong>{" "}
                     {"   "}
                     Bay:
                     <strong>
@@ -168,7 +191,9 @@ function ModalStudent({ show, handleClose, student }) {
                       bg={student.status === "Complete" ? "success" : "danger"}
                       className={badgeClass}
                     >
-                      {student.status === "Complete" ? "Complete" : "Incomplete"}
+                      {student.status === "Complete"
+                        ? "Complete"
+                        : "Incomplete"}
                     </Badge>
                   </p>
                 </div>
@@ -181,10 +206,12 @@ function ModalStudent({ show, handleClose, student }) {
           {/* Toggle Button */}
           <Row className="d-flex justify-content-center mb-3">
             <Button
-              variant={theme === 'dark' ? 'secondary' : 'dark'}
+              variant={theme === "dark" ? "secondary" : "dark"}
               onClick={() => setShowChartReports((prev) => !prev)}
             >
-              {showChartReports ? 'Hide Charts' : 'Show Overall Requirement Charts'}
+              {showChartReports
+                ? "Hide Charts"
+                : "Show Overall Requirement Charts"}
             </Button>
           </Row>
 
@@ -197,19 +224,44 @@ function ModalStudent({ show, handleClose, student }) {
           <Row className="d-flex justify-content-center">
             <Col>
               <div className="d-flex justify-content-center">
+                {/* <DropdownButton
+                  id="dropdown-basic-button"
+                  title={selectedDivisionName}
+                  onSelect={handleSelectDivision}
+                  variant={theme === "dark" ? "secondary" : "dark"}
+                >
+                  <Dropdown.Item eventKey="all">All Divisions</Dropdown.Item>
+                  <Dropdown.Item eventKey="completeCases">
+                    Complete Cases
+                  </Dropdown.Item>
+                  {divisions.map((division) => (
+                    <Dropdown.Item
+                      key={division.id}
+                      eventKey={division.shortName}
+                    >
+                      {division.fullName}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton> */}
                 <DropdownButton
                   id="dropdown-basic-button"
                   title={selectedDivisionName}
                   onSelect={handleSelectDivision}
-                  variant={theme === 'dark' ? "secondary" : "dark"}
+                  variant={theme === "dark" ? "secondary" : "dark"}
                 >
                   <Dropdown.Item eventKey="all">All Divisions</Dropdown.Item>
-                  <Dropdown.Item eventKey="completeCases">Complete Cases</Dropdown.Item>
-                  {divisions.map((division) => (
-                    <Dropdown.Item key={division.id} eventKey={division.shortName}>
-                      {division.fullName}
-                    </Dropdown.Item>
-                  ))}
+                  <Dropdown.Item eventKey="completeCases">
+                    Complete Cases
+                  </Dropdown.Item>
+                  {Array.isArray(divisions) &&
+                    divisions.map((division) => (
+                      <Dropdown.Item
+                        key={division.id}
+                        eventKey={division.shortName}
+                      >
+                        {division.fullName}
+                      </Dropdown.Item>
+                    ))}
                 </DropdownButton>
               </div>
             </Col>
