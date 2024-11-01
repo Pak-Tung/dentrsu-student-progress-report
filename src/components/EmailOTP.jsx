@@ -111,7 +111,8 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
         setError(error.response.data.message);
       } else {
         setError(
-          "An error occurred while communicating with the server. Please try again later."
+          `${userEmail} not found in the database. Please register first.`
+          // "An error occurred while communicating with the server. Please try again later."
         );
       }
     } finally {
