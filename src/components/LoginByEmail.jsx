@@ -67,7 +67,7 @@ function LoginByEmail() {
             } catch (error) {
               console.error("Error fetching student profile:", error);
               alert(
-                `Unfound user or expired cookies. Try logging in again. If the problem persists, contact system administrator (Browser Login with ${email}).`
+                `Expired cookies. Try logging in again.`
               );
               setLoading(false);
               return;
