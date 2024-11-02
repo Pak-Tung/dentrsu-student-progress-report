@@ -67,7 +67,7 @@ function LoginByEmail() {
             } catch (error) {
               console.error("Error fetching student profile:", error);
               alert(
-                `Student profile not found (Browser Login with ${email}). Please contact administrator.`
+                `Unfound user or expired cookies. Try logging in again. If the problem persists, contact system administrator (Browser Login with ${email}).`
               );
               setLoading(false);
               return;
@@ -88,7 +88,7 @@ function LoginByEmail() {
             } catch (error) {
               console.error("Error fetching instructor profile:", error);
               alert(
-                `Profile not found (Browser Login with ${email}). Please contact administrator.`
+                `Unfound user or expired cookies. Try logging in again. If the problem persists, contact system administrator (Browser Login with ${email}).`
               );
               setLoading(false);
               return;
@@ -104,7 +104,7 @@ function LoginByEmail() {
           }
         } catch (error) {
           alert(
-            `User profile not found (Browser Login with ${email}). Please contact administrator.`
+            `Unfound user or expired cookies. Try logging in again. If the problem persists, contact your system administrator (Browser Login with ${email}).`
           );
           setLoading(false);
           Cookies.remove("token");
