@@ -17,9 +17,9 @@ import EmailOTP from "./EmailOTP"; // Import the EmailOTP component
 import LoadingComponent from "./LoadingComponent";
 
 function LoginByEmail() {
-  const [email, setEmail] = useState('');
-  const [token, setToken] = useState('');
-  const [role, setRole] = useState(Cookies.get("role"));
+  const [email, setEmail] = useState(Cookies.get("email") || "");
+  const [token, setToken] = useState(Cookies.get("token") || "");
+  const [role, setRole] = useState(Cookies.get("role") || "");
   const [user, setUser] = useState(
     Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null
   );
@@ -88,7 +88,7 @@ function LoginByEmail() {
             } catch (error) {
               console.error("Error fetching instructor profile:", error);
               alert(
-                `Unfound user or expired cookies. Try logging in again. If the problem persists, contact system administrator (Browser Login with ${email}).`
+                `Expired cookies. Try logging in again. If the problem persists, contact system administrator (Browser Login with ${email}).`
               );
               setLoading(false);
               return;
@@ -104,7 +104,7 @@ function LoginByEmail() {
           }
         } catch (error) {
           alert(
-            `Unfound user or expired cookies. Try logging in again. If the problem persists, contact your system administrator (Browser Login with ${email}).`
+            `User/Cookies expired. Try logging in again. If the problem persists, contact your system administrator (Browser Login with ${email}).`
           );
           setLoading(false);
           Cookies.remove("token");
