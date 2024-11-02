@@ -8,6 +8,7 @@ import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -21,6 +22,7 @@ const defaultOptions = {
 function MinimumReq() {
   const { theme } = useContext(ThemeContext);
   const division = Cookies.get("division");
+  const email = Cookies.get("email");
 
   const fullNameDivision = useCallback((division) => {
     const divisionMap = {
@@ -64,62 +66,76 @@ function MinimumReq() {
 
   return (
     <>
-      <NavbarInstructor />
-      <Container fluid="md" className={containerClass}>
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
-        ) : error ? (
-          <Alert variant="danger" className={alertClass}>{error}</Alert>
-        ) : (
-          <>
-            <div className="d-flex justify-content-center mb-4">
-              <h4 className={textClass}>
-                Minimum Requirement of {fullNameDivision(division)} Division
-              </h4>
-            </div>
-            <ListGroup>
-              <ListGroup.Item className={listGroupItemClass}>
-                <Row>
-                  <Col md={4}>
-                    <strong>Type</strong>
-                  </Col>
-                  <Col md={2}>
-                    <strong>Minimum RSU Requirement</strong>
-                  </Col>
-                  <Col md={2}>
-                    <strong>Unit</strong>
-                  </Col>
-                  <Col md={2}>
-                    <strong>Minimum DC Requirement</strong>
-                  </Col>
-                  <Col md={2}>
-                    <strong>Unit</strong>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-              {sortedReqData.map((req) => (
-                <ListGroup.Item key={req.id} className={listGroupItemClass}>
-                  <Row>
-                    <Col md={4}>{req.type}</Col>
-                    <Col md={2}>{req.req_RSU < 0.001 ? "" : req.req_RSU}</Col>
-                    <Col md={2}>{req.unit_RSU}</Col>
-                    <Col md={2}>{req.req_DC < 0.001 ? "" : req.req_DC}</Col>
-                    <Col md={2}>{req.unit_DC}</Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </>
-        )}
-      </Container>
+      {email ? (
+        <>
+          <NavbarInstructor />
+          <Container fluid="md" className={containerClass}>
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <Alert variant="danger" className={alertClass}>
+                {error}
+              </Alert>
+            ) : (
+              <>
+                <div className="d-flex justify-content-center mb-4">
+                  <h4 className={textClass}>
+                    Minimum Requirement of {fullNameDivision(division)} Division
+                  </h4>
+                </div>
+                <ListGroup>
+                  <ListGroup.Item className={listGroupItemClass}>
+                    <Row>
+                      <Col md={4}>
+                        <strong>Type</strong>
+                      </Col>
+                      <Col md={2}>
+                        <strong>Minimum RSU Requirement</strong>
+                      </Col>
+                      <Col md={2}>
+                        <strong>Unit</strong>
+                      </Col>
+                      <Col md={2}>
+                        <strong>Minimum DC Requirement</strong>
+                      </Col>
+                      <Col md={2}>
+                        <strong>Unit</strong>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                  {sortedReqData.map((req) => (
+                    <ListGroup.Item key={req.id} className={listGroupItemClass}>
+                      <Row>
+                        <Col md={4}>{req.type}</Col>
+                        <Col md={2}>
+                          {req.req_RSU < 0.001 ? "" : req.req_RSU}
+                        </Col>
+                        <Col md={2}>{req.unit_RSU}</Col>
+                        <Col md={2}>{req.req_DC < 0.001 ? "" : req.req_DC}</Col>
+                        <Col md={2}>{req.unit_DC}</Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </>
+            )}
+          </Container>
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

@@ -19,6 +19,8 @@ import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import SumByDivAndStudentEmail from "../Reports/SumByDivAndStudentEmail";
 import ChartReports from "../Reports/ChartReports";
+import LoginByEmail from "../../components/LoginByEmail";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -35,7 +37,7 @@ function StudentAllReq() {
   const [loadingStudent, setLoadingStudent] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
-
+  const email = Cookies.get("email");
   const [student, setStudent] = useState(null);
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState(null);
@@ -140,116 +142,126 @@ function StudentAllReq() {
 
   return (
     <>
-      <NavbarSupervisor />
-      <Container fluid="md">
-        <Row className="d-flex justify-content-center mt-5">
-          <h4>
-            Search by Student ID :{" "}
-            {success && student
-              ? `${student.studentId} ${student.studentName}`
-              : ""}
-          </h4>
-          <Col md={6} className="mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Enter Student ID"
-              value={studentId}
-              onChange={(e) => setStudentId(e.target.value)}
-            />
-          </Col>
-          <Col md={2} className="mb-3">
-            <Button
-              variant="dark"
-              onClick={handleSearchStudent}
-              disabled={!studentId || loadingStudent}
-            >
-              {loadingStudent ? "Searching..." : "Search"}
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-
-      {loadingStudent ? (
-        <FadeIn>
-          <div>
-            <Container>
-              <Row className="d-flex justify-content-center">
-                <Lottie options={defaultOptions} height={140} width={140} />
-              </Row>
-            </Container>
-          </div>
-        </FadeIn>
-      ) : error ? (
-        <div className="d-flex justify-content-center">
-          <Alert variant="danger" className={alertClass}>
-            {error}
-          </Alert>
-        </div>
-      ) : (
-        success &&
-        student && (
-          <Container
-            fluid="md"
-            className={theme === "dark" ? "container-dark" : ""}
-          >
-            {/* Toggle Button */}
-            <Row className="d-flex justify-content-center mb-3">
-              <Button
-                variant={theme === "dark" ? "secondary" : "dark"}
-                onClick={() => setShowChartReports((prev) => !prev)}
-              >
-                {showChartReports
-                  ? "Hide Charts"
-                  : "Show Overall Requirement Charts"}
-              </Button>
-            </Row>
-
-            {/* Conditionally Render ChartReports */}
-            {showChartReports && student?.studentEmail && (
-              <ChartReports studentEmail={student.studentEmail} />
-            )}
-
-            {!selectedDivision && (
-              <Row className="d-flex justify-content-center mb-3">
-                <Col xs={12} className="text-center">
-                  <h5>Select division to display requirement by items</h5>
-                </Col>
-              </Row>
-            )}
-            <Row className="d-flex justify-content-center">
-              <Col>
-                <div className="d-flex justify-content-center">
-                  <DropdownButton
-                    variant={
-                      theme === "dark" ? "outline-light" : "outline-dark"
-                    }
-                    id="dropdown-basic-button"
-                    title={selectedDivisionName}
-                    onSelect={handleSelectDivision}
-                    className={theme === "dark" ? "text-dark-mode" : ""}
-                  >
-                    <Dropdown.Item eventKey="all">All Divisions</Dropdown.Item>
-                    {divisions.map((division) => (
-                      <Dropdown.Item
-                        key={division.id}
-                        eventKey={division.shortName}
-                      >
-                        {division.fullName}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                </div>
+      {email ? (
+        <>
+          <NavbarSupervisor />
+          <Container fluid="md">
+            <Row className="d-flex justify-content-center mt-5">
+              <h4>
+                Search by Student ID :{" "}
+                {success && student
+                  ? `${student.studentId} ${student.studentName}`
+                  : ""}
+              </h4>
+              <Col md={6} className="mb-3">
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Student ID"
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                />
+              </Col>
+              <Col md={2} className="mb-3">
+                <Button
+                  variant="dark"
+                  onClick={handleSearchStudent}
+                  disabled={!studentId || loadingStudent}
+                >
+                  {loadingStudent ? "Searching..." : "Search"}
+                </Button>
               </Col>
             </Row>
-            <br />
-            <Row className="d-flex justify-content-center">
-              <div className="d-flex justify-content-center">
-                {renderDivisionComponent()}
-              </div>
-            </Row>
-            <br />
           </Container>
-        )
+
+          {loadingStudent ? (
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
+          ) : error ? (
+            <div className="d-flex justify-content-center">
+              <Alert variant="danger" className={alertClass}>
+                {error}
+              </Alert>
+            </div>
+          ) : (
+            success &&
+            student && (
+              <Container
+                fluid="md"
+                className={theme === "dark" ? "container-dark" : ""}
+              >
+                {/* Toggle Button */}
+                <Row className="d-flex justify-content-center mb-3">
+                  <Button
+                    variant={theme === "dark" ? "secondary" : "dark"}
+                    onClick={() => setShowChartReports((prev) => !prev)}
+                  >
+                    {showChartReports
+                      ? "Hide Charts"
+                      : "Show Overall Requirement Charts"}
+                  </Button>
+                </Row>
+
+                {/* Conditionally Render ChartReports */}
+                {showChartReports && student?.studentEmail && (
+                  <ChartReports studentEmail={student.studentEmail} />
+                )}
+
+                {!selectedDivision && (
+                  <Row className="d-flex justify-content-center mb-3">
+                    <Col xs={12} className="text-center">
+                      <h5>Select division to display requirement by items</h5>
+                    </Col>
+                  </Row>
+                )}
+                <Row className="d-flex justify-content-center">
+                  <Col>
+                    <div className="d-flex justify-content-center">
+                      <DropdownButton
+                        variant={
+                          theme === "dark" ? "outline-light" : "outline-dark"
+                        }
+                        id="dropdown-basic-button"
+                        title={selectedDivisionName}
+                        onSelect={handleSelectDivision}
+                        className={theme === "dark" ? "text-dark-mode" : ""}
+                      >
+                        <Dropdown.Item eventKey="all">
+                          All Divisions
+                        </Dropdown.Item>
+                        {divisions.map((division) => (
+                          <Dropdown.Item
+                            key={division.id}
+                            eventKey={division.shortName}
+                          >
+                            {division.fullName}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+                    </div>
+                  </Col>
+                </Row>
+                <br />
+                <Row className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center">
+                    {renderDivisionComponent()}
+                  </div>
+                </Row>
+                <br />
+              </Container>
+            )
+          )}
+        </>
+      ) : (
+        <>
+          <LoginByEmail />
+        </>
       )}
     </>
   );

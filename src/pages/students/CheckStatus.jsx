@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "../../components/Navbar";
 import Cookies from "js-cookie";
 import ChartReports from "../Reports/ChartReports";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const CheckStatus = () => {
   const [user, setUser] = useState(() => {
@@ -14,8 +15,16 @@ const CheckStatus = () => {
 
   return (
     <>
-      <Navbar />
-      <ChartReports studentEmail={userEmail} />
+      {userEmail ? (
+        <>
+          <Navbar />
+          <ChartReports studentEmail={userEmail} />
+        </>
+      ) : (
+        <div>
+          <LoginByEmail />
+        </div>
+      )}
     </>
   );
 };

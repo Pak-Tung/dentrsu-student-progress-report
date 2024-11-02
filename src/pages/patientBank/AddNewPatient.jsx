@@ -8,10 +8,14 @@ import {
 } from "../../features/apiCalls";
 import { Button, Form, Container, Row, Col, Alert } from "react-bootstrap";
 import { calculateAge } from "../../utilities/dateUtils";
+import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function AddNewPatient() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
+  const userEmail = Cookies.get("email");
+
   const [formData, setFormData] = useState({
     hn: "",
     name: "",
@@ -160,10 +164,11 @@ function AddNewPatient() {
 
   return (
     <>
-      <NavbarPatientBank />
+      {userEmail ? (
+        <>
+          <NavbarPatientBank />
 
-      <Container fluid className={`${containerClass}`}>
-  
+          <Container fluid className={`${containerClass}`}>
             <h2>เพิ่มบัตรผู้ป่วยใหม่</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             {successMessage && (
@@ -171,7 +176,7 @@ function AddNewPatient() {
             )}
             <Form className="container-md mt-3 border" onSubmit={handleSubmit}>
               <Row>
-                <Col md={4} >
+                <Col md={4}>
                   <Form.Group controlId="hn">
                     <Form.Label>เลขที่บัตรผู้ป่วย</Form.Label>
                     <Form.Control
@@ -217,7 +222,8 @@ function AddNewPatient() {
                 <Col md={6}>
                   <Form.Group controlId="birthDate" className="mb-3">
                     <Form.Label>
-                      วันเกิดผู้ป่วย "ค.ศ. เท่านั้น" {age !== "" && `(อายุ ${age} ปี)`}
+                      วันเกิดผู้ป่วย "ค.ศ. เท่านั้น"{" "}
+                      {age !== "" && `(อายุ ${age} ปี)`}
                     </Form.Label>
                     <Form.Control
                       type="date"
@@ -325,8 +331,11 @@ function AddNewPatient() {
                 บันทึกข้อมูล
               </Button>
             </Form>
-
-      </Container>
+          </Container>
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

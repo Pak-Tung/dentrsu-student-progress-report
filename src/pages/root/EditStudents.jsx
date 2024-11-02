@@ -17,6 +17,8 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import LoginByEmail from "../../components/LoginByEmail";
+import Cookies from "js-cookie";
 
 const defaultOptions = {
   loop: true,
@@ -38,6 +40,7 @@ function EditStudents() {
   const [selectedFloor, setSelectedFloor] = useState(null);
   const [selectedBay, setSelectedBay] = useState(null);
   const [instructors, setInstructors] = useState([]);
+  const email = Cookies.get("email");
 
   const fetchData = async () => {
     setLoading(true);
@@ -103,11 +106,11 @@ function EditStudents() {
           )
         )
       )
-      .sort((a, b) => a - b) // Sort in ascending order
-      .map((year) => ({
-        label: `${year}th Year`,
-        value: year,
-      })),
+        .sort((a, b) => a - b) // Sort in ascending order
+        .map((year) => ({
+          label: `${year}th Year`,
+          value: year,
+        })),
     ],
     [students]
   );
@@ -129,7 +132,9 @@ function EditStudents() {
     () => [
       { label: "All", value: null },
       ...Array.from(new Set(students.map((student) => student.bay)))
-        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })) // Sort in natural ascending order
+        .sort((a, b) =>
+          a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+        ) // Sort in natural ascending order
         .map((bay) => ({
           label: bay,
           value: bay,
@@ -137,8 +142,6 @@ function EditStudents() {
     ],
     [students]
   );
-  
-  
 
   const filteredStudents = useMemo(
     () =>
@@ -163,181 +166,191 @@ function EditStudents() {
 
   return (
     <>
-      <NavbarRoot />
-      <Container fluid="md">
-        <Row>
-          <Col className="text-center">
-            <h1 className="mt-3">Edit Students</h1>
-          </Col>
-        </Row>
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
-        ) : error ? (
-          <div className="d-flex justify-content-center">
-            <Alert variant="danger">{error}</Alert>
-          </div>
-        ) : (
-          <>
-            <Row className="d-flex justify-content-center">
-              <div
-                className="justify-content-center"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  margin: 20,
-                }}
-              >
-                <Col xs={12} sm={6} md={3} className="mb-2">
-                  <DropdownButton
-                    id="teamleader-dropdown"
-                    title={
-                      selectedTeamleader !== null
-                        ? teamleaderOptions.find(
-                            (option) => option.value === selectedTeamleader
-                          )?.label
-                        : "Select Team Leader"
-                    }
-                    variant="dark"
-                    className="me-2"
-                  >
-                    {teamleaderOptions.map((option) => (
-                      <Dropdown.Item
-                        key={option.value}
-                        active={selectedTeamleader === option.value}
-                        onClick={() => setSelectedTeamleader(option.value)}
-                      >
-                        {option.label}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                </Col>
-                <Col xs={12} sm={6} md={3} className="mb-2">
-                  <DropdownButton
-                    id="year-dropdown"
-                    title={
-                      selectedYear !== null
-                        ? yearOptions.find(
-                            (option) => option.value === selectedYear
-                          )?.label
-                        : "Select Year"
-                    }
-                    variant="dark"
-                    className="me-2"
-                  >
-                    {yearOptions.map((option) => (
-                      <Dropdown.Item
-                        key={option.value}
-                        active={selectedYear === option.value}
-                        onClick={() => setSelectedYear(option.value)}
-                      >
-                        {option.label}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                </Col>
-                <Col xs={12} sm={6} md={3} className="mb-2">
-                  <DropdownButton
-                    id="floor-dropdown"
-                    title={
-                      selectedFloor !== null
-                        ? floorOptions.find(
-                            (option) => option.value === selectedFloor
-                          )?.label
-                        : "Select Floor"
-                    }
-                    variant="dark"
-                    className="me-2"
-                  >
-                    {floorOptions.map((option) => (
-                      <Dropdown.Item
-                        key={option.value}
-                        active={selectedFloor === option.value}
-                        onClick={() => setSelectedFloor(option.value)}
-                      >
-                        {option.label}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                </Col>
-                <Col xs={12} sm={6} md={3} className="mb-2">
-                  <DropdownButton
-                    id="bay-dropdown"
-                    title={
-                      selectedBay !== null
-                        ? bayOptions.find(
-                            (option) => option.value === selectedBay
-                          )?.label
-                        : "Select Bay"
-                    }
-                    variant="dark"
-                    className="me-2"
-                  >
-                    {bayOptions.map((option) => (
-                      <Dropdown.Item
-                        key={option.value}
-                        active={selectedBay === option.value}
-                        onClick={() => setSelectedBay(option.value)}
-                      >
-                        {option.label}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                </Col>
-              </div>
+      {email ? (
+        <>
+          <NavbarRoot />
+          <Container fluid="md">
+            <Row>
+              <Col className="text-center">
+                <h1 className="mt-3">Edit Students</h1>
+              </Col>
             </Row>
-            <ListGroup>
-              {filteredStudents.map((student) => (
-                <ListGroup.Item
-                  key={student.studentId}
-                  onClick={() => handleUpdateStudent(student)}
-                  className="myDiv"
-                >
-                  <Row>
-                    <Col xs={12} sm={6} md={3}>
-                      <strong>ID:</strong> {student.studentId} <br />
-                      <strong>Name:</strong> {student.title}{" "}
-                      {student.studentName}
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <div className="d-flex justify-content-center">
+                <Alert variant="danger">{error}</Alert>
+              </div>
+            ) : (
+              <>
+                <Row className="d-flex justify-content-center">
+                  <div
+                    className="justify-content-center"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      margin: 20,
+                    }}
+                  >
+                    <Col xs={12} sm={6} md={3} className="mb-2">
+                      <DropdownButton
+                        id="teamleader-dropdown"
+                        title={
+                          selectedTeamleader !== null
+                            ? teamleaderOptions.find(
+                                (option) => option.value === selectedTeamleader
+                              )?.label
+                            : "Select Team Leader"
+                        }
+                        variant="dark"
+                        className="me-2"
+                      >
+                        {teamleaderOptions.map((option) => (
+                          <Dropdown.Item
+                            key={option.value}
+                            active={selectedTeamleader === option.value}
+                            onClick={() => setSelectedTeamleader(option.value)}
+                          >
+                            {option.label}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
                     </Col>
-                    <Col xs={12} sm={6} md={3}>
-                      <strong>Year:</strong>{" "}
-                      {calculateStudentYear(student.startClinicYear)}th
-                      <br />
-                      <strong>Email:</strong> {student.studentEmail}
+                    <Col xs={12} sm={6} md={3} className="mb-2">
+                      <DropdownButton
+                        id="year-dropdown"
+                        title={
+                          selectedYear !== null
+                            ? yearOptions.find(
+                                (option) => option.value === selectedYear
+                              )?.label
+                            : "Select Year"
+                        }
+                        variant="dark"
+                        className="me-2"
+                      >
+                        {yearOptions.map((option) => (
+                          <Dropdown.Item
+                            key={option.value}
+                            active={selectedYear === option.value}
+                            onClick={() => setSelectedYear(option.value)}
+                          >
+                            {option.label}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
                     </Col>
-                    <Col xs={12} sm={6} md={3}>
-                      <strong>Status:</strong> {student.status} <br />
+                    <Col xs={12} sm={6} md={3} className="mb-2">
+                      <DropdownButton
+                        id="floor-dropdown"
+                        title={
+                          selectedFloor !== null
+                            ? floorOptions.find(
+                                (option) => option.value === selectedFloor
+                              )?.label
+                            : "Select Floor"
+                        }
+                        variant="dark"
+                        className="me-2"
+                      >
+                        {floorOptions.map((option) => (
+                          <Dropdown.Item
+                            key={option.value}
+                            active={selectedFloor === option.value}
+                            onClick={() => setSelectedFloor(option.value)}
+                          >
+                            {option.label}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
                     </Col>
-                    <Col xs={12} sm={6} md={3}>
-                      <strong>Team Leader:</strong>{" "}
-                      {getInstructorName(student.teamleaderEmail)} <br />
-                      <strong>Bay:</strong> {"M" + student.floor}
-                      {student.bay}
+                    <Col xs={12} sm={6} md={3} className="mb-2">
+                      <DropdownButton
+                        id="bay-dropdown"
+                        title={
+                          selectedBay !== null
+                            ? bayOptions.find(
+                                (option) => option.value === selectedBay
+                              )?.label
+                            : "Select Bay"
+                        }
+                        variant="dark"
+                        className="me-2"
+                      >
+                        {bayOptions.map((option) => (
+                          <Dropdown.Item
+                            key={option.value}
+                            active={selectedBay === option.value}
+                            onClick={() => setSelectedBay(option.value)}
+                          >
+                            {option.label}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
                     </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-            {selectedStudent && (
-              <ModalEditStudent
-                show={show}
-                handleClose={handleClose}
-                student={selectedStudent}
-              />
+                  </div>
+                </Row>
+                <ListGroup>
+                  {filteredStudents.map((student) => (
+                    <ListGroup.Item
+                      key={student.studentId}
+                      onClick={() => handleUpdateStudent(student)}
+                      className="myDiv"
+                    >
+                      <Row>
+                        <Col xs={12} sm={6} md={3}>
+                          <strong>ID:</strong> {student.studentId} <br />
+                          <strong>Name:</strong> {student.title}{" "}
+                          {student.studentName}
+                        </Col>
+                        <Col xs={12} sm={6} md={3}>
+                          <strong>Year:</strong>{" "}
+                          {calculateStudentYear(student.startClinicYear)}th
+                          <br />
+                          <strong>Email:</strong> {student.studentEmail}
+                        </Col>
+                        <Col xs={12} sm={6} md={3}>
+                          <strong>Status:</strong> {student.status} <br />
+                        </Col>
+                        <Col xs={12} sm={6} md={3}>
+                          <strong>Team Leader:</strong>{" "}
+                          {getInstructorName(student.teamleaderEmail)} <br />
+                          <strong>Bay:</strong> {"M" + student.floor}
+                          {student.bay}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                {selectedStudent && (
+                  <ModalEditStudent
+                    show={show}
+                    handleClose={handleClose}
+                    student={selectedStudent}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
-      </Container>
-      <br />
+          </Container>
+          <br />
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

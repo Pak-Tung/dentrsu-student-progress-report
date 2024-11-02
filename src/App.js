@@ -41,6 +41,7 @@ import ProfilePatientBank from "./pages/patientBank/ProfilePatientBank";
 import ProfileSupervisor from "./pages/supervisor/ProfileSupervisor";
 import StudentAllReq from "./pages/supervisor/StudentAllReq";
 import InstructorOverview from "./pages/supervisor/InstructorOverview";
+import UploadPatients from "./pages/root/UploadPatients";
 
 //import SelectRoleAdmin from "./pages/admins/selectRoleAdmin";
 
@@ -79,6 +80,7 @@ function App() {
         <Route path="/addUser" element={<UserManagement />} />
         <Route path="/editInstructors" element={<EditInstructors />} />
         <Route path="/editStudents" element={<EditStudents />} />
+        <Route path="/uploadPatients" element={<UploadPatients />} />
 
         <Route path="/addNewPatient" element={<AddNewPatient />} />
         <Route path="/assignPatientToInstructor" element={<AssignPatientToInstructor />} />

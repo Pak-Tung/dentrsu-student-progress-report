@@ -124,7 +124,7 @@ function Overview() {
 
   return (
     <>
-      {userEmail !== undefined ? (
+      {userEmail ? (
         <>
           {success ? (
             <>

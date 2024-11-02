@@ -10,10 +10,13 @@ import {
 } from "../../features/apiCalls";
 import { convertToUTCPlus7 } from "../../utilities/dateUtils";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function SearchPatientByHN() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
+
+  const email = Cookies.get("email");
 
   const [role, setRole] = useState("");
   useEffect(() => {
@@ -149,210 +152,220 @@ function SearchPatientByHN() {
 
   return (
     <>
-      {role === "ptBank" ? <NavbarPatientBank /> : <NavbarSupervisor />}
-      <Container className={`${containerClass}`}>
-        <Form className="mt-4">
-          <Form.Group as={Row} className="mb-3">
-            <Col md={8}>
-              <Form.Control
-                type="text"
-                name="hn"
-                value={hn}
-                onChange={(e) => setHn(e.target.value)}
-                required
-                placeholder="กรอกเลขที่บัตรผู้ป่วย"
-              />
-            </Col>
-            <Col>
-              <Button variant="dark" onClick={handleFetchPatientByHn}>
-                ค้นหาผู้ป่วยจากเลขที่บัตร
-              </Button>
-            </Col>
-          </Form.Group>
-
-          {/* Render the patient details only if patient data is available */}
-          {show && (
-            <>
+      {email ? (
+        <>
+          {role === "ptBank" ? <NavbarPatientBank /> : <NavbarSupervisor />}
+          <Container className={`${containerClass}`}>
+            <Form className="mt-4">
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  ชื่อ นามสกุล ผู้ปวย
-                </Form.Label>
-                <Col md={9}>
+                <Col md={8}>
                   <Form.Control
                     type="text"
-                    name="name"
-                    value={updatePt.name}
-                    placeholder="คำนำหน้า ชื่อ นามสกุล ผู้ปวย"
-                    onChange={(e) =>
-                      setUpdatePt((prevPt) => ({
-                        ...prevPt,
-                        name: e.target.value,
-                      }))
-                    }
-                    readOnly
+                    name="hn"
+                    value={hn}
+                    onChange={(e) => setHn(e.target.value)}
+                    required
+                    placeholder="กรอกเลขที่บัตรผู้ป่วย"
                   />
+                </Col>
+                <Col>
+                  <Button variant="dark" onClick={handleFetchPatientByHn}>
+                    ค้นหาผู้ป่วยจากเลขที่บัตร
+                  </Button>
                 </Col>
               </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  หมายเลขโทรศัพท์ผู้ป่วย:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="tel"
-                    value={updatePt.tel}
-                    onChange={(e) =>
-                      setUpdatePt((prevPt) => ({
-                        ...prevPt,
-                        tel: e.target.value,
-                      }))
-                    }
-                    placeholder="เบอร์โทรศัพท์ผู้ป่วย"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
+              {/* Render the patient details only if patient data is available */}
+              {show && (
+                <>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      ชื่อ นามสกุล ผู้ปวย
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="name"
+                        value={updatePt.name}
+                        placeholder="คำนำหน้า ชื่อ นามสกุล ผู้ปวย"
+                        onChange={(e) =>
+                          setUpdatePt((prevPt) => ({
+                            ...prevPt,
+                            name: e.target.value,
+                          }))
+                        }
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  วันเกิดผู้ป่วย:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="birthDate"
-                    value={updatePt.birthDate}
-                    onChange={(e) =>
-                      setUpdatePt((prevPt) => ({
-                        ...prevPt,
-                        birthDate: e.target.value,
-                      }))
-                    }
-                    placeholder="วันเกิดผู้ป่วย"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      หมายเลขโทรศัพท์ผู้ป่วย:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="tel"
+                        value={updatePt.tel}
+                        onChange={(e) =>
+                          setUpdatePt((prevPt) => ({
+                            ...prevPt,
+                            tel: e.target.value,
+                          }))
+                        }
+                        placeholder="เบอร์โทรศัพท์ผู้ป่วย"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  ชื่อผู้ติดต่อกรณีฉุกเฉิน:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="emergencyContact"
-                    value={updatePt.emergencyContact}
-                    onChange={(e) =>
-                      setUpdatePt((prevPt) => ({
-                        ...prevPt,
-                        emergencyContact: e.target.value,
-                      }))
-                    }
-                    placeholder="ชื่อผู้ติดต่อกรณีฉุกเฉิน"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      วันเกิดผู้ป่วย:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="birthDate"
+                        value={updatePt.birthDate}
+                        onChange={(e) =>
+                          setUpdatePt((prevPt) => ({
+                            ...prevPt,
+                            birthDate: e.target.value,
+                          }))
+                        }
+                        placeholder="วันเกิดผู้ป่วย"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  ความสัมพันธ์กับผู้ป่วย:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="relationship"
-                    value={updatePt.relationship}
-                    onChange={(e) =>
-                      setUpdatePt((prevPt) => ({
-                        ...prevPt,
-                        relationship: e.target.value,
-                      }))
-                    }
-                    placeholder="ความสัมพันธ์กับผู้ป่วย"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      ชื่อผู้ติดต่อกรณีฉุกเฉิน:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="emergencyContact"
+                        value={updatePt.emergencyContact}
+                        onChange={(e) =>
+                          setUpdatePt((prevPt) => ({
+                            ...prevPt,
+                            emergencyContact: e.target.value,
+                          }))
+                        }
+                        placeholder="ชื่อผู้ติดต่อกรณีฉุกเฉิน"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="emergencyTel"
-                    value={updatePt.emergencyTel}
-                    onChange={(e) =>
-                      setUpdatePt((prevPt) => ({
-                        ...prevPt,
-                        emergencyTel: e.target.value,
-                      }))
-                    }
-                    placeholder="หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      ความสัมพันธ์กับผู้ป่วย:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="relationship"
+                        value={updatePt.relationship}
+                        onChange={(e) =>
+                          setUpdatePt((prevPt) => ({
+                            ...prevPt,
+                            relationship: e.target.value,
+                          }))
+                        }
+                        placeholder="ความสัมพันธ์กับผู้ป่วย"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  หมายเหตุ:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="note"
-                    value={updatePt.note}
-                    onChange={(e) =>
-                      setUpdatePt((prevPt) => ({
-                        ...prevPt,
-                        note: e.target.value,
-                      }))
-                    }
-                    placeholder="หมายเหตุ"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="emergencyTel"
+                        value={updatePt.emergencyTel}
+                        onChange={(e) =>
+                          setUpdatePt((prevPt) => ({
+                            ...prevPt,
+                            emergencyTel: e.target.value,
+                          }))
+                        }
+                        placeholder="หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  อาจารย์ผู้รับมอบหมาย:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="teamleaderEmail"
-                    value={getInstructorName(updatePt.teamleaderEmail)}
-                    placeholder="อาจารย์ผู้รับมอบหมาย"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      หมายเหตุ:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="note"
+                        value={updatePt.note}
+                        onChange={(e) =>
+                          setUpdatePt((prevPt) => ({
+                            ...prevPt,
+                            note: e.target.value,
+                          }))
+                        }
+                        placeholder="หมายเหตุ"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  นักศึกษาผู้รับเคส:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="studentEmail"
-                    value={getStudentName(updatePt.studentEmail)}
-                    placeholder="นักศึกษาผู้รับเคส"
-                    readOnly
-                  />
-                </Col>
-              </Form.Group>
-            </>
-          )}
-        </Form>
-      </Container>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      อาจารย์ผู้รับมอบหมาย:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="teamleaderEmail"
+                        value={getInstructorName(updatePt.teamleaderEmail)}
+                        placeholder="อาจารย์ผู้รับมอบหมาย"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      นักศึกษาผู้รับเคส:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="studentEmail"
+                        value={getStudentName(updatePt.studentEmail)}
+                        placeholder="นักศึกษาผู้รับเคส"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
+                </>
+              )}
+            </Form>
+          </Container>
+        </>
+      ) : (
+        <>
+          <div>
+            <LoginByEmail />
+          </div>
+        </>
+      )}
     </>
   );
 }

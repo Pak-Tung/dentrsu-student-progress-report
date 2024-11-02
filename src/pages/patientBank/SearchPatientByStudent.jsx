@@ -12,6 +12,7 @@ import {
   getPatientsByStudentEmail,
 } from "../../features/apiCalls";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -26,7 +27,7 @@ function SearchPatientByStudent() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
-
+  const email = Cookies.get("email");
   const [role, setRole] = useState("");
   useEffect(() => {
     const savedRole = Cookies.get("role");
@@ -84,70 +85,78 @@ function SearchPatientByStudent() {
 
   return (
     <>
-      {role === "ptBank" ? <NavbarPatientBank/>:<NavbarSupervisor />}
-      <Container>
-        <h4>ค้นหาผู้ป่วยด้วยรหัสนักศึกษา</h4>
-        <Form className={`mt-4 ${containerClass}`}>
-          <Form.Group as={Row} className="mb-3">
-
-            <Col md={8}>
-              <Form.Control
-                type="text"
-                name="hn"
-                value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
-                required
-                placeholder="กรอก รหัสนักศึกษา เพื่อค้นหาผู้ป่วย"
-              />
-            </Col>
-            <Col>
-              <Button variant="dark" onClick={handleFetchPatientByStudentId}>
-                ค้นหาผู้ป่วย
-              </Button>
-            </Col>
-          </Form.Group>
-
-          {show && (
-            <>
+      {email ? (
+        <>
+          {role === "ptBank" ? <NavbarPatientBank /> : <NavbarSupervisor />}
+          <Container>
+            <h4>ค้นหาผู้ป่วยด้วยรหัสนักศึกษา</h4>
+            <Form className={`mt-4 ${containerClass}`}>
               <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={2}>
-                  ชื่อ-สกุล นักศึกษา:
-                </Form.Label>
-                <Col md={9}>
+                <Col md={8}>
                   <Form.Control
                     type="text"
-                    name="studentEmail"
-                    value={student.studentName || ""} // Fallback to empty string if undefined
-                    placeholder="นักศึกษาผู้รับเคส"
-                    readOnly
+                    name="hn"
+                    value={studentId}
+                    onChange={(e) => setStudentId(e.target.value)}
+                    required
+                    placeholder="กรอก รหัสนักศึกษา เพื่อค้นหาผู้ป่วย"
                   />
                 </Col>
+                <Col>
+                  <Button
+                    variant="dark"
+                    onClick={handleFetchPatientByStudentId}
+                  >
+                    ค้นหาผู้ป่วย
+                  </Button>
+                </Col>
               </Form.Group>
-            </>
-          )}
-        </Form>
-      </Container>
 
-      {loadingPatients ? (
-        <FadeIn>
-          <div>
-            <Container>
-              <Row className="d-flex justify-content-center">
-                <Lottie options={defaultOptions} height={140} width={140} />
-              </Row>
-            </Container>
-          </div>
-        </FadeIn>
-      ) : error ? (
-        <div className="d-flex justify-content-center">
-          <Alert variant="danger" className={alertClass}>
-            {error}
-          </Alert>
-        </div>
+              {show && (
+                <>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={2}>
+                      ชื่อ-สกุล นักศึกษา:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="studentEmail"
+                        value={student.studentName || ""} // Fallback to empty string if undefined
+                        placeholder="นักศึกษาผู้รับเคส"
+                        readOnly
+                      />
+                    </Col>
+                  </Form.Group>
+                </>
+              )}
+            </Form>
+          </Container>
+
+          {loadingPatients ? (
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
+          ) : error ? (
+            <div className="d-flex justify-content-center">
+              <Alert variant="danger" className={alertClass}>
+                {error}
+              </Alert>
+            </div>
+          ) : (
+            <div className="d-flex justify-content-center">
+              <PatientCard patients={patients} />
+            </div>
+          )}
+        </>
       ) : (
-        <div className="d-flex justify-content-center">
-          <PatientCard patients={patients} />
-        </div>
+        <LoginByEmail />
       )}
     </>
   );

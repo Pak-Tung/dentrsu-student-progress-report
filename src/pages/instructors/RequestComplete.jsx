@@ -7,12 +7,21 @@ import {
   updateStatusByStudentEmail,
   updateRequestByStudentEmail,
 } from "../../features/apiCalls";
-import { Container, Row, Col, ListGroup, Badge, Button, Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Badge,
+  Button,
+  Alert,
+} from "react-bootstrap";
 import * as loadingData from "../../components/loading.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -102,66 +111,78 @@ function RequestComplete() {
 
   return (
     <>
-      <NavbarInstructor />
-      <Container fluid="md" className={containerClass}>
-        <h1>Requesting Complete Status</h1>
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
-        ) : error ? (
-          <div className="d-flex justify-content-center">
-            <Alert variant="danger" className={alertClass}>{error}</Alert>
-          </div>
-        ) : requestStudent.length === 0 ? (
-          <div className="d-flex justify-content-center">
-            <p>No student request for complete status approval.</p>
-          </div>
-        ) : (
-          <ListGroup>
-            {requestStudent.map((student) => (
-              <div key={student.studentId}>
-                <ListGroup.Item className={listGroupItemClass}>
-                  <Badge bg="danger" pill className={badgeClass}>
-                    Requesting Complete Status
-                  </Badge>
-                  <Row>
-                    <Col>
-                      <strong>db-ID:</strong> {student.studentId} <br />
-                      <strong>Student:</strong> {student.studentName} <br />
-                    </Col>
-                    <Col>
-                      <strong>Email:</strong> {student.studentEmail} <br />
-                      <strong>Bay:</strong> {"M" + student.floor}
-                      {student.bay}
-                      {student.unitNumber}
-                    </Col>
-                    <Col>
-                      <strong>Year:</strong>{" "}
-                      {calculateStudentYear(student.startClinicYear)} <br />
-                    </Col>
-                    <Col className="d-flex justify-content-center">
-                      <Button
-                        variant="success"
-                        onClick={() => handleStudent(student.studentEmail)}
-                        className={buttonClass}
-                      >
-                        Approve
-                      </Button>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
+      {userEmail ? (
+        <>
+          <NavbarInstructor />
+          <Container fluid="md" className={containerClass}>
+            <h1>Requesting Complete Status</h1>
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <div className="d-flex justify-content-center">
+                <Alert variant="danger" className={alertClass}>
+                  {error}
+                </Alert>
               </div>
-            ))}
-          </ListGroup>
-        )}
-      </Container>
+            ) : requestStudent.length === 0 ? (
+              <div className="d-flex justify-content-center">
+                <p>No student request for complete status approval.</p>
+              </div>
+            ) : (
+              <ListGroup>
+                {requestStudent.map((student) => (
+                  <div key={student.studentId}>
+                    <ListGroup.Item className={listGroupItemClass}>
+                      <Badge bg="danger" pill className={badgeClass}>
+                        Requesting Complete Status
+                      </Badge>
+                      <Row>
+                        <Col>
+                          <strong>db-ID:</strong> {student.studentId} <br />
+                          <strong>Student:</strong> {student.studentName} <br />
+                        </Col>
+                        <Col>
+                          <strong>Email:</strong> {student.studentEmail} <br />
+                          <strong>Bay:</strong> {"M" + student.floor}
+                          {student.bay}
+                          {student.unitNumber}
+                        </Col>
+                        <Col>
+                          <strong>Year:</strong>{" "}
+                          {calculateStudentYear(student.startClinicYear)} <br />
+                        </Col>
+                        <Col className="d-flex justify-content-center">
+                          <Button
+                            variant="success"
+                            onClick={() => handleStudent(student.studentEmail)}
+                            className={buttonClass}
+                          >
+                            Approve
+                          </Button>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  </div>
+                ))}
+              </ListGroup>
+            )}
+          </Container>
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

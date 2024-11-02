@@ -76,7 +76,7 @@ function ReqSubmit() {
 
   return (
     <>
-      {userEmail !== undefined ? (
+      {userEmail ? (
         <>
           <Navbar />
           <Container>
@@ -118,7 +118,6 @@ function ReqSubmit() {
       ) : (
         <>
           <div>
-            {/* <GoogleLogin /> */}
             <LoginByEmail />
           </div>
         </>

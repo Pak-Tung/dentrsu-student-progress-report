@@ -17,6 +17,7 @@ import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -32,7 +33,7 @@ function EditApprovedReq() {
     const savedDivision = Cookies.get("division");
     return savedDivision ? savedDivision : "";
   });
-
+  const email = Cookies.get("email");
   const [idInput, setIdInput] = useState("");
   const [reqData, setReqData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,103 +97,117 @@ function EditApprovedReq() {
 
   return (
     <>
-      <NavbarAdmin />
-      <Container className="mt-5">
-        <div className="d-flex justify-content-center mb-4">
-          <h2>Edit Approved Requirement</h2>
-        </div>
-        <Form onSubmit={retrieveReqById}>
-          <Row className="d-flex justify-content-center mb-4">
-            <Col md={6}>
-              <InputGroup>
-                <InputGroup.Text id="div-id">Requirement Id</InputGroup.Text>
-                <Form.Control
-                  type="number"
-                  placeholder="Requirement Id"
-                  aria-label="id"
-                  aria-describedby="id"
-                  value={idInput}
-                  onChange={handleInput}
-                  required
-                />
-                <Button type="submit">Fetch</Button>
-              </InputGroup>
-            </Col>
-          </Row>
-        </Form>
-
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
+      {email ? (
+        <>
+          <NavbarAdmin />
+          <Container className="mt-5">
+            <div className="d-flex justify-content-center mb-4">
+              <h2>Edit Approved Requirement</h2>
             </div>
-          </FadeIn>
-        ) : error ? (
-          <div className="d-flex justify-content-center">
-            <Alert variant="danger">{error}</Alert>
-          </div>
-        ) : reqData.length === 0 ? (
-          <div className="text-center">No data available for the given ID.</div>
-        ) : (
-          <ListGroup>
-            {sortedReqData.map((req) => (
-              <div key={req.id}>
-                <ListGroup.Item>
-                  <Badge
-                    bg={
-                      req.isApproved === 1
-                        ? "success"
-                        : req.isApproved === -1
-                        ? "danger"
-                        : "warning"
-                    }
-                    pill
-                  >
-                    {req.isApproved === 1
-                      ? "APPROVED"
-                      : req.isApproved === -1
-                      ? "REVISIONS"
-                      : "PENDING"}
-                  </Badge>
-                  <Row>
-                    <Col>
-                      <strong>db-ID:</strong> {req.id} <br />
-                      <strong>Type:</strong> {req.type}
-                    </Col>
-                    <Col>
-                      <strong>Area:</strong> {req.area}
-                    </Col>
-                    <Col>
-                      <strong>RSU:</strong> {req.req_RSU} <br />
-                      <strong>DC:</strong> {req.req_DC}
-                    </Col>
-                    <Col>
-                      <strong>HN:</strong> {req.HN} <br />
-                      <strong>Name:</strong> {req.patientName}
-                    </Col>
-                    <Col>
-                      <strong>Book No:</strong> {req.bookNo} <br />
-                      <strong>Page No:</strong> {req.pageNo}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-                <br />
-                <Row className="d-flex justify-content-center mb-4">
-                  <Col className="d-flex justify-content-center mb-4">
-                    <Button onClick={handleSetStatus}>
-                      Set Approve Status to Pending
-                    </Button>
-                  </Col>
-                </Row>
+            <Form onSubmit={retrieveReqById}>
+              <Row className="d-flex justify-content-center mb-4">
+                <Col md={6}>
+                  <InputGroup>
+                    <InputGroup.Text id="div-id">
+                      Requirement Id
+                    </InputGroup.Text>
+                    <Form.Control
+                      type="number"
+                      placeholder="Requirement Id"
+                      aria-label="id"
+                      aria-describedby="id"
+                      value={idInput}
+                      onChange={handleInput}
+                      required
+                    />
+                    <Button type="submit">Fetch</Button>
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Form>
+
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <div className="d-flex justify-content-center">
+                <Alert variant="danger">{error}</Alert>
               </div>
-            ))}
-          </ListGroup>
-        )}
-      </Container>
+            ) : reqData.length === 0 ? (
+              <div className="text-center">
+                No data available for the given ID.
+              </div>
+            ) : (
+              <ListGroup>
+                {sortedReqData.map((req) => (
+                  <div key={req.id}>
+                    <ListGroup.Item>
+                      <Badge
+                        bg={
+                          req.isApproved === 1
+                            ? "success"
+                            : req.isApproved === -1
+                            ? "danger"
+                            : "warning"
+                        }
+                        pill
+                      >
+                        {req.isApproved === 1
+                          ? "APPROVED"
+                          : req.isApproved === -1
+                          ? "REVISIONS"
+                          : "PENDING"}
+                      </Badge>
+                      <Row>
+                        <Col>
+                          <strong>db-ID:</strong> {req.id} <br />
+                          <strong>Type:</strong> {req.type}
+                        </Col>
+                        <Col>
+                          <strong>Area:</strong> {req.area}
+                        </Col>
+                        <Col>
+                          <strong>RSU:</strong> {req.req_RSU} <br />
+                          <strong>DC:</strong> {req.req_DC}
+                        </Col>
+                        <Col>
+                          <strong>HN:</strong> {req.HN} <br />
+                          <strong>Name:</strong> {req.patientName}
+                        </Col>
+                        <Col>
+                          <strong>Book No:</strong> {req.bookNo} <br />
+                          <strong>Page No:</strong> {req.pageNo}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                    <br />
+                    <Row className="d-flex justify-content-center mb-4">
+                      <Col className="d-flex justify-content-center mb-4">
+                        <Button onClick={handleSetStatus}>
+                          Set Approve Status to Pending
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
+                ))}
+              </ListGroup>
+            )}
+          </Container>
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

@@ -86,7 +86,7 @@ function CompOverview() {
 
   return (
     <>
-      {userEmail !== undefined ? (
+      {userEmail ? (
         <>
           <Navbar />
           <br />

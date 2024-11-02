@@ -19,6 +19,7 @@ import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -29,17 +30,7 @@ const defaultOptions = {
   },
 };
 
-const defaultOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: successData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
 function MemberInTeam(email) {
-  //console.log("instructorEmail", email.instructorEmail);
   const { theme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
@@ -59,28 +50,6 @@ function MemberInTeam(email) {
   const [studentData, setStudentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   if (role) {
-  //     const fetchData = async () => {
-  //       try {
-  //         const emailToUse =
-  //           role === "instructor" ? userEmail : email.instructorEmail;
-  //         const result = await getStudentByTeamleaderEmail(emailToUse);
-  //         //console.log('result', result);
-  //         setStudentData(result);
-  //         if(result === undefined || result.length === 0){
-  //           setError("No students found");
-  //         }
-  //       } catch (err) {
-  //         setError("Failed to fetch students");
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-  //     fetchData();
-  //   }
-  // }, [userEmail, role]);
 
   useEffect(() => {
     if (role) {
@@ -138,97 +107,109 @@ function MemberInTeam(email) {
 
   return (
     <>
-      {role === "instructor" || role === "root" || role === "admin" ? (
-        <NavbarInstructor />
-      ) : null}
-      <Container fluid="md" className={containerClass}>
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
-        ) : error ? (
-          <Alert variant="danger" className={alertClass}>
-            {error}
-          </Alert>
-        ) : (
-          <>
-            {role === "instructor" ? (
-              <div className="d-flex justify-content-center mb-4">
-                <h4>Member In Team: ({studentData.length} students) </h4>
-              </div>
-            ) : null}
-            <ListGroup>
-              {sortedStudentData.map((student, index) => (
-                <ListGroup.Item
-                  key={index}
-                  onClick={() => handleStudentSelect(student)}
-                  className={`myDiv ${listGroupItemClass}`}
-                >
-                  <Row>
-                    <Col md={2}>
-                      <Image
-                        src={
-                          student.image
-                            ? student.image
-                            : "https://img5.pic.in.th/file/secure-sv1/avataaarss.png"
-                        }
-                        roundedCircle
-                        fluid
-                        width="75"
-                        height="75"
+      {(email || userEmail) ? (
+        <>
+          {role === "instructor" || role === "root" || role === "admin" ? (
+            <NavbarInstructor />
+          ) : null}
+          <Container fluid="md" className={containerClass}>
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
                       />
-                    </Col>
-                    <Col md={6}>
-                      <Badge
-                        bg={
-                          student.status === "Complete" ? "success" : "danger"
-                        }
-                      >
-                        {student.status}
-                      </Badge>
-                      <h5>
-                        {student.studentId} {student.title}{" "}
-                        {student.studentName}
-                      </h5>
-                      <p>
-                        Email: <strong>{student.studentEmail}</strong>
-                      </p>
-                    </Col>
-                    <Col>
-                      <p>
-                        Student Year:
-                        <strong>
-                          {calculateStudentYear(student.startClinicYear)}th
-                        </strong>
-                      </p>
-                      <p>
-                        Bay:{" "}
-                        <strong>
-                          {" "}
-                          M{student.floor}
-                          {student.bay}
-                          {student.unitNumber}
-                        </strong>
-                      </p>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </>
-        )}
-      </Container>
-      <ModalStudent
-        show={show}
-        handleClose={handleClose}
-        student={selectedStudent}
-      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <Alert variant="danger" className={alertClass}>
+                {error}
+              </Alert>
+            ) : (
+              <>
+                {role === "instructor" ? (
+                  <div className="d-flex justify-content-center mb-4">
+                    <h4>Member In Team: ({studentData.length} students) </h4>
+                  </div>
+                ) : null}
+                <ListGroup>
+                  {sortedStudentData.map((student, index) => (
+                    <ListGroup.Item
+                      key={index}
+                      onClick={() => handleStudentSelect(student)}
+                      className={`myDiv ${listGroupItemClass}`}
+                    >
+                      <Row>
+                        <Col md={2}>
+                          <Image
+                            src={
+                              student.image
+                                ? student.image
+                                : "https://img5.pic.in.th/file/secure-sv1/avataaarss.png"
+                            }
+                            roundedCircle
+                            fluid
+                            width="75"
+                            height="75"
+                          />
+                        </Col>
+                        <Col md={6}>
+                          <Badge
+                            bg={
+                              student.status === "Complete"
+                                ? "success"
+                                : "danger"
+                            }
+                          >
+                            {student.status}
+                          </Badge>
+                          <h5>
+                            {student.studentId} {student.title}{" "}
+                            {student.studentName}
+                          </h5>
+                          <p>
+                            Email: <strong>{student.studentEmail}</strong>
+                          </p>
+                        </Col>
+                        <Col>
+                          <p>
+                            Student Year:
+                            <strong>
+                              {calculateStudentYear(student.startClinicYear)}th
+                            </strong>
+                          </p>
+                          <p>
+                            Bay:{" "}
+                            <strong>
+                              {" "}
+                              M{student.floor}
+                              {student.bay}
+                              {student.unitNumber}
+                            </strong>
+                          </p>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </>
+            )}
+          </Container>
+          <ModalStudent
+            show={show}
+            handleClose={handleClose}
+            student={selectedStudent}
+          />
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

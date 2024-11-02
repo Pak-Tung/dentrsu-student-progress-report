@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  Spinner,
-  Alert,
-} from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getInstructorsByDivision } from "../../features/apiCalls";
 import ModalManageAdvisor from "./ModalManageAdvisor";
@@ -16,6 +9,7 @@ import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -31,7 +25,7 @@ function DivisionAdvisor() {
     const savedDivision = Cookies.get("division");
     return savedDivision ? savedDivision : "";
   });
-
+  const email = Cookies.get("email");
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -81,65 +75,75 @@ function DivisionAdvisor() {
 
   return (
     <>
-      <NavbarAdmin />
-      <Container fluid>
-        <Row className="justify-content-center mb-4">
-          <Col className="text-center">
-            <h4 className="mb-4">{fullNameDivision(division)} Advisor</h4>
-          </Col>
-        </Row>
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
-        ) : error ? (
-          <Row className="justify-content-center">
-            <Alert variant="danger">{error}</Alert>
-          </Row>
-        ) : (
-          <ListGroup>
-            {instructors.map((instructor, index) => (
-              <ListGroup.Item
-                key={index}
-                onClick={() => handleInstructorSelect(instructor)}
-                className="myDiv"
-              >
-                <Row>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <h5>
-                      {index + 1}. {instructor.title}{" "}
-                      {instructor.instructorName}
-                    </h5>
-                  </Col>
-                  <Col md={4}>
-                    <p>
-                      Teamleader:{" "}
-                      <strong>
-                        M{instructor.floor}
-                        {instructor.bay}
-                      </strong>
-                    </p>
-                  </Col>
-                  <Col md={2}></Col>
-                </Row>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        )}
-      </Container>
-      {selectedInstructor && (
-        <ModalManageAdvisor
-          show={show}
-          handleClose={handleClose}
-          instructor={selectedInstructor}
-        />
+      {email ? (
+        <>
+          <NavbarAdmin />
+          <Container fluid>
+            <Row className="justify-content-center mb-4">
+              <Col className="text-center">
+                <h4 className="mb-4">{fullNameDivision(division)} Advisor</h4>
+              </Col>
+            </Row>
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <Row className="justify-content-center">
+                <Alert variant="danger">{error}</Alert>
+              </Row>
+            ) : (
+              <ListGroup>
+                {instructors.map((instructor, index) => (
+                  <ListGroup.Item
+                    key={index}
+                    onClick={() => handleInstructorSelect(instructor)}
+                    className="myDiv"
+                  >
+                    <Row>
+                      <Col md={2}></Col>
+                      <Col md={4}>
+                        <h5>
+                          {index + 1}. {instructor.title}{" "}
+                          {instructor.instructorName}
+                        </h5>
+                      </Col>
+                      <Col md={4}>
+                        <p>
+                          Teamleader:{" "}
+                          <strong>
+                            M{instructor.floor}
+                            {instructor.bay}
+                          </strong>
+                        </p>
+                      </Col>
+                      <Col md={2}></Col>
+                    </Row>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            )}
+          </Container>
+          {selectedInstructor && (
+            <ModalManageAdvisor
+              show={show}
+              handleClose={handleClose}
+              instructor={selectedInstructor}
+            />
+          )}
+        </>
+      ) : (
+        <LoginByEmail />
       )}
     </>
   );

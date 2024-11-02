@@ -7,10 +7,7 @@ import {
   getCompReqByInstructorEmail,
   getStudentByEmail,
 } from "../../features/apiCalls";
-import {
-  Container,
-  Row, Col, ListGroup, Badge, Alert,
-} from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Badge, Alert } from "react-bootstrap";
 import ModalCompReqApproval from "./ModalCompReqApproval";
 import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
@@ -18,20 +15,12 @@ import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
   autoplay: true,
   animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
-const defaultOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: successData.default,
   rendererSettings: {
     preserveAspectRatio: "xMidYMid slice",
   },
@@ -130,79 +119,104 @@ function CompApproval() {
 
   return (
     <>
-      <NavbarInstructor />
-      <Container fluid="md" className={containerClass}>
-        <h1 className={textClass}>Complete Case Approval</h1>
+      {userEmail ? (
+        <>
+          <NavbarInstructor />
+          <Container fluid="md" className={containerClass}>
+            <h1 className={textClass}>Complete Case Approval</h1>
 
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
-        ) : error ? (
-          <div className="d-flex justify-content-center">
-            <Alert variant="danger" className={alertClass}>{error}</Alert>
-          </div>
-        ) : pendingReqs.length === 0 ? (
-          <div className="d-flex justify-content-center">
-            <p className={textClass}>No complete case request for approval.</p>
-          </div>
-        ) : (
-          <ListGroup>
-            {pendingReqs.map((pendingReq) => (
-              <div key={pendingReq.id}>
-                <ListGroup.Item
-                  onClick={() => handlePendingReq(pendingReq, studentData[pendingReq.studentEmail])}
-                  className={`myDiv ${listGroupItemClass}`}
-                >
-                  <Badge
-                    bg={
-                      pendingReq.isApproved === 1
-                        ? "success"
-                        : pendingReq.isApproved === -1
-                        ? "danger"
-                        : "warning"
-                    }
-                    className={badgeClass}
-                    pill
-                  >
-                    {pendingReq.isApproved === 1
-                      ? "APPROVED"
-                      : pendingReq.isApproved === -1
-                      ? "REVISIONS REQUIRED"
-                      : "PENDING"}
-                  </Badge>
-                  <Row>
-                    <Col>
-                      <strong className={textClass}>db-ID:</strong> {pendingReq.id} <br />
-                      <strong className={textClass}>Student:</strong> {studentData[pendingReq.studentEmail]} <br />
-                    </Col>
-                    <Col>
-                      <strong className={textClass}>Complexity:</strong> {pendingReq.complexity} <br />
-                      <strong className={textClass}>Note:</strong> {pendingReq.note2}
-                    </Col>
-                    <Col>
-                      <strong className={textClass}>HN:</strong> {pendingReq.HN} <br />
-                      <strong className={textClass}>Name:</strong> {pendingReq.patientName}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <div className="d-flex justify-content-center">
+                <Alert variant="danger" className={alertClass}>
+                  {error}
+                </Alert>
               </div>
-            ))}
-          </ListGroup>
-        )}
-      </Container>
-      <ModalCompReqApproval
-        show={show}
-        handleClose={handleClose}
-        compReq={selectedReq}
-        studentName={selectedStudent}
-      />
+            ) : pendingReqs.length === 0 ? (
+              <div className="d-flex justify-content-center">
+                <p className={textClass}>
+                  No complete case request for approval.
+                </p>
+              </div>
+            ) : (
+              <ListGroup>
+                {pendingReqs.map((pendingReq) => (
+                  <div key={pendingReq.id}>
+                    <ListGroup.Item
+                      onClick={() =>
+                        handlePendingReq(
+                          pendingReq,
+                          studentData[pendingReq.studentEmail]
+                        )
+                      }
+                      className={`myDiv ${listGroupItemClass}`}
+                    >
+                      <Badge
+                        bg={
+                          pendingReq.isApproved === 1
+                            ? "success"
+                            : pendingReq.isApproved === -1
+                            ? "danger"
+                            : "warning"
+                        }
+                        className={badgeClass}
+                        pill
+                      >
+                        {pendingReq.isApproved === 1
+                          ? "APPROVED"
+                          : pendingReq.isApproved === -1
+                          ? "REVISIONS REQUIRED"
+                          : "PENDING"}
+                      </Badge>
+                      <Row>
+                        <Col>
+                          <strong className={textClass}>db-ID:</strong>{" "}
+                          {pendingReq.id} <br />
+                          <strong className={textClass}>Student:</strong>{" "}
+                          {studentData[pendingReq.studentEmail]} <br />
+                        </Col>
+                        <Col>
+                          <strong className={textClass}>Complexity:</strong>{" "}
+                          {pendingReq.complexity} <br />
+                          <strong className={textClass}>Note:</strong>{" "}
+                          {pendingReq.note2}
+                        </Col>
+                        <Col>
+                          <strong className={textClass}>HN:</strong>{" "}
+                          {pendingReq.HN} <br />
+                          <strong className={textClass}>Name:</strong>{" "}
+                          {pendingReq.patientName}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  </div>
+                ))}
+              </ListGroup>
+            )}
+          </Container>
+          <ModalCompReqApproval
+            show={show}
+            handleClose={handleClose}
+            compReq={selectedReq}
+            studentName={selectedStudent}
+          />
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

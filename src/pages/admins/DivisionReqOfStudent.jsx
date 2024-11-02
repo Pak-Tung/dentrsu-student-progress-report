@@ -16,6 +16,7 @@ import * as loadingData from "../../components/loading.json";
 import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -31,7 +32,7 @@ function DivisionReqOfStudent() {
     const savedDivision = Cookies.get("division");
     return savedDivision ? savedDivision : "";
   });
-
+  const email = Cookies.get("email");
   const [studentData, setStudentData] = useState(null);
   const [idInput, setIdInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -83,76 +84,88 @@ function DivisionReqOfStudent() {
 
   return (
     <>
-      <NavbarAdmin />
-      <Container className="mt-4">
-        <div className="d-flex justify-content-center mb-4">
-          <h2>Student {fullNameDivision(division)} Requirement</h2>
-        </div>
-        <Form onSubmit={retrieveStudentById}>
-          <Row className="d-flex justify-content-center mb-4">
-            <Col md={6}>
-              <InputGroup>
-                <InputGroup.Text id="div-id">Student Id</InputGroup.Text>
-                <Form.Control
-                  type="number"
-                  placeholder="Student Id"
-                  aria-label="id"
-                  aria-describedby="id"
-                  value={idInput}
-                  onChange={handleInput}
-                  required
-                />
-                <Button type="submit">Fetch</Button>
-              </InputGroup>
-            </Col>
-          </Row>
-        </Form>
-
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
+      {email ? (
+        <>
+          <NavbarAdmin />
+          <Container className="mt-4">
+            <div className="d-flex justify-content-center mb-4">
+              <h2>Student {fullNameDivision(division)} Requirement</h2>
             </div>
-          </FadeIn>
-        ) : error ? (
-          <div className="d-flex justify-content-center">
-            <Alert variant="danger">{error}</Alert>
-          </div>
-        ) : studentData ? (
-          <>
-            <Row className="d-flex justify-content-center mb-4">
-              <Col className="d-flex justify-content-center mb-4">
-                <strong>Student ID: </strong> {studentData.studentId}
-              </Col>
-              <Col className="d-flex justify-content-center mb-4">
-                <strong>Student Name: </strong> {studentData.title}{" "}
-                {studentData.studentName}
-              </Col>
-              <Col className="d-flex justify-content-center mb-4">
-                <strong>Year: </strong>
-                {calculateStudentYear(studentData.startClinicYear)}th
-              </Col>
-              <Col className="d-flex justify-content-center mb-4">
-                <strong>Bay: </strong> M{studentData.floor}
-                {studentData.bay}
-                {studentData.unitNumber}
-              </Col>
-            </Row>
-            <Row>
-              <SumByDivAndStudentEmail
-                division={division}
-                studentEmail={studentData.studentEmail}
-              />
-            </Row>
-          </>
-        ) : (
-          <div className="text-center">No data available for the given ID.</div>
-        )}
-      </Container>
+            <Form onSubmit={retrieveStudentById}>
+              <Row className="d-flex justify-content-center mb-4">
+                <Col md={6}>
+                  <InputGroup>
+                    <InputGroup.Text id="div-id">Student Id</InputGroup.Text>
+                    <Form.Control
+                      type="number"
+                      placeholder="Student Id"
+                      aria-label="id"
+                      aria-describedby="id"
+                      value={idInput}
+                      onChange={handleInput}
+                      required
+                    />
+                    <Button type="submit">Fetch</Button>
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Form>
+
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <div className="d-flex justify-content-center">
+                <Alert variant="danger">{error}</Alert>
+              </div>
+            ) : studentData ? (
+              <>
+                <Row className="d-flex justify-content-center mb-4">
+                  <Col className="d-flex justify-content-center mb-4">
+                    <strong>Student ID: </strong> {studentData.studentId}
+                  </Col>
+                  <Col className="d-flex justify-content-center mb-4">
+                    <strong>Student Name: </strong> {studentData.title}{" "}
+                    {studentData.studentName}
+                  </Col>
+                  <Col className="d-flex justify-content-center mb-4">
+                    <strong>Year: </strong>
+                    {calculateStudentYear(studentData.startClinicYear)}th
+                  </Col>
+                  <Col className="d-flex justify-content-center mb-4">
+                    <strong>Bay: </strong> M{studentData.floor}
+                    {studentData.bay}
+                    {studentData.unitNumber}
+                  </Col>
+                </Row>
+                <Row>
+                  <SumByDivAndStudentEmail
+                    division={division}
+                    studentEmail={studentData.studentEmail}
+                  />
+                </Row>
+              </>
+            ) : (
+              <div className="text-center">
+                No data available for the given ID.
+              </div>
+            )}
+          </Container>
+        </>
+      ) : (
+        <LoginByEmail />
+      )}
     </>
   );
 }

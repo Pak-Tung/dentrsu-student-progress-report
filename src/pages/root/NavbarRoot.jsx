@@ -54,7 +54,7 @@ function NavbarRoot() {
             <NavDropdown.Divider />
             <NavDropdown.Item href="/editStudents">Students</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/uploadPatientsCSV">
+            <NavDropdown.Item href="/uploadPatients">
               Patients
             </NavDropdown.Item>
           </NavDropdown>

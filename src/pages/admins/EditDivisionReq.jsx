@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  Alert,
-} from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getAllReqByDivision } from "../../features/apiCalls";
 import "../../App.css";
@@ -16,6 +10,7 @@ import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -31,7 +26,7 @@ function EditApprovedReq() {
     const savedDivision = Cookies.get("division");
     return savedDivision ? savedDivision : "";
   });
-
+  const email = Cookies.get("email");
   const [reqData, setReqData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -88,71 +83,85 @@ function EditApprovedReq() {
 
   return (
     <>
-      <NavbarAdmin />
-      <Container fluid="md">
-        <div className="d-flex justify-content-center mb-4">
-          <h4>Minimum Requirement of {fullNameDivision(division)} Division</h4>
-        </div>
-        {loading ? (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
+      {email ? (
+        <>
+          <NavbarAdmin />
+          <Container fluid="md">
+            <div className="d-flex justify-content-center mb-4">
+              <h4>
+                Minimum Requirement of {fullNameDivision(division)} Division
+              </h4>
             </div>
-          </FadeIn>
-        ) : error ? (
-          <div className="d-flex justify-content-center">
-            <Alert variant="danger">{error}</Alert>
-          </div>
-        ) : (
-          <ListGroup>
-            <ListGroup.Item>
-              <Row>
-                <Col md={4}>
-                  <strong>Type</strong>
-                </Col>
-                <Col md={2}>
-                  <strong>Minimum RSU Requirement</strong>
-                </Col>
-                <Col md={2}>
-                  <strong>Unit</strong>
-                </Col>
-                <Col md={2}>
-                  <strong>Minimum CDA Requirement</strong>
-                </Col>
-                <Col md={2}>
-                  <strong>Unit</strong>
-                </Col>
-              </Row>
-            </ListGroup.Item>
-            {sortedReqData.map((req) => (
-              <ListGroup.Item
-                key={req.id}
-                className="myDiv"
-                onClick={() => handleSelect(req)}
-                style={{ cursor: "pointer" }}
-              >
-                <Row>
-                  <Col md={4}>{req.type}</Col>
-                  <Col md={2}>{req.req_RSU === 0.0 ? "-" : req.req_RSU}</Col>
-                  <Col md={2}>{req.unit_RSU}</Col>
-                  <Col md={2}>{req.req_DC === 0.0 ? "-" : req.req_DC}</Col>
-                  <Col md={2}>{req.unit_DC}</Col>
-                </Row>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        )}
-      </Container>
-      {selectedReq && ( // Conditionally render the modal
-        <ModalEditDivReq
-          show={show}
-          handleClose={handleClose}
-          divReq={selectedReq}
-        />
+            {loading ? (
+              <FadeIn>
+                <div>
+                  <Container>
+                    <Row className="d-flex justify-content-center">
+                      <Lottie
+                        options={defaultOptions}
+                        height={140}
+                        width={140}
+                      />
+                    </Row>
+                  </Container>
+                </div>
+              </FadeIn>
+            ) : error ? (
+              <div className="d-flex justify-content-center">
+                <Alert variant="danger">{error}</Alert>
+              </div>
+            ) : (
+              <ListGroup>
+                <ListGroup.Item>
+                  <Row>
+                    <Col md={4}>
+                      <strong>Type</strong>
+                    </Col>
+                    <Col md={2}>
+                      <strong>Minimum RSU Requirement</strong>
+                    </Col>
+                    <Col md={2}>
+                      <strong>Unit</strong>
+                    </Col>
+                    <Col md={2}>
+                      <strong>Minimum CDA Requirement</strong>
+                    </Col>
+                    <Col md={2}>
+                      <strong>Unit</strong>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+                {sortedReqData.map((req) => (
+                  <ListGroup.Item
+                    key={req.id}
+                    className="myDiv"
+                    onClick={() => handleSelect(req)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Row>
+                      <Col md={4}>{req.type}</Col>
+                      <Col md={2}>
+                        {req.req_RSU === 0.0 ? "-" : req.req_RSU}
+                      </Col>
+                      <Col md={2}>{req.unit_RSU}</Col>
+                      <Col md={2}>{req.req_DC === 0.0 ? "-" : req.req_DC}</Col>
+                      <Col md={2}>{req.unit_DC}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            )}
+          </Container>
+          {selectedReq && ( // Conditionally render the modal
+            <ModalEditDivReq
+              show={show}
+              handleClose={handleClose}
+              divReq={selectedReq}
+            />
+          )}
+        </>
+      ) : (
+        <LoginByEmail />
       )}
     </>
   );

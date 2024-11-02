@@ -18,7 +18,7 @@ function CompSubmit() {
 
   return (
     <>
-      {userEmail !== undefined ? (
+      {userEmail ? (
         <>
           <Navbar />
           <Container>

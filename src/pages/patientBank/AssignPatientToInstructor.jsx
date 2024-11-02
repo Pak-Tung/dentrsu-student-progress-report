@@ -9,6 +9,7 @@ import {
   getPatientByHn,
 } from "../../features/apiCalls";
 import { calculateAge, convertToUTCPlus7 } from "../../utilities/dateUtils";
+import LoginByEmail from "../../components/LoginByEmail";
 
 function AssignPatientToInstructor() {
   const { theme } = useContext(ThemeContext);
@@ -17,6 +18,8 @@ function AssignPatientToInstructor() {
     const cookieUser = Cookies.get("user");
     return cookieUser ? JSON.parse(cookieUser) : {};
   });
+
+  const userEmail = user.email;
 
   const [hn, setHn] = useState("");
   const [patient, setPatient] = useState({});
@@ -202,182 +205,194 @@ function AssignPatientToInstructor() {
 
   return (
     <>
-      <NavbarPatientBank />
+      {userEmail ? (
+        <>
+          <NavbarPatientBank />
 
-      <Container className={`${containerClass}`}>
-        <h2>แก้ไขข้อมูลผู้ป่วย</h2>
-        <Form onSubmit={handlePatientUpdateFormSubmit} className="container-md mt-3 border">
-          <Form.Group as={Row} >
-            <Form.Label column>
-              เลขที่บัตรผู้ป่วย
-            </Form.Label>
-            <Col md={7}>
-              <Form.Control
-                type="text"
-                name="hn"
-                value={hn}
-                onChange={(e) => setHn(e.target.value)}
-                required
-                placeholder="เลขที่บัตรผู้ป่วย"
-              />
-            </Col>
-            <Col>
-              <Button variant="outline-dark" onClick={handleFetchPatientByHn}>
-                ค้นหาผู้ป่วย
-              </Button>
-            </Col>
-          </Form.Group>
-          <br />
-          {show && (
-            <>
-              <Form.Group as={Row} className="mb-3"> 
-                <Form.Label column md={3}>
-                  ชื่อ นามสกุล ผู้ปวย
-                </Form.Label>
-                <Col>
+          <Container className={`${containerClass}`}>
+            <h2>แก้ไขข้อมูลผู้ป่วย</h2>
+            <Form
+              onSubmit={handlePatientUpdateFormSubmit}
+              className="container-md mt-3"
+            >
+              <Form.Group as={Row}>
+                <Form.Label column>เลขที่บัตรผู้ป่วย</Form.Label>
+                <Col md={7}>
                   <Form.Control
                     type="text"
-                    name="name"
-                    value={updatePt.name}
-                    onChange={handleUpdatePtFormChange}
+                    name="hn"
+                    value={hn}
+                    onChange={(e) => setHn(e.target.value)}
                     required
-                    placeholder="คำนำหน้า ชื่อ นามสกุล ผู้ปวย"
+                    placeholder="เลขที่บัตรผู้ป่วย"
                   />
                 </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  หมายเลขโทรศัพท์ผู้ป่วย:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="tel"
-                    value={updatePt.tel}
-                    onChange={handleUpdatePtFormChange}
-                    placeholder="เบอร์โทรศัพท์ผู้ป่วย"
-                  />
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  วันเกิดผู้ป่วย: {age !== "" && `(อายุ ${age} ปี)`}
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="date"
-                    name="birthDate"
-                    value={updatePt.birthDate}
-                    onChange={handleUpdatePtFormChange}
-                    placeholder="วันเกิดผู้ป่วย"
-                  />
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  ชื่อผู้ติดต่อกรณีฉุกเฉิน:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="emergencyContact"
-                    value={updatePt.emergencyContact}
-                    onChange={handleUpdatePtFormChange}
-                    placeholder="ชื่อผู้ติดต่อกรณีฉุกเฉิน"
-                  />
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="emergencyTel"
-                    value={updatePt.emergencyTel}
-                    onChange={handleUpdatePtFormChange}
-                    placeholder="หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน"
-                  />
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  ความสัมพันธ์กับผู้ป่วย:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="relationship"
-                    value={updatePt.relationship}
-                    onChange={handleUpdatePtFormChange}
-                    placeholder="ความสัมพันธ์กับผู้ป่วย"
-                  />
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  หมายเหตุ:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Control
-                    type="text"
-                    name="note"
-                    value={updatePt.note}
-                    onChange={handleUpdatePtFormChange}
-                    placeholder="หมายเหตุสำคัญสำหรับผู้ป่วยรายนี้"
-                  />
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3">
-                <Form.Label column md={3}>
-                  อาจารย์ผู้รับมอบหมาย:
-                </Form.Label>
-                <Col md={9}>
-                  <Form.Select
-                    name="teamleaderEmail"
-                    value={selectedTeamleader}
-                    onChange={handleTeamleaderChange}
+                <Col>
+                  <Button
+                    variant="outline-dark"
+                    onClick={handleFetchPatientByHn}
                   >
-                    <option value="" disabled>
-                      เลือกอาจารย์ผู้รับมอบหมาย
-                    </option>
-                    {instructors.map((instructor) => (
-                      <option
-                        key={instructor.id}
-                        value={instructor.instructorEmail}
-                      >
-                        {instructor.instructorName}
-                      </option>
-                    ))}
-                  </Form.Select>
+                    ค้นหาผู้ป่วย
+                  </Button>
                 </Col>
               </Form.Group>
+              <br />
+              {show && (
+                <>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      ชื่อ นามสกุล ผู้ปวย
+                    </Form.Label>
+                    <Col>
+                      <Form.Control
+                        type="text"
+                        name="name"
+                        value={updatePt.name}
+                        onChange={handleUpdatePtFormChange}
+                        required
+                        placeholder="คำนำหน้า ชื่อ นามสกุล ผู้ปวย"
+                      />
+                    </Col>
+                  </Form.Group>
 
-              <Button variant="dark" type="submit">
-                บันทึกข้อมูล
-              </Button>
-            </>
-          )}
-        </Form>
-        {error && (
-          <Alert variant="danger" className="mt-3">
-            {error}
-          </Alert>
-        )}
-        {successMessage && (
-          <Alert variant="success" className="mt-3">
-            {successMessage}
-          </Alert>
-        )}
-      </Container>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      หมายเลขโทรศัพท์ผู้ป่วย:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="tel"
+                        value={updatePt.tel}
+                        onChange={handleUpdatePtFormChange}
+                        placeholder="เบอร์โทรศัพท์ผู้ป่วย"
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      วันเกิดผู้ป่วย: {age !== "" && `(อายุ ${age} ปี)`}
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="date"
+                        name="birthDate"
+                        value={updatePt.birthDate}
+                        onChange={handleUpdatePtFormChange}
+                        placeholder="วันเกิดผู้ป่วย"
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      ชื่อผู้ติดต่อกรณีฉุกเฉิน:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="emergencyContact"
+                        value={updatePt.emergencyContact}
+                        onChange={handleUpdatePtFormChange}
+                        placeholder="ชื่อผู้ติดต่อกรณีฉุกเฉิน"
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="emergencyTel"
+                        value={updatePt.emergencyTel}
+                        onChange={handleUpdatePtFormChange}
+                        placeholder="หมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน"
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      ความสัมพันธ์กับผู้ป่วย:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="relationship"
+                        value={updatePt.relationship}
+                        onChange={handleUpdatePtFormChange}
+                        placeholder="ความสัมพันธ์กับผู้ป่วย"
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      หมายเหตุ:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Control
+                        type="text"
+                        name="note"
+                        value={updatePt.note}
+                        onChange={handleUpdatePtFormChange}
+                        placeholder="หมายเหตุสำคัญสำหรับผู้ป่วยรายนี้"
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={3}>
+                      อาจารย์ผู้รับมอบหมาย:
+                    </Form.Label>
+                    <Col md={9}>
+                      <Form.Select
+                        name="teamleaderEmail"
+                        value={selectedTeamleader}
+                        onChange={handleTeamleaderChange}
+                      >
+                        <option value="" disabled>
+                          เลือกอาจารย์ผู้รับมอบหมาย
+                        </option>
+                        {instructors.map((instructor) => (
+                          <option
+                            key={instructor.id}
+                            value={instructor.instructorEmail}
+                          >
+                            {instructor.instructorName}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Col>
+                  </Form.Group>
+
+                  <Button variant="dark" type="submit">
+                    บันทึกข้อมูล
+                  </Button>
+                </>
+              )}
+            </Form>
+            {error && (
+              <Alert variant="danger" className="mt-3">
+                {error}
+              </Alert>
+            )}
+            {successMessage && (
+              <Alert variant="success" className="mt-3">
+                {successMessage}
+              </Alert>
+            )}
+          </Container>
+        </>
+      ) : (
+        <>
+          <LoginByEmail />
+        </>
+      )}
     </>
   );
 }

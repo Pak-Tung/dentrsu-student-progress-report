@@ -13,6 +13,7 @@ import {
   getInstructorsByTeamleaderRole,
 } from "../../features/apiCalls";
 import Cookies from "js-cookie";
+import LoginByEmail from "../../components/LoginByEmail";
 
 const defaultOptions = {
   loop: true,
@@ -28,7 +29,7 @@ function SearchPatientByInstructor() {
   const containerClass = theme === "dark" ? "container-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
   const [error, setError] = useState(null);
-
+  const email = Cookies.get("email");
   const [role, setRole] = useState("");
   useEffect(() => {
     const savedRole = Cookies.get("role");
@@ -62,86 +63,93 @@ function SearchPatientByInstructor() {
     fetchInstructors();
   }, []);
 
-    const [patients, setPatients] = useState([]);
+  const [patients, setPatients] = useState([]);
 
-    const [loadingPatients, setLoadingPatients] = useState(false);
+  const [loadingPatients, setLoadingPatients] = useState(false);
 
-    const handleFetchPatientByTeamleaderEmail = async () => {
-        setLoadingPatients(true);
-        try {
-            const result = await getPatientsByTeamleaderEmail(selectedTeamleader);
-            if (result) {
-                setLoadingPatients(false);
-                setPatients(result);
-            } else {        
-            setError(result.error);
-            setLoadingPatients(false);
-            }
-        } catch (error) {
-            console.error("Error fetching patients data:", error);
-            setError("Error fetching patients data.");
-            setLoadingPatients(false);
-        }
-        };
+  const handleFetchPatientByTeamleaderEmail = async () => {
+    setLoadingPatients(true);
+    try {
+      const result = await getPatientsByTeamleaderEmail(selectedTeamleader);
+      if (result) {
+        setLoadingPatients(false);
+        setPatients(result);
+      } else {
+        setError(result.error);
+        setLoadingPatients(false);
+      }
+    } catch (error) {
+      console.error("Error fetching patients data:", error);
+      setError("Error fetching patients data.");
+      setLoadingPatients(false);
+    }
+  };
 
   return (
     <>
-      {role === "ptBank" ? <NavbarPatientBank/>:<NavbarSupervisor />}
-      <Container className={`${containerClass}`}>
-        <h4>ค้นหาผู้ป่วยจากอาจารย์ที่ปรึกษา</h4>
-        <Form className='mt-4'>
-          <Form.Group as={Row} className="mb-3">
-            <Col md={8}>
-              <Form.Control
-                as="select"
-                name="teamleaderEmail"
-                value={selectedTeamleader}
-                onChange={handleTeamleaderChange}
-              >
-                <option value="" disabled>
-                  เลือกอาจารย์ทีมลีดเดอร์
-                </option>
-                {instructors.map((instructor) => (
-                  <option
-                    key={instructor.id}
-                    value={instructor.instructorEmail}
+      {email ? (
+        <>
+          {role === "ptBank" ? <NavbarPatientBank /> : <NavbarSupervisor />}
+          <Container className={`${containerClass}`}>
+            <h4>ค้นหาผู้ป่วยจากอาจารย์ที่ปรึกษา</h4>
+            <Form className="mt-4">
+              <Form.Group as={Row} className="mb-3">
+                <Col md={8}>
+                  <Form.Control
+                    as="select"
+                    name="teamleaderEmail"
+                    value={selectedTeamleader}
+                    onChange={handleTeamleaderChange}
                   >
-                    {instructor.instructorName}
-                  </option>
-                ))}
-              </Form.Control>
-            </Col>
-            <Col>
-              <Button variant="dark" onClick={handleFetchPatientByTeamleaderEmail}>
-                ค้นหาผู้ป่วย
-              </Button>
-            </Col>
-          </Form.Group>
+                    <option value="" disabled>
+                      เลือกอาจารย์ทีมลีดเดอร์
+                    </option>
+                    {instructors.map((instructor) => (
+                      <option
+                        key={instructor.id}
+                        value={instructor.instructorEmail}
+                      >
+                        {instructor.instructorName}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Col>
+                <Col>
+                  <Button
+                    variant="dark"
+                    onClick={handleFetchPatientByTeamleaderEmail}
+                  >
+                    ค้นหาผู้ป่วย
+                  </Button>
+                </Col>
+              </Form.Group>
+            </Form>
+          </Container>
 
-        </Form>
-      </Container>
-
-      {loadingPatients ? (
-        <FadeIn>
-          <div>
-            <Container>
-              <Row className="d-flex justify-content-center">
-                <Lottie options={defaultOptions} height={140} width={140} />
-              </Row>
-            </Container>
-          </div>
-        </FadeIn>
-      ) : error ? (
-        <div className="d-flex justify-content-center">
-          <Alert variant="danger" className={alertClass}>
-            {error}
-          </Alert>
-        </div>
+          {loadingPatients ? (
+            <FadeIn>
+              <div>
+                <Container>
+                  <Row className="d-flex justify-content-center">
+                    <Lottie options={defaultOptions} height={140} width={140} />
+                  </Row>
+                </Container>
+              </div>
+            </FadeIn>
+          ) : error ? (
+            <div className="d-flex justify-content-center">
+              <Alert variant="danger" className={alertClass}>
+                {error}
+              </Alert>
+            </div>
+          ) : (
+            <div className="d-flex justify-content-center">
+              <PatientCard patients={patients} />
+            </div>
+          )}
+        </>
       ) : (
-        <div className="d-flex justify-content-center">
-
-          <PatientCard patients={patients} />
-        </div>
+        <LoginByEmail />
       )}
     </>
   );
