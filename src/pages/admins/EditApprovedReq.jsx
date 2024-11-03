@@ -12,21 +12,9 @@ import {
   Badge,
 } from "react-bootstrap";
 import { getDivReqById, updateDivReqById } from "../../features/apiCalls";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import Cookies from "js-cookie";
 import LoginByEmail from "../../components/LoginByEmail";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function EditApprovedReq() {
   const [division, setDivision] = useState(() => {
@@ -127,19 +115,7 @@ function EditApprovedReq() {
             </Form>
 
             {loading ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <div className="d-flex justify-content-center">
                 <Alert variant="danger">{error}</Alert>

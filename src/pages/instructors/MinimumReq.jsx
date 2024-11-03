@@ -2,22 +2,11 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import NavbarInstructor from "../../components/NavbarInstructor";
 import { Container, Row, Col, ListGroup, Alert } from "react-bootstrap";
 import { getAllReqByDivision } from "../../features/apiCalls";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import Cookies from "js-cookie";
 import LoginByEmail from "../../components/LoginByEmail";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function MinimumReq() {
   const { theme } = useContext(ThemeContext);
@@ -71,19 +60,7 @@ function MinimumReq() {
           <NavbarInstructor />
           <Container fluid="md" className={containerClass}>
             {loading ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <Alert variant="danger" className={alertClass}>
                 {error}

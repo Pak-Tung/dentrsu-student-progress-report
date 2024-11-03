@@ -12,20 +12,8 @@ import {
 import NavbarAdmin from "./NavbarAdmin";
 import { getAllStudents, getAllInstructors } from "../../features/apiCalls";
 import ModalAssignAdvisor from "./ModalAssignAdvisor";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import Cookies from "js-cookie";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function DivisionAdvisee() {
   const [division, setDivision] = useState(() => {
@@ -236,17 +224,7 @@ function DivisionAdvisee() {
         </ListGroup>
 
         {loading ? (
-          <div className="d-flex justify-content-center">
-            <FadeIn>
-              <div>
-                <Container>
-                  <Row className="d-flex justify-content-center">
-                    <Lottie options={defaultOptions} height={140} width={140} />
-                  </Row>
-                </Container>
-              </div>
-            </FadeIn>
-          </div>
+          <LoadingComponent />
         ) : error ? (
           <Alert variant="danger" className="text-center">
             {error}

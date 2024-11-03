@@ -6,33 +6,11 @@ import { getTeamLeaderByEmail } from "../../features/apiTL";
 import LoginByEmail from "../../components/LoginByEmail";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Badge,
-  Alert,
-  Button,
-  FormControl,
-  InputGroup,
-} from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import { Alert, Button, FormControl, InputGroup } from "react-bootstrap";
+import LoadingComponent from "../../components/LoadingComponent";
 import { ThemeContext } from "../../ThemeContext";
 import "../../DarkMode.css";
 import { updateUserPictureByEmail } from "../../features/apiCalls";
-
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function Profile() {
   const { theme } = useContext(ThemeContext);
@@ -80,16 +58,13 @@ function Profile() {
     fetchStudentData();
   }, [userEmail]);
 
-
-
   useEffect(() => {
     const fetchTeamLeaderData = async () => {
-      if (student.teamleaderEmail) { 
-        
+      if (student.teamleaderEmail) {
         setLoading(true);
         try {
           const res = await getTeamLeaderByEmail(student.teamleaderEmail);
-          
+
           if (res.error) {
             setError(res.error);
           } else if (res.data[0]) {
@@ -125,7 +100,7 @@ function Profile() {
 
   const handleImageClick = () => {
     setShowTextbox(true);
-    showTextbox === true?setShowTextbox(false):setShowTextbox(true);
+    showTextbox === true ? setShowTextbox(false) : setShowTextbox(true);
   };
 
   const handleImageSubmit = async () => {
@@ -253,7 +228,8 @@ function Profile() {
                     theme === "dark" ? "bg-dark text-white" : ""
                   }`}
                 >
-                  {teamLeader.title}{teamLeader.instructorName}
+                  {teamLeader.title}
+                  {teamLeader.instructorName}
                 </li>
               </ul>
               <div
@@ -273,20 +249,11 @@ function Profile() {
                     Log out
                   </button>
                 </div>
-                
               </div>
             </div>
           </div>
         ) : (
-          <FadeIn>
-            <div>
-              <Container>
-                <Row className="d-flex justify-content-center">
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                </Row>
-              </Container>
-            </div>
-          </FadeIn>
+          <LoadingComponent />
         )}
       </div>
     </>

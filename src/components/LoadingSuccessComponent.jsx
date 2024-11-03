@@ -2,9 +2,9 @@ import React from "react";
 import { Container, Row } from "react-bootstrap";
 import Lottie from "lottie-react";
 import FadeIn from "react-fade-in";
-import * as loadingData from "./loading.json";
+import * as successData from "./success.json";
 
-const LoadingComponent = () => {
+const LoadingSuccessComponent = () => {
   return (
     <div
       style={{
@@ -18,8 +18,8 @@ const LoadingComponent = () => {
         <Container>
           <Row className="d-flex justify-content-center">
             <Lottie
-              animationData={loadingData.default}
-              loop={true}
+              animationData={successData.default}
+              loop={false}
               autoplay={true}
               rendererSettings={{ preserveAspectRatio: "xMidYMid slice" }}
               style={{ height: 140, width: 140 }}
@@ -31,4 +31,4 @@ const LoadingComponent = () => {
   );
 };
 
-export default LoadingComponent;
+export default LoadingSuccessComponent;

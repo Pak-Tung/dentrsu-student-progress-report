@@ -6,20 +6,9 @@ import Navbar from "../../components/Navbar";
 import StatusByDiv from "../../components/StatusByDiv";
 import { Form, Container, Row, Col, Alert } from "react-bootstrap";
 import LoginByEmail from "../../components/LoginByEmail";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function ReqStatus() {
   const { theme } = useContext(ThemeContext);
@@ -32,7 +21,7 @@ function ReqStatus() {
   const [student, setStudent] = useState([]);
   const [divisions, setDivisions] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState(() => {
-    return Cookies.get("selectedDivision")||"oper";
+    return Cookies.get("selectedDivision") || "oper";
   });
   const [requirementLabel, setRequirementLabel] = useState(
     "Operative Requirement"
@@ -138,18 +127,12 @@ function ReqStatus() {
             </Row>
           </Container>
           {loadingStudent ? (
-            <FadeIn>
-              <div>
-                <Container>
-                  <Row className="d-flex justify-content-center">
-                    <Lottie options={defaultOptions} height={140} width={140} />
-                  </Row>
-                </Container>
-              </div>
-            </FadeIn>
+            <LoadingComponent />
           ) : error ? (
             <div className="d-flex justify-content-center">
-              <Alert variant="danger" className={alertClass}>{error}</Alert>
+              <Alert variant="danger" className={alertClass}>
+                {error}
+              </Alert>
             </div>
           ) : (
             <div className="d-flex justify-content-center">

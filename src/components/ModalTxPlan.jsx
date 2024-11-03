@@ -11,9 +11,6 @@ import {
 } from "react-bootstrap";
 import Cookies from "js-cookie";
 import { ThemeContext } from "../ThemeContext";
-import * as loadingData from "./loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
 import {
   getTxPlanByPatientHn,
   insertTxPlan,
@@ -24,7 +21,6 @@ import {
   getStudentByTeamleaderEmail,
   getTxtypesByDivision,
 } from "../features/apiCalls";
-import TxPlanCard from "./TxPlanCard";
 import "../App.css";
 import UpdateComplexity from "./UpdateComplexity";
 import ButtonTreatmentPlanApproval from "./ButtonTreatmentPlanApproval";
@@ -36,15 +32,7 @@ import {
   convertToUTCPlus7,
   calculateAge,
 } from "../utilities/dateUtils";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
+import LoadingComponent from "./LoadingComponent";
 
 const patientStatuses = [
   { statusId: "-1", status: "Discharged" },
@@ -553,13 +541,7 @@ function ModalTxPlan({
       </Modal.Header>
       <Modal.Body className={theme}>
         {loadingTxPlan ? (
-          <FadeIn>
-            <Container>
-              <Row className="d-flex justify-content-center">
-                <Lottie options={defaultOptions} height={140} width={140} />
-              </Row>
-            </Container>
-          </FadeIn>
+          <LoadingComponent />
         ) : error ? (
           <div className="d-flex justify-content-center">
             <Alert variant="danger" className={alertClass}>

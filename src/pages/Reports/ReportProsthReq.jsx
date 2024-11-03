@@ -1,26 +1,14 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Container, Row, Col, Badge, ListGroup, Alert } from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import React, { useEffect, useState, useContext } from "react";
+import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calProsthReq } from "./calProsthReq";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function ReportProsthReq(divisionR) {
   const { theme } = useContext(ThemeContext);
   const [show, setShow] = useState(false);
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
-  const alertClass = theme === "dark" ? "alert-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
   const [totalReq, setTotalReq] = useState({

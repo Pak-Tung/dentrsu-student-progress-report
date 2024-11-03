@@ -3,9 +3,7 @@ import { Button, Form, Row, Col, Container, Alert } from "react-bootstrap";
 import { ThemeContext } from "../../ThemeContext";
 import NavbarPatientBank from "./NavbarPatientBank";
 import NavbarSupervisor from "../supervisor/NavbarSupervisor";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import PatientCard from "../../components/PatientCard";
 import {
   getStudentById,
@@ -13,16 +11,6 @@ import {
 } from "../../features/apiCalls";
 import Cookies from "js-cookie";
 import LoginByEmail from "../../components/LoginByEmail";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
 function SearchPatientByStudent() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
@@ -134,15 +122,7 @@ function SearchPatientByStudent() {
           </Container>
 
           {loadingPatients ? (
-            <FadeIn>
-              <div>
-                <Container>
-                  <Row className="d-flex justify-content-center">
-                    <Lottie options={defaultOptions} height={140} width={140} />
-                  </Row>
-                </Container>
-              </div>
-            </FadeIn>
+            <LoadingComponent />
           ) : error ? (
             <div className="d-flex justify-content-center">
               <Alert variant="danger" className={alertClass}>

@@ -6,30 +6,11 @@ import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import SumByDiv from "./SumByDiv";
 import LoginByEmail from "../../components/LoginByEmail";
 import "../../Navbar.css";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
 import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
+import LoadingSuccessComponent from "../../components/LoadingSuccessComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
-const defaultOptions2 = {
-  loop: true,
-  autoplay: true,
-  animationData: successData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function Overview() {
   const { theme } = useContext(ThemeContext);
@@ -161,7 +142,13 @@ function Overview() {
                   </Col>
                 </Row>
 
-                {!selectedDivision && (<Row className="d-flex justify-content-center mb-3"><Col xs={12} className="text-center"><h5>Select division to display</h5></Col></Row>)}
+                {!selectedDivision && (
+                  <Row className="d-flex justify-content-center mb-3">
+                    <Col xs={12} className="text-center">
+                      <h5>Select division to display</h5>
+                    </Col>
+                  </Row>
+                )}
 
                 {renderDivisionComponent()}
 
@@ -171,27 +158,7 @@ function Overview() {
           ) : (
             <FadeIn>
               <div>
-                {!loading ? (
-                  <Container fluid>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                ) : (
-                  <Container fluid>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions2}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                )}
+                {!loading ? <LoadingComponent /> : <LoadingSuccessComponent />}
               </div>
             </FadeIn>
           )}

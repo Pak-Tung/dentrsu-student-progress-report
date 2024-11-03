@@ -13,21 +13,10 @@ import {
 } from "react-bootstrap";
 import ModalEditInstructor from "./ModalEditInstructor";
 import NavbarRoot from "./NavbarRoot";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import LoginByEmail from "../../components/LoginByEmail";
 import Cookies from "js-cookie";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function EditInstructors() {
   const [instructors, setInstructors] = useState([]);
@@ -106,19 +95,7 @@ function EditInstructors() {
               </Col>
             </Row>
             {loading ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <div className="d-flex justify-content-center">
                 <Alert variant="danger">{error}</Alert>

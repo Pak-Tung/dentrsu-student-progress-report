@@ -11,18 +11,7 @@ import { ThemeContext } from "../../ThemeContext";
 import "../../App.css";
 import { formatDateFormISO } from "../../utilities/dateUtils";
 import LoginByEmail from "../../components/LoginByEmail";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
+import LoadingComponent from "../../components/LoadingComponent";
 
 function TreatmentApproval() {
   const { theme } = useContext(ThemeContext);
@@ -141,15 +130,7 @@ function TreatmentApproval() {
             <h1>Treatment Approval</h1>
           </div>
           {loadingTreatments ? (
-            <FadeIn>
-              <div>
-                <Container>
-                  <Row className="d-flex justify-content-center">
-                    <Lottie options={defaultOptions} height={140} width={140} />
-                  </Row>
-                </Container>
-              </div>
-            </FadeIn>
+            <LoadingComponent />
           ) : error ? (
             <div className="d-flex justify-content-center">
               <Alert variant="danger" className={alertClass}>

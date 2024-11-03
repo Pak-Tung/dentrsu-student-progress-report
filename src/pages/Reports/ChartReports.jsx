@@ -3,10 +3,7 @@ import { getStudentByEmail } from "../../features/apiCalls";
 import { Container, Row, Col, Badge, Button } from "react-bootstrap";
 import Cookies from "js-cookie";
 import "../../Navbar.css";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import {
@@ -26,15 +23,6 @@ import { calPedoReq } from "./calPedoReq";
 import RadarChart from "../../components/RadarChart";
 import StackedCompCases from "../../components/StackedCompCases";
 import { allMinDivReq } from "./allMinDivReq";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 const LABELS = [
   "Operative",
@@ -334,15 +322,7 @@ function ChartReports({ studentEmail }) {
   return (
     <>
       {loading ? (
-        <FadeIn>
-          <div>
-            <Container fluid>
-              <Row className="d-flex justify-content-center">
-                <Lottie options={defaultOptions} height={140} width={140} />
-              </Row>
-            </Container>
-          </div>
-        </FadeIn>
+        <LoadingComponent />
       ) : (
         <Container className={theme === "dark" ? "container-dark" : ""}>
           {role === "student" && (

@@ -5,9 +5,7 @@ import {
   getReqByDivision,
 } from "../../features/apiCalls";
 import { Container, Row, Col, Badge, ListGroup, Alert } from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import ReportPerioReq from "./ReportPerioReq";
@@ -19,15 +17,6 @@ import ReportRadioReq from "./ReportRadioReq";
 import ReportSurReq from "./ReportSurReq";
 import ReportOrthoReq from "./ReportOrthoReq";
 import ReportPedoReq from "./ReportPedoReq";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function SumByDiv({ division }) {
   const { theme } = useContext(ThemeContext);
@@ -151,15 +140,7 @@ function SumByDiv({ division }) {
             )}
 
           {loadingStudent ? (
-            <FadeIn>
-              <div>
-                <Container>
-                  <Row className="d-flex justify-content-center">
-                    <Lottie options={defaultOptions} height={140} width={140} />
-                  </Row>
-                </Container>
-              </div>
-            </FadeIn>
+            <LoadingComponent />
           ) : error ? (
             <div className="d-flex justify-content-center">
               <Alert variant="danger" className={alertClass}>

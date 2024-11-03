@@ -16,21 +16,10 @@ import {
   Button,
   Alert,
 } from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import LoginByEmail from "../../components/LoginByEmail";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function RequestComplete() {
   const { theme } = useContext(ThemeContext);
@@ -117,19 +106,7 @@ function RequestComplete() {
           <Container fluid="md" className={containerClass}>
             <h1>Requesting Complete Status</h1>
             {loading ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <div className="d-flex justify-content-center">
                 <Alert variant="danger" className={alertClass}>

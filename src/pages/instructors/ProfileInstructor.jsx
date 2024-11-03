@@ -5,21 +5,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import LoginByEmail from "../../components/LoginByEmail";
 import { getInstructorByEmail } from "../../features/apiCalls";
 import { useNavigate } from "react-router-dom";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import { Alert } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function ProfileInstructor() {
   const { theme } = useContext(ThemeContext);
@@ -88,9 +77,7 @@ function ProfileInstructor() {
         </div>
 
         {loading ? (
-          <div className="d-flex justify-content-center">
-            <Lottie options={defaultOptions} height={120} width={120} />
-          </div>
+          <LoadingComponent />
         ) : error ? (
           <div className="d-flex justify-content-center">
             <Alert variant="danger">{error}</Alert>

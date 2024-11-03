@@ -1,65 +1,52 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Container, Row, Col, Badge, ListGroup, Alert } from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import React, { useEffect, useState, useContext } from "react";
+import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calSurReq } from "./calSurReq";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
 function ReportSurReq(divisionR) {
-    const { theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const [show, setShow] = useState(false);
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
-  const alertClass = theme === "dark" ? "alert-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
   const [totalReq, setTotalReq] = useState({
     RSU: {
-        Aseptic_station: 0,
-        Suture_station: 0,
-        Vital_sign_station: 0,
-        IANB_exam: 0,
-        Impact_in_model: 0,
-        Extraction: 0,
-        Impact: 0,
-        Exam_extraction_RSU: 0,
-        Exam_impact_RSU: 0
+      Aseptic_station: 0,
+      Suture_station: 0,
+      Vital_sign_station: 0,
+      IANB_exam: 0,
+      Impact_in_model: 0,
+      Extraction: 0,
+      Impact: 0,
+      Exam_extraction_RSU: 0,
+      Exam_impact_RSU: 0,
     },
     CDA: {
-        Extraction: 0,
-        Impact: 0,
-        Exam_extraction_CDA: 0,
-        Exam_impact_CDA: 0
+      Extraction: 0,
+      Impact: 0,
+      Exam_extraction_CDA: 0,
+      Exam_impact_CDA: 0,
     },
   });
 
   const [minReq, setMinReq] = useState({
     RSU: {
-        Aseptic_station: 1,
-        Suture_station: 1,
-        Vital_sign_station: 1,
-        IANB_exam: 1,
-        Impact_in_model: 1,
-        Extraction: 18,
-        Impact: 1,
-        Exam_extraction_RSU: 1,
-        Exam_impact_RSU: 1,
+      Aseptic_station: 1,
+      Suture_station: 1,
+      Vital_sign_station: 1,
+      IANB_exam: 1,
+      Impact_in_model: 1,
+      Extraction: 18,
+      Impact: 1,
+      Exam_extraction_RSU: 1,
+      Exam_impact_RSU: 1,
     },
     CDA: {
-        Extraction: 13,
-        Impact: 1,
-        Exam_extraction_CDA: 1,
-        Exam_impact_CDA: 1,
+      Extraction: 13,
+      Impact: 1,
+      Exam_extraction_CDA: 1,
+      Exam_impact_CDA: 1,
     },
   });
 
@@ -94,15 +81,23 @@ function ReportSurReq(divisionR) {
       <ListGroup>
         <ListGroup.Item variant="dark">
           <Row>
-            <Col xs={12} md={8}>Oral surgery Requirement</Col>
-            <Col xs={12} md={4} className="text-center">Requirement</Col>
+            <Col xs={12} md={8}>
+              Oral surgery Requirement
+            </Col>
+            <Col xs={12} md={4} className="text-center">
+              Requirement
+            </Col>
           </Row>
         </ListGroup.Item>
 
         <ListGroup.Item key={"title_RSU"} className={listGroupItemClass}>
           <Row>
-            <Col xs={12} md={8}>RSU Requirement</Col>
-            <Col xs={12} md={4} className="text-center">Total/(Minimum)</Col>
+            <Col xs={12} md={8}>
+              RSU Requirement
+            </Col>
+            <Col xs={12} md={4} className="text-center">
+              Total/(Minimum)
+            </Col>
           </Row>
           {Object.entries(totalReq.RSU).map(([key, value]) => {
             return (
@@ -124,8 +119,12 @@ function ReportSurReq(divisionR) {
       </ListGroup>
       <ListGroup.Item key={"title_CDA"} className={listGroupItemClass}>
         <Row>
-          <Col xs={12} md={8}>CDA Requirement</Col>
-          <Col xs={12} md={4} className="text-center">Total/(Minimum)</Col>
+          <Col xs={12} md={8}>
+            CDA Requirement
+          </Col>
+          <Col xs={12} md={4} className="text-center">
+            Total/(Minimum)
+          </Col>
         </Row>
         {Object.entries(totalReq.CDA).map(([key, value]) => {
           //if (value === 0) return null;
@@ -202,7 +201,7 @@ function ReportSurReq(divisionR) {
           </ListGroup.Item>
         ))}
     </>
-  )
+  );
 }
 
-export default ReportSurReq
+export default ReportSurReq;

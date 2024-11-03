@@ -1,20 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Container, Row, Col, Badge, ListGroup, Alert } from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calDiagReq } from "./calDiagReq";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function ReportDiagReq(divisionR) {
   const { theme } = useContext(ThemeContext);

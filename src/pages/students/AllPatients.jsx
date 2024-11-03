@@ -1,24 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import Navbar from "../../components/Navbar";
-import { Form, Container, Row, Col, Alert } from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import { Container, Row, Col, Alert } from "react-bootstrap";
+import LoadingComponent from "../../components/LoadingComponent";
 import LoginByEmail from "../../components/LoginByEmail";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { getPatientsByStudentEmail } from "../../features/apiCalls";
 import PatientCard from "../../components/PatientCard";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function AllPatients() {
   const { theme } = useContext(ThemeContext);
@@ -78,15 +67,7 @@ function AllPatients() {
             </Row>
           </Container>
           {loadingPatients ? (
-            <FadeIn>
-              <div>
-                <Container>
-                  <Row className="d-flex justify-content-center">
-                    <Lottie options={defaultOptions} height={140} width={140} />
-                  </Row>
-                </Container>
-              </div>
-            </FadeIn>
+            <LoadingComponent />
           ) : error ? (
             <div className="d-flex justify-content-center">
               <Alert variant="danger" className={alertClass}>{error}</Alert>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import NavbarAdmin from "./NavbarAdmin";
 import {
   Container,
@@ -12,20 +12,9 @@ import {
 import Cookies from "js-cookie";
 import { getStudentById } from "../../features/apiCalls";
 import SumByDivAndStudentEmail from "../Reports/SumByDivAndStudentEmail";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import LoginByEmail from "../../components/LoginByEmail";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function DivisionReqOfStudent() {
   const [division, setDivision] = useState(() => {
@@ -112,19 +101,7 @@ function DivisionReqOfStudent() {
             </Form>
 
             {loading ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <div className="d-flex justify-content-center">
                 <Alert variant="danger">{error}</Alert>

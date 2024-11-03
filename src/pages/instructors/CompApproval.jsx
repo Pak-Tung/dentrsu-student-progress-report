@@ -9,22 +9,11 @@ import {
 } from "../../features/apiCalls";
 import { Container, Row, Col, ListGroup, Badge, Alert } from "react-bootstrap";
 import ModalCompReqApproval from "./ModalCompReqApproval";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import LoginByEmail from "../../components/LoginByEmail";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function CompApproval() {
   const { theme } = useContext(ThemeContext);
@@ -126,19 +115,7 @@ function CompApproval() {
             <h1 className={textClass}>Complete Case Approval</h1>
 
             {loading ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <div className="d-flex justify-content-center">
                 <Alert variant="danger" className={alertClass}>

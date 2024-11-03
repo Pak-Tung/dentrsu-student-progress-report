@@ -2,7 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RoleLogin from "./pages/RoleLogin";
-import NoPermission from "./pages/NoPermission";
 import Overview from "./pages/Reports/Overview";
 import ReqSubmit from "./pages/Submit/ReqSubmit";
 import ReqStatus from "./pages/Reports/ReqStatus";
@@ -49,7 +48,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/access_denied" element={<NoPermission />} />
         <Route path="/reqSubmit" element={<ReqSubmit />} />
         <Route path="/compSubmit" element={<CompSubmit />} />
         <Route path="/reqStatus" element={<ReqStatus />} />

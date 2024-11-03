@@ -15,20 +15,9 @@ import {
   getStudentByDivInstructorEmail,
   updateStudentDivInstructorByDivInstructorEmail,
 } from "../../features/apiCalls";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import Cookies from "js-cookie";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function ModalManageAdvisor({ show, handleClose, instructor }) {
   const [division, setDivision] = useState(() => {
@@ -145,15 +134,7 @@ function ModalManageAdvisor({ show, handleClose, instructor }) {
       </Modal.Header>
       <Modal.Body>
         {loading ? (
-          <FadeIn>
-          <div>
-            <Container>
-              <Row className="d-flex justify-content-center">
-                <Lottie options={defaultOptions} height={140} width={140} />
-              </Row>
-            </Container>
-          </div>
-        </FadeIn>
+          <LoadingComponent />
         ) : error ? (
           <Container>
             <Alert variant="danger" className="text-center">

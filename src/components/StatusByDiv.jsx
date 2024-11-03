@@ -14,19 +14,9 @@ import {
   Alert,
 } from "react-bootstrap";
 import ModalUpdateReq from "./ModalUpdateReq";
-import * as loadingData from "../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "./LoadingComponent";
 import { ThemeContext } from "../ThemeContext";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function StatusByDiv(division) {
   const { theme } = useContext(ThemeContext);
@@ -167,15 +157,7 @@ function StatusByDiv(division) {
         </div>
         <ListGroup>
           {loadingStudent ? (
-            <FadeIn>
-              <div>
-                <Container>
-                  <Row className="d-flex justify-content-center">
-                    <Lottie options={defaultOptions} height={140} width={140} />
-                  </Row>
-                </Container>
-              </div>
-            </FadeIn>
+            <LoadingComponent />
           ) : error ? (
             <div className="d-flex justify-content-center">
               <Alert variant="danger">{error}</Alert>

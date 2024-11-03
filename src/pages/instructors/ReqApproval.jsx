@@ -9,22 +9,10 @@ import {
 } from "../../features/apiCalls";
 import { Container, Row, Col, ListGroup, Badge, Alert } from "react-bootstrap";
 import ModalReqApproval from "./ModalReqApproval";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import LoginByEmail from "../../components/LoginByEmail";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function ReqApproval() {
   const { theme } = useContext(ThemeContext);
@@ -152,21 +140,7 @@ function ReqApproval() {
           <Container fluid="md" className={containerClass}>
             <h1 className={textClass}>Requirement Approval</h1>
             {state.loading ? (
-              <div className="d-flex justify-content-center">
-                <FadeIn>
-                  <div>
-                    <Container>
-                      <Row className="d-flex justify-content-center">
-                        <Lottie
-                          options={defaultOptions}
-                          height={140}
-                          width={140}
-                        />
-                      </Row>
-                    </Container>
-                  </div>
-                </FadeIn>
-              </div>
+              <LoadingComponent />
             ) : state.error ? (
               <div className="d-flex justify-content-center">
                 <Alert variant="danger" className={alertClass}>

@@ -15,23 +15,11 @@ import {
 } from "../../features/apiCalls";
 import "../../App.css";
 import ModalStudentByDiv from "./ModalStudentByDiv";
-import * as loadingData from "../../components/loading.json";
-import * as successData from "../../components/success.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import Cookies from "js-cookie";
 import LoginByEmail from "../../components/LoginByEmail";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function DivisionAdvisee() {
   const { theme } = useContext(ThemeContext);
@@ -105,19 +93,7 @@ function DivisionAdvisee() {
           <NavbarInstructor />
           <Container fluid="md" className={containerClass}>
             {loading ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie
-                        options={defaultOptions}
-                        height={140}
-                        width={140}
-                      />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <Alert variant="danger" className={alertClass}>
                 {error}

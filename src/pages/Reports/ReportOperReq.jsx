@@ -1,26 +1,13 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Container, Row, Col, Badge, ListGroup, Alert } from "react-bootstrap";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import React, { useEffect, useState, useContext } from "react";
+import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calOperReg } from "./calOperReg";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function ReportOperReq(operR) {
   const { theme } = useContext(ThemeContext);
 
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
-  const alertClass = theme === "dark" ? "alert-dark" : "";
 
   const [totalReq, setTotalReq] = useState({
     RSU: {

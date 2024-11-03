@@ -7,19 +7,8 @@ import ModalUpdateComp from "./ModalUpdateComp";
 import "../../pages/CustomStyles.css";
 import "../../App.css";
 import LoginByEmail from "../../components/LoginByEmail";
-import * as loadingData from "../../components/loading.json";
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
+import LoadingComponent from "../../components/LoadingComponent";
 import { ThemeContext } from "../../ThemeContext";
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loadingData.default,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 function CompStatus() {
   const { theme } = useContext(ThemeContext);
@@ -76,15 +65,7 @@ function CompStatus() {
               </Col>
             </Row>
             {loadingStudent ? (
-              <FadeIn>
-                <div>
-                  <Container>
-                    <Row className="d-flex justify-content-center">
-                      <Lottie options={defaultOptions} height={140} width={140} />
-                    </Row>
-                  </Container>
-                </div>
-              </FadeIn>
+              <LoadingComponent />
             ) : error ? (
               <div className="d-flex justify-content-center">
                 <Alert variant="danger">{error}</Alert>
