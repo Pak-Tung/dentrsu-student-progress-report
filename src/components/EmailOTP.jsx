@@ -71,7 +71,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
 
     try {
       const response = await sendOTP(userEmail, userOTP);
-
+      //console.log(response);
       if (response && response === "OTP via email") {
         setUserExists(true);
         setMessage(
@@ -91,7 +91,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
         setMessage("OTP verified successfully. Logging you in...");
         setOtpVerified(true); // Notify parent component that OTP was verified
         handleLoginSuccess();
-      } else if (response && response === "OTP verification failed. Incorrect OTP.") {
+      } else if (response && response.message === "OTP verification failed. Incorrect OTP.") {
         setError(
           "OTP verification failed. Please check your OTP and try again."
         );
@@ -110,6 +110,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
       ) {
         setError(error.response.data.message);
       } else {
+        console.error("An error occurred:", error);
         setError(
           // `${userEmail} not found in the database. Please register first.`
           "An error occurred while communicating with the server. Please try again later."

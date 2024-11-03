@@ -103,8 +103,9 @@ function LoginByEmail() {
             setLoading(false);
           }
         } catch (error) {
+          console.error("Error fetching user profile:", error);
           alert(
-            `User/Cookies expired. Try logging in again. If the problem persists, contact your system administrator (Browser Login with ${email}).`
+            `Cookies expired. Try logging in again. (Login with ${email}).`
           );
           setLoading(false);
           Cookies.remove("token");
