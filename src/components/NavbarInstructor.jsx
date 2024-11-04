@@ -31,11 +31,11 @@ function NavbarInstructor() {
       case "oper":
         return "Operative";
       case "endo":
-        return "Endodontics";
+        return "Endodontic";
       case "perio":
-        return "Periodontics";
+        return "Periodontic";
       case "prosth":
-        return "Prosthodontics";
+        return "Prosthodontic";
       case "diag":
         return "Oral Diagnosis";
       case "radio":
@@ -43,7 +43,7 @@ function NavbarInstructor() {
       case "sur":
         return "Oral Surgery";
       case "ortho":
-        return "Orthodontics";
+        return "Orthodontic";
       case "pedo":
         return "Pediatric";
       default:

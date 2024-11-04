@@ -260,7 +260,7 @@ const SubmissionForm = ({ division }) => {
     if (division === "perio") {
       return "Severity";
     } else {
-      return "Requirement Page No. (if not available, enter 0)";
+      return "Page No. (if not available, enter 0)";
     }
   };
 
@@ -713,7 +713,7 @@ const SubmissionForm = ({ division }) => {
                 <InputGroupField
                   id="bookNo"
                   label="Requirement Book No"
-                  placeholder="Requirement Book No (if not available, enter 0)"
+                  placeholder="Book No (if not available, enter 0)"
                   name="bookNo"
                   onChange={handleInput}
                   required
