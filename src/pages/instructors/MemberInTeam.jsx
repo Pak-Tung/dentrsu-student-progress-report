@@ -127,7 +127,7 @@ function MemberInTeam(email) {
                             src={
                               student.image
                                 ? student.image
-                                : "https://img5.pic.in.th/file/secure-sv1/avataaarss.png"
+                                : "/images/student_jpg.jpg"
                             }
                             roundedCircle
                             fluid

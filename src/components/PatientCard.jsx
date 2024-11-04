@@ -201,7 +201,7 @@ function PatientCard({ patients = [], updatePatients }) {
                         ? "REQUEST TX APPROVAL"
                         : patient.status === "3"
                         ? "REQUEST COMPLETE CASE APPROVAL"
-                        : "INCOMPLETE"}
+                        : "UNKOWN"}
                     </Badge>
                     <Row>
                       <Col sm={3}>

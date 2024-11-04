@@ -15,6 +15,8 @@ function NavbarInstructor() {
     return savedUser ? JSON.parse(savedUser) : {};
   });
 
+  const division = user.division;
+
   useEffect(() => {
     const savedUser = Cookies.get("user");
     if (savedUser) {
@@ -23,6 +25,32 @@ function NavbarInstructor() {
       Cookies.set("user", JSON.stringify({ email: "" }));
     }
   }, []);
+
+  const getDivisionName = (division) => {
+    switch (division) {
+      case "oper":
+        return "Operative";
+      case "endo":
+        return "Endodontics";
+      case "perio":
+        return "Periodontics";
+      case "prosth":
+        return "Prosthodontics";
+      case "diag":
+        return "Oral Diagnosis";
+      case "radio":
+        return "Oral Radiology";
+      case "sur":
+        return "Oral Surgery";
+      case "ortho":
+        return "Orthodontics";
+      case "pedo":
+        return "Pediatric";
+      default:
+        return "Unknown";
+    }
+  };
+
   return (
     <Navbar
       expand="md"
@@ -47,7 +75,7 @@ function NavbarInstructor() {
               All patients
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/txApproval">
+            <NavDropdown.Item href="/txApproval" disabled>
               Treatment Approval
             </NavDropdown.Item>
           </NavDropdown>
@@ -68,13 +96,13 @@ function NavbarInstructor() {
               Student Complete Status Approval
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown title="Member" id="nav-member" className="flex-fill">
+          <NavDropdown title="Student" id="nav-member" className="flex-fill">
             <NavDropdown.Item href="/memberInTeam">
-              Member in Team
+              Students in Team
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/divisionAdvisee">
-              Division Advisee
+              {getDivisionName(division)} Advisee
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Division" id="nav-division" className="flex-fill">

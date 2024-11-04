@@ -6,7 +6,10 @@ import LoadingComponent from "../../components/LoadingComponent";
 import LoginByEmail from "../../components/LoginByEmail";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
-import { getPatientsByTeamleaderEmail, getStudentByTeamleaderEmail } from "../../features/apiCalls";
+import {
+  getPatientsByTeamleaderEmail,
+  getStudentByTeamleaderEmail,
+} from "../../features/apiCalls";
 import PatientCard from "../../components/PatientCard";
 
 function AllTeamleaderPatients() {
@@ -29,12 +32,14 @@ function AllTeamleaderPatients() {
   const [allStudents, setAllStudents] = useState([]);
 
   const statusOptions = [
+    { value: "All", label: "All" },
     { value: "-1", label: "Discharged" },
     { value: "0", label: "Charting" },
     { value: "1", label: "Pending Treatment Plan Approve" },
     { value: "2", label: "Treatment Plan Approved" },
     { value: "3", label: "Pending Completed Case Approve" },
     { value: "4", label: "Completed Case Approved" },
+    { value: "", label: "Unknown" },
   ];
   const [selectedStatuses, setSelectedStatuses] = useState([]);
 
@@ -121,10 +126,22 @@ function AllTeamleaderPatients() {
     return student ? student.studentName : studentEmail;
   };
 
+  const filterByStatus = (status) => {
+    if (status === "All") {
+      setSelectedStatuses([]);
+    } else {
+      setSelectedStatuses((prevStatuses) =>
+        prevStatuses.includes(status)
+          ? prevStatuses.filter((s) => s !== status)
+          : [...prevStatuses, status]
+      );
+    }
+  };
+
   const applyFilters = (student, statuses) => {
     let filtered = patients;
 
-    if (statuses.length > 0) {
+    if (statuses.length > 0 && !statuses.includes("All")) {
       filtered = filtered.filter((patient) =>
         statuses.includes(patient.status)
       );
@@ -171,7 +188,7 @@ function AllTeamleaderPatients() {
                     {statusOptions.map((status) => (
                       <Dropdown.Item
                         key={status.value}
-                        onClick={() => handleStatusChange(status.value)}
+                        onClick={() => filterByStatus(status.value)}
                       >
                         {selectedStatuses.includes(status.value) ? (
                           <span>&#10003; </span>

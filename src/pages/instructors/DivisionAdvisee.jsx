@@ -121,7 +121,11 @@ function DivisionAdvisee() {
                         <Row>
                           <Col md={2}>
                             <Image
-                              src={student.image}
+                              src={
+                                student.image
+                                  ? student.image
+                                  : "/images/student_jpg.jpg"
+                              }
                               roundedCircle
                               fluid
                               width="75"

@@ -13,19 +13,12 @@ import SelectRoleAdmin from "../pages/admins/SelectRoleAdmin";
 import ProfileSupervisor from "../pages/supervisor/ProfileSupervisor";
 import Cookies from "js-cookie";
 import LoginScreen from "./LoginScreen";
-import EmailOTP from "./EmailOTP"; // Import the EmailOTP component
-import LoadingComponent from "./LoadingComponent";
 
 function LoginByEmail() {
   const [email, setEmail] = useState(Cookies.get("email") || "");
   const [token, setToken] = useState(Cookies.get("token") || "");
   const [role, setRole] = useState(Cookies.get("role") || "");
-  const [user, setUser] = useState(
-    Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null
-  );
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true); // Initially true to show the loading animation
-  const [success, setSuccess] = useState(false);
   const [otpVerified, setOtpVerified] = useState(Cookies.get('otpVerified') || false); // New state for OTP verification
 
   const handleLoginSuccess = () => {
@@ -69,7 +62,6 @@ function LoginByEmail() {
               alert(
                 `Expired cookies. Try logging in again.`
               );
-              setLoading(false);
               return;
             }
           } else if (
@@ -90,7 +82,6 @@ function LoginByEmail() {
               alert(
                 `Expired cookies. Try logging in again. If the problem persists, contact system administrator (Browser Login with ${email}).`
               );
-              setLoading(false);
               return;
             }
           }
@@ -98,16 +89,12 @@ function LoginByEmail() {
           if (userRecord) {
             setCookies(userRecord);
             setRole(userRecord.role);
-            setUser(userRecord);
-            setSuccess(true);
-            setLoading(false);
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
           alert(
             `Cookies expired. Try logging in again. (Login with ${email}).`
           );
-          setLoading(false);
           Cookies.remove("token");
           Cookies.remove("email");
           Cookies.remove("role");
@@ -115,14 +102,15 @@ function LoginByEmail() {
           window.location.reload();
         }
       } else {
-        setLoading(false);
       }
     };
 
     if (isLoggedIn || (email && token && otpVerified)) {
       fetchUserProfile();
     } else {
-      setLoading(false);
+      setEmail("");
+      setToken("");
+      setRole("");
     }
   }, [isLoggedIn, email, token, otpVerified]); // Added otpVerified as a dependency
 
