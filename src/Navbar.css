@@ -49,3 +49,29 @@
   .logo-navbar-div {
     margin-left: 10px;
   }
+
+  /* theme.css */
+
+/* Light Theme */
+body.light {
+  background-color: #ffffff;
+  color: #000000; /* Default black text for light theme */
+}
+
+/* Dark Theme */
+body.dark {
+  background-color: #121212;
+  color: #b0b0b0; /* Set font color to gray for dark theme */
+}
+
+/* Light Theme - Default placeholder color */
+body.light input::placeholder,
+body.light textarea::placeholder {
+  color: #888888; /* Light gray placeholder color for light theme */
+}
+
+/* Dark Theme - White placeholder color */
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #cccccc; /* White placeholder color for dark theme */
+}

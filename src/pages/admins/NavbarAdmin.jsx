@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Cookies from "js-cookie";
 import Navbar from "react-bootstrap/Navbar";
 import "../../Navbar.css";
+import "../../DarkMode.css";
+import { ThemeContext } from "../../ThemeContext";
 
 function NavbarAdmin() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const [user, setUser] = useState(() => {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
@@ -24,7 +27,7 @@ function NavbarAdmin() {
   return (
     <Navbar
       expand="md"
-      className="navbar navbar-expand-lg navbar-light bg-light"
+      className={`navbar navbar-expand-lg navbar-${theme} bg-${theme}`}
     >
       <div className="logo-navbar-div">
         <Navbar.Brand href="/">

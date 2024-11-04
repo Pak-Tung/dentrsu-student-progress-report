@@ -14,6 +14,7 @@ import LoginByEmail from "../../components/LoginByEmail";
 
 function SearchPatientByHN() {
   const { theme } = useContext(ThemeContext);
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
   const containerClass = theme === "dark" ? "container-dark" : "";
 
   const email = Cookies.get("email");
@@ -166,10 +167,16 @@ function SearchPatientByHN() {
                     onChange={(e) => setHn(e.target.value)}
                     required
                     placeholder="กรอกเลขที่บัตรผู้ป่วย"
+                    className={themeClass}
                   />
                 </Col>
                 <Col>
-                  <Button variant="dark" onClick={handleFetchPatientByHn}>
+                  <Button
+                    variant={
+                      theme === "light" ? "outline-dark" : "outline-light"
+                    }
+                    onClick={handleFetchPatientByHn}
+                  >
                     ค้นหาผู้ป่วยจากเลขที่บัตร
                   </Button>
                 </Col>
@@ -184,6 +191,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="name"
                         value={updatePt.name}
@@ -205,6 +213,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="tel"
                         value={updatePt.tel}
@@ -226,6 +235,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="birthDate"
                         value={updatePt.birthDate}
@@ -247,6 +257,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="emergencyContact"
                         value={updatePt.emergencyContact}
@@ -268,6 +279,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="relationship"
                         value={updatePt.relationship}
@@ -289,6 +301,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="emergencyTel"
                         value={updatePt.emergencyTel}
@@ -310,6 +323,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="note"
                         value={updatePt.note}
@@ -331,6 +345,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="teamleaderEmail"
                         value={getInstructorName(updatePt.teamleaderEmail)}
@@ -346,6 +361,7 @@ function SearchPatientByHN() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="studentEmail"
                         value={getStudentName(updatePt.studentEmail)}

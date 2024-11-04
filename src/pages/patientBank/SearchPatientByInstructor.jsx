@@ -15,6 +15,7 @@ import LoginByEmail from "../../components/LoginByEmail";
 function SearchPatientByInstructor() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
   const [error, setError] = useState(null);
   const email = Cookies.get("email");
@@ -84,6 +85,7 @@ function SearchPatientByInstructor() {
               <Form.Group as={Row} className="mb-3">
                 <Col md={8}>
                   <Form.Control
+                    className={themeClass}
                     as="select"
                     name="teamleaderEmail"
                     value={selectedTeamleader}
@@ -104,7 +106,9 @@ function SearchPatientByInstructor() {
                 </Col>
                 <Col>
                   <Button
-                    variant="dark"
+                    variant={
+                      theme === "light" ? "outline-dark" : "outline-light"
+                    }
                     onClick={handleFetchPatientByTeamleaderEmail}
                   >
                     ค้นหาผู้ป่วย

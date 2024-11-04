@@ -12,6 +12,7 @@ import LoginByEmail from "../../components/LoginByEmail";
 function InstructorOverview() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
   const [error, setError] = useState(null);
 
@@ -98,6 +99,7 @@ function InstructorOverview() {
                     name="teamleaderEmail"
                     value={selectedTeamleader}
                     onChange={handleTeamleaderChange}
+                    className={themeClass}
                   >
                     <option value="" disabled>
                       Select Team Leader
@@ -115,7 +117,7 @@ function InstructorOverview() {
                 </Col>
                 <Col md={2}>
                   <Button
-                    variant="dark"
+                    variant={theme === "dark" ? "outline-light" : "outline-dark"}
                     onClick={handleFetchPatientByTeamleaderEmail}
                   >
                     Search
@@ -138,9 +140,6 @@ function InstructorOverview() {
               <div className="d-flex justify-content-center">
                 <MemberInTeam instructorEmail={selectedTeamleader} />
               </div>
-              {/* <div className="d-flex justify-content-center">
-            <PatientCard patients={patients} />
-          </div> */}
             </>
           ) : null}
         </>

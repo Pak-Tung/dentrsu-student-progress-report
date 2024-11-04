@@ -13,6 +13,7 @@ import LoginByEmail from "../../components/LoginByEmail";
 
 function AddNewPatient() {
   const { theme } = useContext(ThemeContext);
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
   const containerClass = theme === "dark" ? "container-dark" : "";
   const userEmail = Cookies.get("email");
 
@@ -120,7 +121,7 @@ function AddNewPatient() {
         if (result.error) {
           setError(result.error.message || "Error fetching instructors");
         } else {
-          setInstructors(result);
+          setInstructors(Array.isArray(result) ? result : []);
         }
       } catch (error) {
         setError("Error fetching instructors: " + error.message);
@@ -174,7 +175,7 @@ function AddNewPatient() {
             {successMessage && (
               <Alert variant="success">{successMessage}</Alert>
             )}
-            <Form className="container-md mt-3 border" onSubmit={handleSubmit}>
+            <Form className="container-md mt-3" onSubmit={handleSubmit}>
               <Row>
                 <Col md={4}>
                   <Form.Group controlId="hn">
@@ -186,6 +187,7 @@ function AddNewPatient() {
                       onChange={handleChange}
                       required
                       placeholder="กรอกเลขที่บัตรผู้ป่วย"
+                      className={themeClass}
                     />
                   </Form.Group>
                 </Col>
@@ -200,6 +202,7 @@ function AddNewPatient() {
                       onChange={handleChange}
                       required
                       placeholder="กรอกคำนำหน้า ชื่อ นามสกุล ผู้ป่วย"
+                      className={themeClass}
                     />
                   </Form.Group>
                 </Col>
@@ -215,6 +218,7 @@ function AddNewPatient() {
                       value={formData.tel}
                       onChange={handleChange}
                       placeholder="กรอกหมายเลขโทรศัพท์"
+                      className={themeClass}
                     />
                   </Form.Group>
                 </Col>
@@ -231,6 +235,7 @@ function AddNewPatient() {
                       value={formData.birthDate}
                       onChange={handleChange}
                       placeholder="กรอกวันเกิด"
+                      className={themeClass}
                     />
                   </Form.Group>
                 </Col>
@@ -246,6 +251,7 @@ function AddNewPatient() {
                       value={formData.emergencyContact}
                       onChange={handleChange}
                       placeholder="กรอกชื่อผู้ติดต่อกรณีฉุกเฉิน"
+                      className={themeClass}
                     />
                   </Form.Group>
                 </Col>
@@ -259,6 +265,7 @@ function AddNewPatient() {
                       value={formData.relationship}
                       onChange={handleChange}
                       placeholder="กรอกความสัมพันธ์กับผู้ป่วย"
+                      className={themeClass}
                     />
                   </Form.Group>
                 </Col>
@@ -274,6 +281,7 @@ function AddNewPatient() {
                       value={formData.emergencyTel}
                       onChange={handleChange}
                       placeholder="กรอกหมายเลขโทรศัพท์ผู้ติดต่อกรณีฉุกเฉิน"
+                      className={themeClass}
                     />
                   </Form.Group>
                 </Col>
@@ -287,18 +295,20 @@ function AddNewPatient() {
                       name="teamleaderEmail"
                       value={selectedTeamleader}
                       onChange={handleTeamleaderChange}
+                      className={themeClass}
                     >
                       <option value="" disabled>
                         เลือกอาจารย์ผู้รับมอบหมาย
                       </option>
-                      {instructors.map((instructor) => (
-                        <option
-                          key={instructor.id}
-                          value={instructor.instructorEmail}
-                        >
-                          {instructor.instructorName}
-                        </option>
-                      ))}
+                      {Array.isArray(instructors) &&
+                        instructors.map((instructor) => (
+                          <option
+                            key={instructor.id}
+                            value={instructor.instructorEmail}
+                          >
+                            {instructor.instructorName}
+                          </option>
+                        ))}
                     </Form.Select>
                   </Form.Group>
                 </Col>
@@ -310,6 +320,7 @@ function AddNewPatient() {
                       name="studentEmail"
                       value={selectedStudent}
                       onChange={handleStudentChange}
+                      className={themeClass}
                     >
                       <option value="" disabled>
                         เลือกนักศึกษาที่จะมอบหมาย
@@ -327,7 +338,7 @@ function AddNewPatient() {
                 </Col>
               </Row>
 
-              <Button variant="dark" type="submit" className="mt-3">
+              <Button variant={theme === 'light'?"dark": "outline-light"} type="submit" className="mt-3">
                 บันทึกข้อมูล
               </Button>
             </Form>

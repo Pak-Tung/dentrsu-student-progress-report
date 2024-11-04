@@ -13,6 +13,7 @@ import LoginByEmail from "../../components/LoginByEmail";
 
 function AssignPatientToInstructor() {
   const { theme } = useContext(ThemeContext);
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
   const containerClass = theme === "dark" ? "container-dark" : "";
   const [user] = useState(() => {
     const cookieUser = Cookies.get("user");
@@ -219,6 +220,7 @@ function AssignPatientToInstructor() {
                 <Form.Label column>เลขที่บัตรผู้ป่วย</Form.Label>
                 <Col md={7}>
                   <Form.Control
+                    className={themeClass}
                     type="text"
                     name="hn"
                     value={hn}
@@ -229,7 +231,9 @@ function AssignPatientToInstructor() {
                 </Col>
                 <Col>
                   <Button
-                    variant="outline-dark"
+                    variant={
+                      theme === "light" ? "outline-dark" : "outline-light"
+                    }
                     onClick={handleFetchPatientByHn}
                   >
                     ค้นหาผู้ป่วย
@@ -245,6 +249,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="name"
                         value={updatePt.name}
@@ -261,6 +266,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="tel"
                         value={updatePt.tel}
@@ -276,6 +282,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="date"
                         name="birthDate"
                         value={updatePt.birthDate}
@@ -291,6 +298,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="emergencyContact"
                         value={updatePt.emergencyContact}
@@ -306,6 +314,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="emergencyTel"
                         value={updatePt.emergencyTel}
@@ -321,6 +330,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="relationship"
                         value={updatePt.relationship}
@@ -336,6 +346,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="note"
                         value={updatePt.note}
@@ -351,6 +362,7 @@ function AssignPatientToInstructor() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Select
+                        className={themeClass}
                         name="teamleaderEmail"
                         value={selectedTeamleader}
                         onChange={handleTeamleaderChange}
@@ -370,7 +382,7 @@ function AssignPatientToInstructor() {
                     </Col>
                   </Form.Group>
 
-                  <Button variant="dark" type="submit">
+                  <Button variant={theme === 'light'?"dark": "outline-light"} type="submit">
                     บันทึกข้อมูล
                   </Button>
                 </>

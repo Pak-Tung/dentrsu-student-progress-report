@@ -14,6 +14,7 @@ import LoginByEmail from "../../components/LoginByEmail";
 function SearchPatientByStudent() {
   const { theme } = useContext(ThemeContext);
   const containerClass = theme === "dark" ? "container-dark" : "";
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
   const email = Cookies.get("email");
   const [role, setRole] = useState("");
@@ -82,6 +83,7 @@ function SearchPatientByStudent() {
               <Form.Group as={Row} className="mb-3">
                 <Col md={8}>
                   <Form.Control
+                    className={themeClass}
                     type="text"
                     name="hn"
                     value={studentId}
@@ -92,7 +94,9 @@ function SearchPatientByStudent() {
                 </Col>
                 <Col>
                   <Button
-                    variant="dark"
+                    variant={
+                      theme === "light" ? "outline-dark" : "outline-light"
+                    }
                     onClick={handleFetchPatientByStudentId}
                   >
                     ค้นหาผู้ป่วย
@@ -108,6 +112,7 @@ function SearchPatientByStudent() {
                     </Form.Label>
                     <Col md={9}>
                       <Form.Control
+                        className={themeClass}
                         type="text"
                         name="studentEmail"
                         value={student.studentName || ""} // Fallback to empty string if undefined

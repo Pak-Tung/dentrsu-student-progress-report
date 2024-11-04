@@ -68,7 +68,9 @@ function NavbarStudent() {
             className="flex-fill"
             //disabled
           >
-            <NavDropdown.Item href="/reqStatus">Req Status</NavDropdown.Item>
+            <NavDropdown.Item href="/reqStatus">
+              Requirement Status
+            </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compReport">
               Complete cases
@@ -84,7 +86,7 @@ function NavbarStudent() {
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/checkStatus">
-              Overall Requirement Chart
+              Radar Chart
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Profile" id="nav-profile" className="flex-fill">

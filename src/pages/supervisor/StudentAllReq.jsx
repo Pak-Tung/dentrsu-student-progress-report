@@ -22,6 +22,7 @@ import Cookies from "js-cookie";
 
 function StudentAllReq() {
   const { theme } = useContext(ThemeContext);
+  const themeClass = theme === "dark" ? "form-control-dark" : "";
   const alertClass = theme === "dark" ? "alert-dark" : "";
   const [loadingStudent, setLoadingStudent] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -148,11 +149,12 @@ function StudentAllReq() {
                   placeholder="Enter Student ID"
                   value={studentId}
                   onChange={(e) => setStudentId(e.target.value)}
+                  className={themeClass}
                 />
               </Col>
               <Col md={2} className="mb-3">
                 <Button
-                  variant="dark"
+                  variant={theme === "dark" ? "outline-light" : "outline-dark"}
                   onClick={handleSearchStudent}
                   disabled={!studentId || loadingStudent}
                 >
