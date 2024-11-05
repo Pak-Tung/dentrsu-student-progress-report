@@ -31,7 +31,7 @@ function NavbarSupervisor() {
         <div className="logo-navbar-div">
         <Navbar.Brand href="/">
           <img
-            src="/logo_navbar.png"
+            src={theme === "light"?"/logo_navbar.png":"/logo_navbar_dark.png"}
             width="30"
             height="30"
             className="d-inline-block align-top"

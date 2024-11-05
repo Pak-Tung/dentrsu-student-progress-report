@@ -38,7 +38,6 @@ const InputGroupField = ({
   </InputGroup>
 );
 
-
 function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
   const { theme } = useContext(ThemeContext);
   const themeClass = theme === "dark" ? "form-control-dark" : "";
@@ -77,11 +76,7 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
         setMessage(
           "OTP has been sent to your email. Please check your inbox and enter the OTP."
         );
-      } else if (
-        response &&
-        response.status === 200 &&
-        userOTP !==  ""
-      ) {
+      } else if (response && response.status === 200 && userOTP !== "") {
         //console.log(response);
         const token = response.token;
         const email = response.userEmail;
@@ -91,7 +86,10 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
         setMessage("OTP verified successfully. Logging you in...");
         setOtpVerified(true); // Notify parent component that OTP was verified
         handleLoginSuccess();
-      } else if (response && response.message === "OTP verification failed. Incorrect OTP.") {
+      } else if (
+        response &&
+        response.message === "OTP verification failed. Incorrect OTP."
+      ) {
         setError(
           "OTP verification failed. Please check your OTP and try again."
         );
@@ -185,7 +183,13 @@ function EmailOTP({ handleLoginSuccess, setOtpVerified }) {
           <div className="d-grid gap-2">
             <Button
               variant={
-                userExists ? "success" : theme === "dark" ? "secondary" : "dark"
+                userExists
+                  ? theme === "dark"
+                    ? "outline-light"
+                    : "success"
+                  : theme === "dark"
+                  ? "secondary"
+                  : "dark"
               }
               size="lg"
               type="submit"

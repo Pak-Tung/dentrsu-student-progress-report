@@ -3,9 +3,12 @@ import EmailOTP from "./EmailOTP";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useContext } from "react";
+import { ThemeContext } from "../ThemeContext";
 import "../App.css";
 
 function LoginScreen({ handleLoginSuccess, setOtpVerified }) {
+  const { theme } = useContext(ThemeContext);
   return (
     <div className="mt-5">
       <Container fluid>
@@ -18,7 +21,7 @@ function LoginScreen({ handleLoginSuccess, setOtpVerified }) {
         </Row>
         <Row className="d-flex justify-content-center">
           <Col className="text-center">
-            <img src="/logo_png.png" alt="Logo" width="250" />
+            <img src={theme === "light"?"/logo_png.png":"/logo_png_dark.png"} alt="Logo" width="250" />
           </Col>
         </Row>
         <br />
