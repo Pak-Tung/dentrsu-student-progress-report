@@ -75,3 +75,41 @@ body.dark input::placeholder,
 body.dark textarea::placeholder {
   color: #cccccc; /* White placeholder color for dark theme */
 }
+
+/* Light Theme - Default disabled input background */
+body.light input:disabled,
+body.light textarea:disabled {
+  background-color: #f0f0f0; /* Light gray background for disabled inputs in light theme */
+  color: #666666; /* Text color for readability */
+}
+
+/* Dark Theme - White background for disabled inputs */
+body.dark input:disabled,
+body.dark textarea:disabled {
+  background-color: #121212; /* White background for disabled inputs in dark theme */
+  color: #b0b0b0; /* Darker text color for readability */
+}
+
+/* Light Theme - Default select styles */
+body.light select {
+  background-color: #ffffff; /* White background for select in light theme */
+  color: #000000; /* Black text color for light theme */
+}
+
+/* Dark Theme - Select input and options styles */
+body.dark select {
+  background-color: #333333; /* Darker background for select in dark theme */
+  color: #ffffff; /* White text color for readability in dark theme */
+  border: 1px solid #555555; /* Optional: Light border for better visibility */
+}
+
+/* Dark Theme - Style for select dropdown options */
+body.dark select option {
+  background-color: #333333; /* Darker background for select options in dark theme */
+  color: #ffffff; /* White text color for readability */
+}
+
+/* Placeholder color for disabled option */
+body.dark select option[disabled] {
+  color: #aaaaaa; /* Light gray color for placeholder-like option in dark theme */
+}
