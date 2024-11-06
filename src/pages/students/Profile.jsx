@@ -12,6 +12,7 @@ import { ThemeContext } from "../../ThemeContext";
 import "../../DarkMode.css";
 import { updateUserPictureByEmail } from "../../features/apiCalls";
 
+
 function Profile() {
   const { theme } = useContext(ThemeContext);
 
@@ -75,6 +76,9 @@ function Profile() {
           }
         } catch (err) {
           setError("Failed to fetch team leader data");
+          setLoading(false);
+          alert("Failed to fetch team leader data");
+          return <LoginByEmail />;
         } finally {
           setLoading(false);
         }
