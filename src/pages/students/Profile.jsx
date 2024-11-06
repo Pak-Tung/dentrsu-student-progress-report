@@ -77,7 +77,6 @@ function Profile() {
         } catch (err) {
           setError("Failed to fetch team leader data");
           setLoading(false);
-          alert("Failed to fetch team leader data");
           return <LoginByEmail />;
         } finally {
           setLoading(false);
