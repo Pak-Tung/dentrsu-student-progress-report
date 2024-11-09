@@ -513,6 +513,7 @@ const SubmissionForm = ({ division }) => {
   //*********Sur Condition ***********************/
   const [disableSurArea, setDisableSurArea] = useState(false);
   const [showSurReq, setShowSurReq] = useState(false);
+  const [showSurPt, setShowSurPt] = useState(true);
 
   useEffect(() => {
     if (division === "sur") {
@@ -530,6 +531,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setDisableSurArea(true);
         setShowSurReq(true);
+        setShowSurPt(false);
       } else if (
         selectedOption === "Extraction" ||
         selectedOption === "Impact"
@@ -541,6 +543,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setDisableSurArea(false);
         setShowSurReq(true);
+        setShowSurPt(true);
       } else if (
         selectedOption === "Exam: extraction (RSU)" ||
         selectedOption === "Exam: impact (RSU)"
@@ -552,6 +555,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setDisableSurArea(false);
         setShowSurReq(true);
+        setShowSurPt(true);
       } else if (
         selectedOption === "Exam: extraction (CDA)" ||
         selectedOption === "Exam: impact (CDA)"
@@ -563,6 +567,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setDisableSurArea(false);
         setShowSurReq(true);
+        setShowSurPt(true);
       } else {
         setFormData((prevState) => ({
           ...prevState,
@@ -571,6 +576,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setDisableSurArea(true);
         setShowSurReq(false);
+        setShowSurPt(true);
       }
     }
   }, [selectedOption, division]);
@@ -621,6 +627,7 @@ const SubmissionForm = ({ division }) => {
   const [showPedoReq, setShowPedoReq] = useState(false);
   const [showPedoReqCDA, setShowPedoReqCDA] = useState(false);
   const [disablePedoArea, setDisablePedoArea] = useState(false);
+  const [showPt, setShowPt] = useState(true);
 
   useEffect(() => {
     if (division === "pedo") {
@@ -638,6 +645,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setShowPedoReq(true);
         setDisablePedoArea(true);
+        setShowPt(true);
       } else if (
         selectedOption === "Photographs and Radiographs" ||
         selectedOption === "Exam Inferior alveolar nerve block injection" ||
@@ -650,6 +658,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setShowPedoReq(true);
         setDisablePedoArea(true);
+        setShowPt(true);
       } else if (
         selectedOption === "Sealant" ||
         selectedOption === "Filling" ||
@@ -667,6 +676,7 @@ const SubmissionForm = ({ division }) => {
         setShowPedoReq(false);
         setDisablePedoArea(false);
         setShowPedoReqCDA(false);
+        setShowPt(true);
       } else if (selectedOption === "PRR") {
         setFormData((prevState) => ({
           ...prevState,
@@ -676,6 +686,7 @@ const SubmissionForm = ({ division }) => {
         setShowPedoReq(true);
         setShowPedoReqCDA(false);
         setDisablePedoArea(false);
+        setShowPt(true);
       } else if (selectedOption === "Miscellaneous work") {
         setFormData((prevState) => ({
           ...prevState,
@@ -685,6 +696,7 @@ const SubmissionForm = ({ division }) => {
         setShowPedoReq(false);
         setShowPedoReqCDA(true);
         setDisablePedoArea(false);
+        setShowPt(true);
       } else {
         setShowPedoReq(false);
         setFormData((prevState) => ({
@@ -692,6 +704,7 @@ const SubmissionForm = ({ division }) => {
           req_RSU: 0,
           req_DC: 0,
         }));
+        setShowPt(true);
       }
     }
   }, [selectedOption, division, formData]);
@@ -873,6 +886,8 @@ const SubmissionForm = ({ division }) => {
           </Row>
           {selectedOption !== "CPC or Journal club" &&
             selectedOption !== "Journal club" && 
+            showSurPt &&
+            showPt && 
             showProsthPt && (
               <Row className="justify-content-md-center">
                 <Col md={4}>

@@ -112,7 +112,7 @@ function CompApproval() {
         <>
           <NavbarInstructor />
           <Container fluid="md" className={containerClass}>
-            <h1 className={textClass}>Complete Case Approval</h1>
+            <h2 className={textClass}>Complete Case Approval Request</h2>
 
             {loading ? (
               <LoadingComponent />

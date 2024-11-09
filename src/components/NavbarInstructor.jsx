@@ -16,6 +16,7 @@ function NavbarInstructor() {
   });
 
   const division = user.division;
+  const teamleader = user.teamleader === 1 ? true : false;
 
   useEffect(() => {
     const savedUser = Cookies.get("user");
@@ -59,7 +60,9 @@ function NavbarInstructor() {
       <div className="logo-navbar-div">
         <Navbar.Brand href="/">
           <img
-            src={theme === "light"?"/logo_navbar.png":"/logo_navbar_dark.png"}
+            src={
+              theme === "light" ? "/logo_navbar.png" : "/logo_navbar_dark.png"
+            }
             width="30"
             height="30"
             className="d-inline-block align-top"
@@ -70,44 +73,60 @@ function NavbarInstructor() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto w-100 justify-content-between">
-          <NavDropdown title="Patients" id="nav-patients" className="flex-fill">
-            <NavDropdown.Item href="/allTeamleaderPatients">
-              All patients
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="/txApproval" disabled>
-              Treatment Approval
-            </NavDropdown.Item>
-          </NavDropdown>
+          {teamleader && (
+            <>
+              <NavDropdown
+                title="Patients"
+                id="nav-patients"
+                className="flex-fill"
+              >
+                <NavDropdown.Item href="/allTeamleaderPatients">
+                  All My Patients
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/txApproval" disabled>
+                  Treatment Approval
+                </NavDropdown.Item>
+              </NavDropdown>
+            </>
+          )}
           <NavDropdown
-            title="Requirements"
+            title="Approval"
             id="nav-approval"
             className="flex-fill"
           >
             <NavDropdown.Item href="/reqApproval">
-              Requirement Approval
+              Requirements
             </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="/compApproval">
-              Complete cases Approval
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="/requestComplete">
-              Student Complete Status Approval
-            </NavDropdown.Item>
+            {teamleader && (
+              <>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/compApproval">
+                  Completed Cases
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/requestComplete">
+                  Completed Status
+                </NavDropdown.Item>
+              </>
+            )}
           </NavDropdown>
-          <NavDropdown title="Student" id="nav-member" className="flex-fill">
-            <NavDropdown.Item href="/memberInTeam">
-              Students in Team
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
+          <NavDropdown title="Students" id="nav-member" className="flex-fill">
+            {teamleader && (
+              <>
+                <NavDropdown.Item href="/memberInTeam">
+                  My Team Members
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+              </>
+            )}
             <NavDropdown.Item href="/divisionAdvisee">
-              {getDivisionName(division)} Advisee
+               My {getDivisionName(division)} Advisees
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Division" id="nav-division" className="flex-fill">
             <NavDropdown.Item href="/minReq">
-              Minimum Requirement
+              Minimum Requirements
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Profile" id="nav-profile" className="flex-fill">

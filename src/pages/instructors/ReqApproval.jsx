@@ -138,7 +138,7 @@ function ReqApproval() {
         <>
           <NavbarInstructor />
           <Container fluid="md" className={containerClass}>
-            <h1 className={textClass}>Requirement Approval</h1>
+            <h2 className={textClass}>Requirement Approval Request</h2>
             {state.loading ? (
               <LoadingComponent />
             ) : state.error ? (

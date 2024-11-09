@@ -47,7 +47,7 @@ function NavbarStudent() {
         <Nav className="ml-auto w-100 justify-content-between">
           <NavDropdown title="Patients" id="nav-patients" className="flex-fill">
             <NavDropdown.Item href="/allPatients">
-              All patients
+              All My Patients
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown
@@ -56,10 +56,10 @@ function NavbarStudent() {
             className="flex-fill"
             //disabled
           >
-            <NavDropdown.Item href="/reqSubmit">Requirement</NavDropdown.Item>
+            <NavDropdown.Item href="/reqSubmit">Requirements</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compSubmit">
-              Complete cases
+              Completed Cases
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown
@@ -69,20 +69,20 @@ function NavbarStudent() {
             //disabled
           >
             <NavDropdown.Item href="/reqStatus">
-              Requirement Status
+              Requirements
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compReport">
-              Complete cases
+              Completed Cases
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Overview" id="nav-overview" className="flex-fill">
             <NavDropdown.Item href="/overview">
-              Requirement Overview
+              Requirements
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compOverview">
-              Complete cases
+              Completed Cases
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/checkStatus">

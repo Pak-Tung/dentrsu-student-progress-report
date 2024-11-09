@@ -69,7 +69,7 @@ function MinimumReq() {
               <>
                 <div className="d-flex justify-content-center mb-4">
                   <h4 className={textClass}>
-                    Minimum Requirement of {fullNameDivision(division)} Division
+                    Minimum Requirements of {fullNameDivision(division)} Division
                   </h4>
                 </div>
                 <ListGroup>
@@ -79,16 +79,16 @@ function MinimumReq() {
                         <strong>Type</strong>
                       </Col>
                       <Col md={2}>
-                        <strong>Minimum RSU Requirement</strong>
+                        <strong>RSU</strong>
                       </Col>
                       <Col md={2}>
-                        <strong>Unit</strong>
+                        <strong></strong>
                       </Col>
                       <Col md={2}>
-                        <strong>Minimum DC Requirement</strong>
+                        <strong>CDA</strong>
                       </Col>
                       <Col md={2}>
-                        <strong>Unit</strong>
+                        <strong></strong>
                       </Col>
                     </Row>
                   </ListGroup.Item>

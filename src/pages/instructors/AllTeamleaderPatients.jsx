@@ -174,15 +174,10 @@ function AllTeamleaderPatients() {
           <NavbarInstructor />
           <Container className={containerClass}>
             <Row className="justify-content-center">
-              <Col md={6} className="text-center">
-                <h2>All Patients</h2>
-              </Col>
-            </Row>
-            <Row className="justify-content-center">
               <Col md={3} className="text-center">
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
-                    Filter Status
+                    Select Patient Status:
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {statusOptions.map((status) => (
@@ -204,7 +199,7 @@ function AllTeamleaderPatients() {
               <Col md={3} className="text-center">
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
-                    Student: {getStudentName(filterStudent)} (
+                    Select Student: {getStudentName(filterStudent)} (
                     {countPatients(filterStudent)})
                   </Dropdown.Toggle>
                   <Dropdown.Menu>

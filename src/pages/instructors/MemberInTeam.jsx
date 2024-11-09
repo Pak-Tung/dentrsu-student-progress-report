@@ -111,7 +111,7 @@ function MemberInTeam(email) {
               <>
                 {role === "instructor" ? (
                   <div className="d-flex justify-content-center mb-4">
-                    <h4>Member In Team: ({studentData.length} students) </h4>
+                    <h4>Team Members: ({studentData.length} students) </h4>
                   </div>
                 ) : null}
                 <ListGroup>

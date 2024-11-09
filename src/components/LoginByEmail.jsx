@@ -76,6 +76,7 @@ function LoginByEmail() {
               if (instructor) {
                 userRecord.name = instructor[0].instructorName;
                 userRecord.division = instructor[0].division;
+                userRecord.teamleader = instructor[0].teamleader;
               }
             } catch (error) {
               console.error("Error fetching instructor profile:", error);

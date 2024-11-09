@@ -104,7 +104,7 @@ function RequestComplete() {
         <>
           <NavbarInstructor />
           <Container fluid="md" className={containerClass}>
-            <h1>Requesting Complete Status</h1>
+            <h2>Complete Status Request</h2>
             {loading ? (
               <LoadingComponent />
             ) : error ? (

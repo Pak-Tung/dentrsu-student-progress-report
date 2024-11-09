@@ -102,7 +102,7 @@ function DivisionAdvisee() {
               <>
                 <div className="d-flex justify-content-center mb-4">
                   <h4 className={textClass}>
-                    Division Advisee: {studentData.length} students
+                    Advisees: {studentData.length} students
                   </h4>
                 </div>
                 <ListGroup>
