@@ -134,10 +134,12 @@ function PatientCard({ patients = [], updatePatients }) {
                 <strong>Completed Date</strong>
                 <br />
               </Col>
-              <Col md={1}>
-                <strong>Complexity</strong>
-                <br />
-              </Col>
+              {role === "student" && (
+                <Col md={1}>
+                  <strong>Complexity</strong>
+                  <br />
+                </Col>
+              )}
               {role !== "student" && (
                 <Col md={2}>
                   <strong>Operator</strong>
@@ -221,10 +223,12 @@ function PatientCard({ patients = [], updatePatients }) {
                         {formatDate(patient.completedDate)}
                         <br />
                       </Col>
-                      <Col className="text-center" md={1}>
-                        {patient.complexity}
-                        <br />
-                      </Col>
+                      {role === "student" && (
+                        <Col className="text-center" md={1}>
+                          {patient.complexity}
+                          <br />
+                        </Col>
+                      )}
                       {role !== "student" && (
                         <Col className="text-center">
                           {getStudentName(patient.studentEmail)}
@@ -232,11 +236,11 @@ function PatientCard({ patients = [], updatePatients }) {
                         </Col>
                       )}
                     </Row>
-                      <Row>
-                        <Col md={12}>
-                          Note: <strong> {patient.note}</strong>
-                        </Col>
-                      </Row>
+                    <Row>
+                      <Col md={12}>
+                        Note: <strong> {patient.note}</strong>
+                      </Col>
+                    </Row>
                   </ListGroup.Item>
                 );
               })
