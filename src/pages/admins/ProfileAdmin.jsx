@@ -34,8 +34,8 @@ function ProfileAdmin() {
             setError(result.error);
           } else if (result[0]) {
             setInstructor(result[0]);
-            Cookies.set("instructor", result[0], { expires: 7 });
-            Cookies.set("division", result[0].division, { expires: 7 });
+            Cookies.set("instructor", result[0], { expires: 1 });
+            Cookies.set("division", result[0].division, { expires: 1 });
           } else {
             setError("Instructor data is undefined");
           }

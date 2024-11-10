@@ -100,6 +100,9 @@ function LoginByEmail() {
           Cookies.remove("email");
           Cookies.remove("role");
           Cookies.remove("user");
+          Cookies.remove("otpVerified");
+          Cookies.remove("division");
+          Cookies.remove("instructor");
           window.location.reload();
         }
       } else {

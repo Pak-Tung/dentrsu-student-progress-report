@@ -34,7 +34,7 @@ function ProfileRoot() {
   const userEmail = user.email;
 
   const handleSelectRole = (selectedRole) => {
-    Cookies.set("role", selectedRole);
+    Cookies.set("role", selectedRole, { expires: 1 }); // Expires in 1 days
     setRole(selectedRole);
     if (selectedRole === "admin") {
       handleShow();

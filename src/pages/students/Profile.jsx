@@ -117,7 +117,7 @@ function Profile() {
         setError(response.error);
       } else {
         setUser((prevUser) => ({ ...prevUser, picture: imageUrl }));
-        Cookies.set("user", JSON.stringify({ ...user, picture: imageUrl }));
+        Cookies.set("user", JSON.stringify({ ...user, picture: imageUrl }), { expires: 1 });
         setShowTextbox(false);
         alert("Profile picture updated successfully");
       }
