@@ -177,7 +177,7 @@ function AllTeamleaderPatients() {
               <Col md={3} className="text-center">
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
-                    Select Patient Status:
+                    Patient Status:
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {statusOptions.map((status) => (
@@ -199,7 +199,7 @@ function AllTeamleaderPatients() {
               <Col md={3} className="text-center">
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
-                    Select Student: {getStudentName(filterStudent)} (
+                    Students: {getStudentName(filterStudent)} (
                     {countPatients(filterStudent)})
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
