@@ -1,0 +1,14 @@
+# Dockerfile for React App
+FROM node:16-alpine
+
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 8081
+CMD ["npx", "serve", "-s", "build", "-l", "8081"]

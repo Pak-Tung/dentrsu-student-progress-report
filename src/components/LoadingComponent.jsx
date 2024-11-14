@@ -1,10 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Row } from "react-bootstrap";
 import Lottie from "lottie-react";
-import FadeIn from "react-fade-in";
+import FadeInOut from "./FadeInOut";
 import * as loadingData from "./loading.json";
 
 const LoadingComponent = () => {
+  const [show, setShow] = useState(true);
+  const extraStyles = {
+    // position: "fixed",
+    // top: "30px",
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
+    // background: "rgba(0, 0, 0, 0.4)",
+    // color: "#FFF"
+  };
   return (
     <div
       style={{
@@ -14,7 +24,7 @@ const LoadingComponent = () => {
         alignItems: "center", // Centers content vertically
       }}
     >
-      <FadeIn>
+      <FadeInOut show={show} duration={1500} style={extraStyles}>
         <Container>
           <Row className="d-flex justify-content-center">
             <Lottie
@@ -26,7 +36,7 @@ const LoadingComponent = () => {
             />
           </Row>
         </Container>
-      </FadeIn>
+      </FadeInOut>
     </div>
   );
 };

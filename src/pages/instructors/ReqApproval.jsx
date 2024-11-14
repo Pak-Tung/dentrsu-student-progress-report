@@ -25,7 +25,6 @@ function ReqApproval() {
       return {};
     }
   });
-  const userEmail = user.email;
 
   const [instructor, setInstructor] = useState({});
   const [loading, setLoading] = useState(true);
@@ -42,7 +41,7 @@ function ReqApproval() {
 
   const fetchInstructorData = useCallback(async () => {
     try {
-      const result = await getInstructorByEmail(userEmail);
+      const result = await getInstructorByEmail(user.email);
       if (result.error) {
         setState((prevState) => ({ ...prevState, error: result.error }));
       } else if (result[0]) {
@@ -56,12 +55,12 @@ function ReqApproval() {
         error: "Failed to fetch instructor data",
       }));
     }
-  }, [userEmail]);
+  }, [user]);
 
   const fetchRequests = useCallback(async () => {
     try {
       const result = await getDivReqByInstructorEmail(
-        userEmail,
+        user.email,
         instructorDivision
       );
       if (result.error) {
@@ -99,7 +98,7 @@ function ReqApproval() {
         loading: false,
       }));
     }
-  }, [userEmail, instructorDivision]);
+  }, [user.email, instructorDivision]);
 
   useEffect(() => {
     fetchInstructorData();
@@ -134,7 +133,7 @@ function ReqApproval() {
 
   return (
     <>
-      {userEmail ? (
+      {user.email ? (
         <>
           <NavbarInstructor />
           <Container fluid="md" className={containerClass}>

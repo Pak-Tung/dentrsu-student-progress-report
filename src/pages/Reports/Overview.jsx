@@ -6,7 +6,6 @@ import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import SumByDiv from "./SumByDiv";
 import LoginByEmail from "../../components/LoginByEmail";
 import "../../Navbar.css";
-import FadeIn from "react-fade-in";
 import LoadingComponent from "../../components/LoadingComponent";
 import LoadingSuccessComponent from "../../components/LoadingSuccessComponent";
 import "../../DarkMode.css";
@@ -156,11 +155,9 @@ function Overview() {
               </Container>
             </>
           ) : (
-            <FadeIn>
-              <div>
-                {!loading ? <LoadingComponent /> : <LoadingSuccessComponent />}
-              </div>
-            </FadeIn>
+            <div>
+              {!loading ? <LoadingComponent /> : <LoadingSuccessComponent />}
+            </div>
           )}
         </>
       ) : (

@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import Lottie from "lottie-react";
-import FadeIn from "react-fade-in";
+import FadeInOut from "./FadeInOut";
 import * as successData from "./success.json";
 
 const LoadingSuccessComponent = () => {
+  const [show, setShow] = useState(false);
+  const extraStyles = {
+    // position: "fixed",
+    // top: "30px",
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
+    // background: "rgba(0, 0, 0, 0.4)",
+    // color: "#FFF"
+  };
+
   return (
     <div
       style={{
@@ -14,7 +25,7 @@ const LoadingSuccessComponent = () => {
         alignItems: "center", // Centers content vertically
       }}
     >
-      <FadeIn>
+      <FadeInOut show={show} duration={500} style={extraStyles}>
         <Container>
           <Row className="d-flex justify-content-center">
             <Lottie
@@ -26,7 +37,7 @@ const LoadingSuccessComponent = () => {
             />
           </Row>
         </Container>
-      </FadeIn>
+      </FadeInOut>
     </div>
   );
 };

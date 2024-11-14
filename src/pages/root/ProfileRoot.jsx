@@ -15,10 +15,7 @@ import LoginByEmail from "../../components/LoginByEmail";
 import Cookies from "js-cookie";
 
 function ProfileRoot() {
-  const [user, setUser] = useState(() => {
-    const savedUser = Cookies.get("user");
-    return savedUser ? JSON.parse(savedUser) : {};
-  });
+  const user = JSON.parse(Cookies.get("user")) || {};
 
   const [role, setRole] = useState("");
 

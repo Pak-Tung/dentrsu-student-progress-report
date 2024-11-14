@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { insertStudent } from "../../features/apiCalls";
-import NavbarRoot from "./NavbarRoot";
 import { Container, Row, Col, Button, InputGroup, Form } from "react-bootstrap";
 import LoginByEmail from "../../components/LoginByEmail";
 import Cookies from "js-cookie";
