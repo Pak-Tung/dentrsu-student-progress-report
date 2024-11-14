@@ -16,7 +16,7 @@ function LoginScreen({ handleLoginSuccess, setOtpVerified }) {
           <Col className="text-center">
             <h4>Comprehensive Dental Care Clinic</h4>
             <br />
-            <h2>DentRSU Hub</h2>
+            <h2>DentRSU Connect</h2>
           </Col>
         </Row>
         <Row className="d-flex justify-content-center">
