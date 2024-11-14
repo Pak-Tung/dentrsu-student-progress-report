@@ -21,7 +21,14 @@ function LoginScreen({ handleLoginSuccess, setOtpVerified }) {
         </Row>
         <Row className="d-flex justify-content-center">
           <Col className="text-center">
-            <img src={theme === "light"?"/logo_png.png":"/logo_png_dark.png"} alt="Logo" width="250" />
+            <img
+              src={theme === "light" ? "/logo_png.png" : "/logo_png_dark.png"}
+              alt="Logo"
+              width="250"
+              onClick={() => window.location.reload()}
+              style={{ cursor: "pointer" }}
+              title="click to refresh"
+            />
           </Col>
         </Row>
         <br />
