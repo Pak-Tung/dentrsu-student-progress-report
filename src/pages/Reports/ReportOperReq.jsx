@@ -16,6 +16,7 @@ function ReportOperReq(operR) {
       Class_III: 0,
       Class_IV: 0,
       Class_V: 0,
+      Class_VI: 0,
       Recall_completed_case: 0,
       Recall_any: 0,
       Exam_Class_II: 0,
@@ -47,6 +48,7 @@ function ReportOperReq(operR) {
       Class_III: 2,
       Class_IV: 2,
       Class_V: 5,
+      Class_VI: 0,
       Recall_completed_case: 1,
       Recall_any: 1,
       Exam_Class_II: 1,
@@ -120,7 +122,6 @@ function ReportOperReq(operR) {
           </Row>
           {Object.entries(totalReq.RSU).map(([key, value]) => {
             if (
-              value === 0 &&
               (key === "Polishing" ||
                 key === "Sealant" ||
                 key === "Diastema_closure" ||
@@ -129,7 +130,8 @@ function ReportOperReq(operR) {
                 key === "Emergency_tx" ||
                 key === "Inlay" ||
                 key === "Onlay" ||
-                key === "Veneer")
+                key === "Veneer" ||
+                key === "Class_VI")
             )
               return null;
             return (

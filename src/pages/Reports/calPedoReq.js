@@ -6,7 +6,7 @@ export const calPedoReq = (rqm, minReq) => {
             Photographs_and_Radiographs: 0,
             Caries_risk_assessment_and_Management: 0,
             Sealant: 0,
-            Filling: 0,
+            Filling_or_PRR: 0,
             Primary_molar_class_II_restoration: 0,
             Stainless_steel_crown_in_posterior_teeth: 0,
             Pulpectomy_Step_OC_and_LT_or_Pulpotomy: 0,
@@ -44,9 +44,9 @@ export const calPedoReq = (rqm, minReq) => {
             } else if(item.type === "Sealant"){
                 totalReq.RSU.Sealant += parseFloat(item.req_RSU);
                 item.extraRSU = "Sealant";
-            } else if(item.type === "Filling"){
-                totalReq.RSU.Filling += parseFloat(item.req_RSU);
-                item.extraRSU = "Filling";
+            } else if(item.type === "Filling or PRR"){
+                totalReq.RSU.Filling_or_PRR += parseFloat(item.req_RSU);
+                item.extraRSU = "Filling or PRR";
             } else if(item.type === "Primary molar class II restoration"){
                 totalReq.RSU.Primary_molar_class_II_restoration += parseFloat(item.req_RSU);
                 item.extraRSU = "Primary molar class II restoration";
@@ -91,11 +91,8 @@ export const calPedoReq = (rqm, minReq) => {
                 item.extraCDA = "Sealant";
             } else if(item.type === "Filling"){
                 totalReq.CDA.Filling_or_PRR += parseFloat(item.req_DC);
-                item.extraCDA = "Filling";
-            } else if(item.type === "PRR"){
-                totalReq.CDA.Filling_or_PRR += parseFloat(item.req_DC);
-                item.extraCDA = "PRR";
-            }else if(item.type === "Primary molar class II restoration"){
+                item.extraCDA = "Filling or PRR";
+            } else if(item.type === "Primary molar class II restoration"){
                 totalReq.CDA.Filling_or_PRR += parseFloat(item.req_DC);
                 item.extraRSU = "Primary molar class II restoration";
             }else if(item.type === "Stainless steel crown in posterior teeth"){

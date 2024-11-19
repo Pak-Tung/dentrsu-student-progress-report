@@ -871,13 +871,13 @@ function ModalTxPlan({
                   <Form.Group as={Row} className="mb-3">
                     <Col md={4}></Col>
                     <Col md={4}>
-                      <Button variant="dark" type="submit">
+                      <Button variant={theme === "light"?"outline-dark":"outline-light"} type="submit">
                         Save Patient Update
                       </Button>
                     </Col>
                     <Col md={4}>
                       <Button
-                        variant="outline-dark"
+                        variant={theme === "light"?"outline-dark":"outline-light"}
                         onClick={handleClosePatientUpdateForm}
                       >
                         Close Patient Update Form

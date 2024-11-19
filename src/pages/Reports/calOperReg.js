@@ -18,6 +18,7 @@ export const calOperReg = (rqm, minReq) => {
       Class_III: 0,
       Class_IV: 0,
       Class_V: 0,
+      Class_VI: 0,
       Recall_completed_case: 0,
       Recall_any: 0,
       Exam_Class_II: 0,
@@ -147,6 +148,9 @@ export const calOperReg = (rqm, minReq) => {
       } else if (item.type === "Veneer") {
         totalReq.RSU.Veneer += parseFloat(item.req_RSU);
         item.extra = "Veneer";
+      } else if (item.type === "Class VI") {
+        totalReq.RSU.Class_VI += parseFloat(item.req_RSU);
+        item.extra = "Minimum total R";
       }
     }
   });
@@ -212,7 +216,8 @@ export const calOperReg = (rqm, minReq) => {
     totalReq.RSU.Inlay +
     totalReq.RSU.Onlay +
     totalReq.RSU.Diastema_closure +
-    totalReq.RSU.Veneer;
+    totalReq.RSU.Veneer +
+    totalReq.RSU.Class_VI;
 
   
 
@@ -246,6 +251,9 @@ export const calOperReg = (rqm, minReq) => {
         } else {
           item.extraCDA = "Class V Surplus";
         }
+      } else if (item.type === "Class VI") {
+        totalAnyClass += parseFloat(item.req_DC);
+        item.extraCDA = "Any class";
       }
     }
   });
@@ -284,7 +292,7 @@ export const calOperReg = (rqm, minReq) => {
         totalAnyClass += parseFloat(item.req_DC);
         item.extraCDA = "Any class";
         totalClassII_CDA -= parseFloat(item.req_DC);
-      }
+      } 
     }
   });
 

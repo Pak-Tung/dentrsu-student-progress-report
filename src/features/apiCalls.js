@@ -321,6 +321,48 @@ export const updateDivReqById = async (id, req, division) => {
   }
 };
 
+export const deleteDivReqById = async (id, division) => {
+  switch (division) {
+    case "oper":
+      division = "operReqDelete";
+      break;
+    case "endo":
+      division = "endoReqDelete";
+      break;
+    case "perio":
+      division = "perioReqDelete";
+      break;
+    case "prosth":
+      division = "prosthReqDelete";
+      break;
+    case "diag":
+      division = "diagReqDelete";
+      break;
+    case "radio":
+      division = "radioReqDelete";
+      break;
+    case "sur":
+      division = "surReqDelete";
+      break;
+    case "pedo":
+      division = "pedoReqDelete";
+      break;
+    case "ortho":
+      division = "orthoReqDelete";
+      break;
+    default:
+      break;
+  }
+  try {
+    const response = await apiClient.delete(
+      `/api/students/reqs/${division}/id/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
 //Instructors
 export const getAllInstructors = async () => {
   try {
@@ -831,3 +873,4 @@ export const insertPatientsDataCsv = async (patients) => {
     throw new Error(errorMsg);
   }
 };
+

@@ -117,115 +117,115 @@ function ReportDiagReq(divisionR) {
             );
           })}
         </ListGroup.Item>
-      </ListGroup>
 
-      <ListGroup.Item key={"title_CDA"} className={listGroupItemClass}>
-        <Row>
-          <Col xs={12} md={8}>
-            <strong>CDA Requirement</strong>
-          </Col>
-          <Col xs={12} md={4} className="text-center"></Col>
-        </Row>
-        {Object.entries(totalReq.CDA).map(([key, value]) => {
-          return (
-            <Row key={key} className="mb-2">
-              <Col xs={12} md={8}>
-                <h4>
-                  <Badge bg={value >= minReq.CDA[key] ? "success" : "danger"}>
-                    {key.replace(/_/g, " ")}
-                  </Badge>
-                </h4>
-              </Col>
-              <Col xs={12} md={4} className="text-center">
-                {value} / ({minReq.CDA[key]})
-              </Col>
-            </Row>
-          );
-        })}
-      </ListGroup.Item>
+        <ListGroup.Item key={"title_CDA"} className={listGroupItemClass}>
+          <Row>
+            <Col xs={12} md={8}>
+              <strong>CDA Requirement</strong>
+            </Col>
+            <Col xs={12} md={4} className="text-center"></Col>
+          </Row>
+          {Object.entries(totalReq.CDA).map(([key, value]) => {
+            return (
+              <Row key={key} className="mb-2">
+                <Col xs={12} md={8}>
+                  <h4>
+                    <Badge bg={value >= minReq.CDA[key] ? "success" : "danger"}>
+                      {key.replace(/_/g, " ")}
+                    </Badge>
+                  </h4>
+                </Col>
+                <Col xs={12} md={4} className="text-center">
+                  {value} / ({minReq.CDA[key]})
+                </Col>
+              </Row>
+            );
+          })}
+        </ListGroup.Item>
 
-      <ListGroup.Item
-        key="patientDetail"
-        onClick={() => setShow((prevShow) => !prevShow)}
-        style={{ cursor: "pointer" }}
-        className={`myDiv ${listGroupItemClass}`}
-      >
-        <Row>
-          <Col>
-            {show
-              ? "Click to hide patient details..."
-              : "Click for more patient details..."}
-          </Col>
-        </Row>
-      </ListGroup.Item>
+        <ListGroup.Item
+          key="patientDetail"
+          onClick={() => setShow((prevShow) => !prevShow)}
+          style={{ cursor: "pointer" }}
+          className={`myDiv ${listGroupItemClass}`}
+        >
+          <Row>
+            <Col>
+              {show
+                ? "Click to hide patient details..."
+                : "Click for more patient details..."}
+            </Col>
+          </Row>
+        </ListGroup.Item>
 
-      {show && (
-        <>
-          <ListGroup.Item
-            key={"ptTitle"}
-            className={listGroupItemClass}
-            variant="primary"
-          >
-            <Row>
-              <Col xs={6} md={3}>
-                Patient Name
-              </Col>
-              <Col xs={6} md={2}>
-                Type of Work
-              </Col>
-              <Col xs={6} md={3}>
-                Description
-              </Col>
-              <Col xs={3} md={1}>
-                RSU
-              </Col>
-              <Col xs={3} md={1}>
-                CDA
-              </Col>
-              <Col xs={3} md={1}>
-                RSU Status
-              </Col>
-              <Col xs={3} md={1}>
-                CDA Status
-              </Col>
-              <Col xs={3} md={1}>
-                Approval Status
-              </Col>
-            </Row>
-          </ListGroup.Item>
-
-          {calRqm.map((rq) => (
-            <ListGroup.Item key={rq.id} className={listGroupItemClass}>
+        {show && (
+          <>
+            <ListGroup.Item
+              key={"ptTitle"}
+              className={listGroupItemClass}
+              variant="primary"
+            >
               <Row>
                 <Col xs={6} md={3}>
-                  {rq.HN} {rq.patientName}
+                  Patient Name
                 </Col>
                 <Col xs={6} md={2}>
-                  {rq.type}
+                  Type of Work
                 </Col>
                 <Col xs={6} md={3}>
-                  {rq.area}
+                  Description
                 </Col>
                 <Col xs={3} md={1}>
-                  {rq.req_RSU} {rq.unit_RSU}
+                  RSU
                 </Col>
                 <Col xs={3} md={1}>
-                  {rq.req_DC} {rq.unit_DC}
+                  CDA
                 </Col>
                 <Col xs={3} md={1}>
-                  {rq.extraRSU}
+                  RSU Status
                 </Col>
                 <Col xs={3} md={1}>
-                  {rq.extraCDA}
+                  CDA Status
                 </Col>
                 <Col xs={3} md={1}>
-                  {getApprovalStatus(parseInt(rq.isApproved))}
+                  Approval Status
                 </Col>
               </Row>
             </ListGroup.Item>
-          ))}
-        </>
-      )}
+
+            {calRqm.map((rq) => (
+              <ListGroup.Item key={rq.id} className={listGroupItemClass}>
+                <Row>
+                  <Col xs={6} md={3}>
+                    {rq.HN} {rq.patientName}
+                  </Col>
+                  <Col xs={6} md={2}>
+                    {rq.type}
+                  </Col>
+                  <Col xs={6} md={3}>
+                    {rq.area}
+                  </Col>
+                  <Col xs={3} md={1}>
+                    {rq.req_RSU} {rq.unit_RSU}
+                  </Col>
+                  <Col xs={3} md={1}>
+                    {rq.req_DC} {rq.unit_DC}
+                  </Col>
+                  <Col xs={3} md={1}>
+                    {rq.extraRSU}
+                  </Col>
+                  <Col xs={3} md={1}>
+                    {rq.extraCDA}
+                  </Col>
+                  <Col xs={3} md={1}>
+                    {getApprovalStatus(parseInt(rq.isApproved))}
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            ))}
+          </>
+        )}
+      </ListGroup>
     </>
   );
 }

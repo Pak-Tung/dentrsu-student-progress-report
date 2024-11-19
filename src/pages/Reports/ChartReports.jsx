@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import { getStudentByEmail } from "../../features/apiCalls";
 import { Container, Row, Col, Badge, Button } from "react-bootstrap";
 import Cookies from "js-cookie";
@@ -159,7 +165,7 @@ function ChartReports({ studentEmail }) {
     }
   }, [rqm, minReq]);
 
-  const [percentReq, setPercentReq] = useState({});
+  // const [percentReq, setPercentReq] = useState({});
 
   const calculateTotalMinRequirements = (minReqs) => {
     const totalMinDivReq = {};
@@ -184,6 +190,33 @@ function ChartReports({ studentEmail }) {
     return totalMinDivReq;
   };
 
+  // Adjust totalDivReq so it doesn't exceed minReq
+  const adjustedTotalDivReq = useMemo(() => {
+    const adjusted = {};
+    for (const school in totalDivReq) {
+      adjusted[school] = {};
+      const divisions = totalDivReq[school];
+      for (const division in divisions) {
+        adjusted[school][division] = {}; // Initialize the division object
+        const requirements = divisions[division];
+        for (const key in requirements) {
+          const value = totalDivReq[school][division][key];
+          const minRequirement = minReq[division]?.[school]?.[key];
+          // if (division === "prosth") {
+          //   console.log("value", value);
+          //   console.log("minRequirement", minRequirement);
+          // }
+          if (minRequirement !== undefined && value > minRequirement) {
+            adjusted[school][division][key] = minRequirement;
+          } else {
+            adjusted[school][division][key] = value;
+          }
+        }
+      }
+    }
+    return adjusted;
+  }, [totalDivReq, minReq]);
+
   function calculateTotalDivRequirements(totalDivReqs) {
     let totalReqs = {};
 
@@ -207,36 +240,51 @@ function ChartReports({ studentEmail }) {
 
   const calculatePercentRequirements = (totalReqs, minReqs) => {
     const percentReq = {};
-  
+
     for (const division in totalReqs) {
+      // if (division === "prosth") {
+      //   console.log("totalReqs prosth", totalReqs[division]);
+      //   console.log("minReqs prosth", minReqs[division]);
+      // }
       percentReq[division] = {
         RSU:
           minReqs[division]?.RSU > 0
-            ? Math.min((totalReqs[division].RSU / minReqs[division].RSU) * 100, 100.0)
+            ? Math.min(
+                (totalReqs[division].RSU / minReqs[division].RSU) * 100,
+                100.0
+              )
             : 0,
         CDA:
           minReqs[division]?.CDA > 0
-            ? Math.min((totalReqs[division].CDA / minReqs[division].CDA) * 100, 100.0)
+            ? Math.min(
+                (totalReqs[division].CDA / minReqs[division].CDA) * 100,
+                100.0
+              )
             : 0,
       };
     }
-  
+    // console.log("percentReq", percentReq);
     return percentReq;
   };
-  
+
+  // Calculate percentage requirements
+  const percentReq = useMemo(() => {
+    if (Object.keys(adjustedTotalDivReq).length && Object.keys(minReq).length) {
+      const totalMinReq = calculateTotalMinRequirements(minReq);
+      const totalDivRequirements =
+        calculateTotalDivRequirements(adjustedTotalDivReq);
+      return calculatePercentRequirements(totalDivRequirements, totalMinReq);
+    } else {
+      return {};
+    }
+  }, [adjustedTotalDivReq, minReq]);
+
+  const [percentReqState, setPercentReqState] = useState({});
 
   useEffect(() => {
-    if (Object.keys(totalDivReq).length && Object.keys(minReq).length) {
-      const totalMinReq = calculateTotalMinRequirements(minReq);
-      const total = calculateTotalDivRequirements(totalDivReq);
-
-      const percent = calculatePercentRequirements(total, totalMinReq);
-      setPercentReq(percent);
-    }
-
-    // Data is ready; set loading to false
+    setPercentReqState(percentReq);
     setLoading(false);
-  }, [totalDivReq, minReq]);
+  }, [percentReq]);
 
   function transformPercentToNestedArray(percent, shortLabels) {
     const codes = ["RSU", "CDA"]; // Define the codes in the desired order

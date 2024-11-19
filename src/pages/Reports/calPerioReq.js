@@ -6,13 +6,13 @@ export const calPerioReq = (rqm, minReq) => {
       Case_P: 0,
       Complexities: 0,
       OHI_1st_Exam: 0,
+      OHI_2n_Exam: 0,
       SRP_1st_Exam: 0,
     },
     CDA: {
       //Case_G: 0,
       Case_P: 0,
       CDA_Cases: 0,
-      OHI_2n_Exam: 0,
       SRP_2nd_Exam: 0,
     },
   };
@@ -22,6 +22,7 @@ export const calPerioReq = (rqm, minReq) => {
   let totalCaseP = 0;
   let totalComplexities = 0;
   let totalOHI1stExam = 0;
+  let totalOHI2ndExam = 0;
   let totalSRP1stExam = 0;
 
   rqm.forEach((item) => {
@@ -35,7 +36,10 @@ export const calPerioReq = (rqm, minReq) => {
       } else if (item.type === "OHI 1st exam") {
         totalOHI1stExam += parseFloat(item.req_RSU);
         item.extraRSU = "OHI 1st exam";
-      } else if (item.type === "SRP 1st exam") {
+      } else if (item.type === "OHI 2nd exam") {
+        totalOHI2ndExam += parseFloat(item.req_RSU);
+        item.extraRSU = "OHI 2nd exam";
+      }else if (item.type === "SRP 1st exam") {
         totalSRP1stExam += parseFloat(item.req_RSU);
         item.extraRSU = "SRP 1st exam";
       }
@@ -52,7 +56,6 @@ export const calPerioReq = (rqm, minReq) => {
   let totalCaseG_CDA = 0;
   let totalCaseP_CDA = 0;
   let totalCDACases = 0;
-  let totalOHI2ndExam = 0;
   let totalSRP2ndExam = 0;
 
   rqm.forEach((item) => {
@@ -63,9 +66,6 @@ export const calPerioReq = (rqm, minReq) => {
       } else if (item.type === "Case P") {
         totalCaseP_CDA += 1;
         item.extraCDA = "Case P";
-      }  else if (item.type === "OHI 2nd exam") {
-        totalOHI2ndExam += parseFloat(item.req_DC);
-        item.extraCDA = "OHI 2nd exam";
       } else if (item.type === "SRP 2nd exam") {
         totalSRP2ndExam += parseFloat(item.req_DC);
         item.extraCDA = "SRP 2nd exam";
@@ -88,7 +88,7 @@ export const calPerioReq = (rqm, minReq) => {
   totalReq.RSU.Complexities = totalComplexities;
   totalReq.CDA.CDA_Cases = totalCDACases;
   totalReq.RSU.OHI_1st_Exam = totalOHI1stExam;
-  totalReq.CDA.OHI_2n_Exam = totalOHI2ndExam;
+  totalReq.RSU.OHI_2n_Exam = totalOHI2ndExam;
   totalReq.RSU.SRP_1st_Exam = totalSRP1stExam;
   totalReq.CDA.SRP_2nd_Exam = totalSRP2ndExam;
 

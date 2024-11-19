@@ -4,7 +4,6 @@ import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calProsthReq } from "./calProsthReq";
 
-
 function ReportProsthReq(divisionR) {
   const { theme } = useContext(ThemeContext);
   const [show, setShow] = useState(false);
@@ -89,14 +88,20 @@ function ReportProsthReq(divisionR) {
       <ListGroup>
         <ListGroup.Item variant="dark">
           <Row>
-            <Col xs={12} md={8}>Prosthodontic Requirement</Col>
-            <Col xs={12} md={4} className="text-center">Requirement</Col>
+            <Col xs={12} md={8}>
+              Prosthodontic Requirement
+            </Col>
+            <Col xs={12} md={4} className="text-center">
+              Requirement
+            </Col>
           </Row>
         </ListGroup.Item>
 
         <ListGroup.Item key={"title_RSU"} className={listGroupItemClass}>
           {Object.entries(totalReq.RSU).map(([key, value]) => {
-            if(key === "Bridge_3_units"){return null;}
+            if (key === "Bridge_3_units") {
+              return null;
+            }
             return (
               <Row key={key}>
                 <Col xs={12} md={8}>
@@ -113,58 +118,58 @@ function ReportProsthReq(divisionR) {
             );
           })}
         </ListGroup.Item>
-      </ListGroup>
 
-      <ListGroup.Item
-        key="patientDetail"
-        onClick={() => setShow((prevShow) => !prevShow)}
-        style={{ cursor: "pointer" }}
-        className={`myDiv ${listGroupItemClass}`}
-      >
-        <Row>
-          <Col>
-            {show
-              ? "click to hide patient detail..."
-              : "click for more patient detail..."}
-          </Col>
-        </Row>
-      </ListGroup.Item>
-
-      {show && (
         <ListGroup.Item
-          key={"ptTitle"}
-          className={listGroupItemClass}
-          variant="primary"
+          key="patientDetail"
+          onClick={() => setShow((prevShow) => !prevShow)}
+          style={{ cursor: "pointer" }}
+          className={`myDiv ${listGroupItemClass}`}
         >
           <Row>
-            <Col>Patient Name</Col>
-            <Col>Type of work</Col>
-            <Col>Description</Col>
-            <Col>R</Col>
-            <Col>Status</Col>
-            <Col>Approve status</Col>
+            <Col>
+              {show
+                ? "click to hide patient detail..."
+                : "click for more patient detail..."}
+            </Col>
           </Row>
         </ListGroup.Item>
-      )}
 
-      {show &&
-        calRqm.map((rq) => (
-          <ListGroup.Item key={rq.id} className={listGroupItemClass}>
+        {show && (
+          <ListGroup.Item
+            key={"ptTitle"}
+            className={listGroupItemClass}
+            variant="primary"
+          >
             <Row>
-              <Col>
-                {rq.HN} {rq.patientName}
-              </Col>
-              <Col>{rq.type}</Col>
-              <Col>{rq.area}</Col>
-              <Col>
-                {rq.req_RSU} {rq.unit_RSU}
-              </Col>
-              <Col>{rq.extraRSU}</Col>
-              
-              <Col>{getApprovalStatus(parseInt(rq.isApproved))}</Col>
+              <Col>Patient Name</Col>
+              <Col>Type of work</Col>
+              <Col>Description</Col>
+              <Col>R</Col>
+              <Col>Status</Col>
+              <Col>Approve status</Col>
             </Row>
           </ListGroup.Item>
-        ))}
+        )}
+
+        {show &&
+          calRqm.map((rq) => (
+            <ListGroup.Item key={rq.id} className={listGroupItemClass}>
+              <Row>
+                <Col>
+                  {rq.HN} {rq.patientName}
+                </Col>
+                <Col>{rq.type}</Col>
+                <Col>{rq.area}</Col>
+                <Col>
+                  {rq.req_RSU} {rq.unit_RSU}
+                </Col>
+                <Col>{rq.extraRSU}</Col>
+
+                <Col>{getApprovalStatus(parseInt(rq.isApproved))}</Col>
+              </Row>
+            </ListGroup.Item>
+          ))}
+      </ListGroup>
     </>
   );
 }

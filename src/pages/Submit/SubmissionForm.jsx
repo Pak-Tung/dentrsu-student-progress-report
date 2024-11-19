@@ -17,6 +17,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import "../../App.css";
 import Cookies from "js-cookie";
 import { ThemeContext } from "../../ThemeContext";
@@ -227,6 +228,12 @@ const SubmissionForm = ({ division }) => {
       event.stopPropagation();
     } else {
       try {
+        const userConfirmed = window.confirm(
+          "Are you sure you want to submit this requirement?"
+        );
+        if (!userConfirmed) {
+          return; // Exit the function if the user cancels
+        }
         const updatedFormData = {
           ...formData,
           unit_RSU: unitRSU,
@@ -237,13 +244,56 @@ const SubmissionForm = ({ division }) => {
 
         if (response.insertId > 0 && response.affectedRows > 0) {
           alert("Form submitted successfully!");
-          window.location.reload();
+          resetForm();
         }
       } catch (error) {
         console.error("Error submitting form:", error);
       }
     }
-    setValidated(true);
+    //setValidated(true);
+  };
+
+  // Function to reset the form and state variables
+  const resetForm = () => {
+    setFormData({
+      id: 0,
+      studentEmail: userEmail,
+      type: "",
+      area: "",
+      req_RSU: 0,
+      unit_RSU: "",
+      req_DC: 0,
+      unit_DC: "",
+      HN: "",
+      patientName: "",
+      isApproved: 0,
+      instructorEmail: divisionInstructor, // Ensure this is set correctly
+      approvedDate: "",
+      bookNo: 0,
+      pageNo: 0,
+      note: "",
+    });
+    setSelectedOption("");
+    setUnitRSU("unit_RSU");
+    setUnitDC("unit_CDA");
+    setValidated(false);
+    setSelectedRecallStatus("");
+    setSeverity(0);
+    setRecall(0);
+    setType("");
+    setShowOperArea(true);
+    setShowProsthReq(false);
+    setShowProsthPt(true);
+    setDisableDiagRSU(false);
+    setDisableDiagCDA(false);
+    setDisableRadioArea(false);
+    setDisableSurArea(false);
+    setShowSurReq(false);
+    setShowSurPt(true);
+    setShowPedoReq(false);
+    setShowPedoReqCDA(false);
+    setDisablePedoArea(false);
+    setShowPt(true);
   };
 
   const themeClass = theme === "dark" ? "form-control-dark" : "";
@@ -265,7 +315,7 @@ const SubmissionForm = ({ division }) => {
   };
 
   /******Calculate Oper ****************/
-  const [showOperReq, setShowOperReq] = useState(false);
+  const [showOperArea, setShowOperArea] = useState(true);
 
   useEffect(() => {
     if (division === "oper") {
@@ -284,22 +334,24 @@ const SubmissionForm = ({ division }) => {
           req_RSU: 1,
           req_DC: 0,
         }));
+        setShowOperArea(true);
       } else if (
         selectedOption === "Oper chart" ||
         selectedOption === "Recall completed case" ||
-        selectedOption === "Recall any"
+        selectedOption === "Recall any" ||
+        selectedOption === "Caries control"
       ) {
-        setShowOperReq(true);
-      } 
+        setShowOperArea(false);
+      } else {
+        setShowOperArea(true);
+      }
     }
   }, [selectedOption, division]);
 
   /*******End of Oper Calculate ************/
-  
+
   useEffect(() => {
     if (division === "endo") {
-      
-
       if (
         selectedOption === "RCT Anterior or premolar" ||
         selectedOption === "Exam RCT"
@@ -331,7 +383,6 @@ const SubmissionForm = ({ division }) => {
   }, [selectedOption, division]);
 
   /*****Endo Calculate ******/
-
 
   /****End of Endo Calculate ******/
 
@@ -368,10 +419,12 @@ const SubmissionForm = ({ division }) => {
       req_RSU: complexity_RSU,
       req_DC: cases_DC,
       ...(recall === "Only recall" && { req_DC: 1 }),
-      ...((type === "SRP 1st exam" || type === "OHI 1st exam") && {
+      ...((type === "SRP 1st exam" ||
+        type === "OHI 1st exam" ||
+        type === "OHI 2nd exam") && {
         req_RSU: 1,
       }),
-      ...((type === "SRP 2nd exam" || type === "OHI 2nd exam") && {
+      ...(type === "SRP 2nd exam" && {
         req_DC: 1,
       }),
     }));
@@ -382,6 +435,7 @@ const SubmissionForm = ({ division }) => {
   //*********Prosth Condition ***********************/
   const [showProsthReq, setShowProsthReq] = useState(false);
   const [showProsthPt, setShowProsthPt] = useState(true);
+  const [showProsthArea, setShowProsthArea] = useState(true);
 
   useEffect(() => {
     if (division === "prosth") {
@@ -391,8 +445,9 @@ const SubmissionForm = ({ division }) => {
           req_RSU: 1,
           req_DC: 1,
         }));
-        setShowProsthReq(false);
+        //setShowProsthReq(false);
         setShowProsthPt(true);
+        setShowProsthArea(false);
       } else if (
         selectedOption === "Exam design RPD" ||
         selectedOption === "Exam crown preparation"
@@ -402,11 +457,19 @@ const SubmissionForm = ({ division }) => {
           req_RSU: 1,
           req_DC: 0,
         }));
-        setShowProsthReq(true);
+        //setShowProsthReq(true);
         setShowProsthPt(false);
-      } else if(
-        selectedOption === "MRPD" ||
-        selectedOption === "ARPD" ||
+        setShowProsthArea(false);
+      } else if (selectedOption === "MRPD" || selectedOption === "ARPD") {
+        setFormData((prevState) => ({
+          ...prevState,
+          req_RSU: 0,
+          req_DC: 0,
+        }));
+        //setShowProsthReq(false);
+        setShowProsthPt(true);
+        setShowProsthArea(false);
+      } else if (
         selectedOption === "Crown" ||
         selectedOption === "Post Core Crown" ||
         selectedOption === "Bridge 3 units"
@@ -416,8 +479,9 @@ const SubmissionForm = ({ division }) => {
           req_RSU: 0,
           req_DC: 0,
         }));
-        setShowProsthReq(false);
+        //setShowProsthReq(false);
         setShowProsthPt(true);
+        setShowProsthArea(true);
       }
     }
   }, [selectedOption, division]);
@@ -430,7 +494,7 @@ const SubmissionForm = ({ division }) => {
 
   useEffect(() => {
     if (division === "diag") {
-      if(selectedOption === "Complete case examination"){
+      if (selectedOption === "Complete case examination") {
         setFormData((prevState) => ({
           ...prevState,
           req_RSU: 1,
@@ -628,6 +692,7 @@ const SubmissionForm = ({ division }) => {
   const [showPedoReqCDA, setShowPedoReqCDA] = useState(false);
   const [disablePedoArea, setDisablePedoArea] = useState(false);
   const [showPt, setShowPt] = useState(true);
+  const [showPedoArea, setShowPedoArea] = useState(true);
 
   useEffect(() => {
     if (division === "pedo") {
@@ -644,7 +709,7 @@ const SubmissionForm = ({ division }) => {
           req_DC: 1,
         }));
         setShowPedoReq(true);
-        setDisablePedoArea(true);
+        setShowPedoArea(false);
         setShowPt(true);
       } else if (
         selectedOption === "Photographs and Radiographs" ||
@@ -657,11 +722,11 @@ const SubmissionForm = ({ division }) => {
           req_DC: 0,
         }));
         setShowPedoReq(true);
-        setDisablePedoArea(true);
+        setShowPedoArea(false);
         setShowPt(true);
       } else if (
         selectedOption === "Sealant" ||
-        selectedOption === "Filling" ||
+        selectedOption === "Filling or PRR" ||
         selectedOption === "Primary molar class II restoration" ||
         selectedOption === "Stainless steel crown in posterior teeth" ||
         selectedOption === "Pulpectomy Step OC and LT or Pulpotomy" ||
@@ -674,18 +739,8 @@ const SubmissionForm = ({ division }) => {
           req_DC: 0,
         }));
         setShowPedoReq(false);
-        setDisablePedoArea(false);
+        setShowPedoArea(true);
         setShowPedoReqCDA(false);
-        setShowPt(true);
-      } else if (selectedOption === "PRR") {
-        setFormData((prevState) => ({
-          ...prevState,
-          req_RSU: 0,
-          req_DC: 1,
-        }));
-        setShowPedoReq(true);
-        setShowPedoReqCDA(false);
-        setDisablePedoArea(false);
         setShowPt(true);
       } else if (selectedOption === "Miscellaneous work") {
         setFormData((prevState) => ({
@@ -695,7 +750,7 @@ const SubmissionForm = ({ division }) => {
         }));
         setShowPedoReq(false);
         setShowPedoReqCDA(true);
-        setDisablePedoArea(false);
+        setShowPedoArea(true);
         setShowPt(true);
       } else {
         setShowPedoReq(false);
@@ -705,6 +760,7 @@ const SubmissionForm = ({ division }) => {
           req_DC: 0,
         }));
         setShowPt(true);
+        setShowPedoArea(true);
       }
     }
   }, [selectedOption, division, formData]);
@@ -714,8 +770,8 @@ const SubmissionForm = ({ division }) => {
   return (
     <>
       <Form
-        noValidate
-        validated={validated}
+        // noValidate
+        // validated={validated}
         onSubmit={handleSubmit}
         className={theme}
       >
@@ -731,6 +787,7 @@ const SubmissionForm = ({ division }) => {
                   onChange={handleInput}
                   required
                   className={themeClass}
+                  value={formData.bookNo}
                 />
               )}
             </Col>
@@ -749,6 +806,7 @@ const SubmissionForm = ({ division }) => {
                   onChange={handleInput}
                   required
                   className={themeClass}
+                  value={formData.pageNo}
                 />
               )}
             </Col>
@@ -775,6 +833,32 @@ const SubmissionForm = ({ division }) => {
               </Form.Group>
             </Col>
           </Row>
+          {(selectedOption === "Class I" ||
+            selectedOption === "Class II" ||
+            selectedOption === "Class III" ||
+            selectedOption === "Class IV" ||
+            selectedOption === "Class V" ||
+            selectedOption === "Diastema closure") && (
+            <Row className="justify-content-center">
+              <Col>
+                <Alert variant="info">{`กรณี ${selectedOption} ให้กรอกครั้งละ 1 ซี่`}</Alert>
+              </Col>
+            </Row>
+          )}
+          {selectedOption === "RCT Molar" && (
+            <Row className="justify-content-center">
+              <Col>
+                <Alert variant="info">{`กรณีใช้ซี่นี้สอบแทนฟันรากเดียว ให้กรอกข้อมูลอีกครั้งในงาน Exam RCT ด้วย`}</Alert>
+              </Col>
+            </Row>
+          )}
+          {selectedOption === "Exam RCT" && (
+            <Row className="justify-content-center">
+              <Col>
+                <Alert variant="info">{`กรณีใช้ Molar สอบแทนฟันรากเดียว ให้ระบุรากที่ใช้สอบด้วยในช่อง area ด้วย`}</Alert>
+              </Col>
+            </Row>
+          )}
           <Row>
             {division === "perio"
               ? (selectedOption === "Case G" ||
@@ -804,12 +888,12 @@ const SubmissionForm = ({ division }) => {
                   </Col>
                 )
               : division !== "ortho" &&
-                division !== "prosth" &&
+                showProsthArea &&
                 division !== "diag" &&
                 !disableRadioArea &&
                 !disableSurArea &&
-                !disablePedoArea &&
-                !showOperReq && (
+                showPedoArea &&
+                showOperArea && (
                   <Col>
                     <InputGroupField
                       id="area"
@@ -819,6 +903,7 @@ const SubmissionForm = ({ division }) => {
                       onChange={handleInput}
                       required
                       className={themeClass}
+                      value={formData.area}
                     />
                   </Col>
                 )}
@@ -885,9 +970,9 @@ const SubmissionForm = ({ division }) => {
             </Col>
           </Row>
           {selectedOption !== "CPC or Journal club" &&
-            selectedOption !== "Journal club" && 
+            selectedOption !== "Journal club" &&
             showSurPt &&
-            showPt && 
+            showPt &&
             showProsthPt && (
               <Row className="justify-content-md-center">
                 <Col md={4}>
@@ -899,6 +984,7 @@ const SubmissionForm = ({ division }) => {
                     onChange={handleInput}
                     required
                     className={themeClass}
+                    value={formData.HN}
                   />
                 </Col>
                 <Col>
@@ -910,6 +996,7 @@ const SubmissionForm = ({ division }) => {
                     onChange={handleInput}
                     required
                     className={themeClass}
+                    value={formData.patientName}
                   />
                 </Col>
               </Row>

@@ -1,7 +1,19 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Modal, Button, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Form,
+  InputGroup,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 import Cookies from "js-cookie";
-import { updateDivReqById, getReqByDivision } from "../features/apiCalls";
+import {
+  updateDivReqById,
+  getReqByDivision,
+  deleteDivReqById,
+} from "../features/apiCalls";
 import { getInstructorsByDivision } from "../features/apiTL";
 import { ThemeContext } from "../ThemeContext";
 
@@ -161,7 +173,11 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
           unit_RSU: unitRSU,
           unit_DC: unitDC,
         };
-        const response = await updateDivReqById(divisionReq.id, updatedFormData, division);
+        const response = await updateDivReqById(
+          divisionReq.id,
+          updatedFormData,
+          division
+        );
         if (response.affectedRows === 1) {
           alert("Form submitted successfully!");
           Cookies.set("selectedDivision", division, { expires: 1 });
@@ -174,6 +190,25 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
     setValidated(true);
   };
 
+  const handleDeleteDivReq = async (division, id) => {
+    try {
+      const userConfirmed = window.confirm(
+        "Are you sure you want to delete this requirement?"
+      );
+      if (!userConfirmed) {
+        return; // Exit the function if the user cancels
+      }
+      const response = await deleteDivReqById(id, division);
+      if (response.affectedRows === 1) {
+        alert("Requirement deleted successfully!");
+        Cookies.set("selectedDivision", division, { expires: 1 });
+        handleClose();
+      }
+    } catch (error) {
+      console.error("Error deleting requirement:", error);
+    }
+  };
+
   return (
     <Modal show={show} onHide={handleClose} className={theme}>
       <Modal.Header closeButton className={theme}>
@@ -181,12 +216,22 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
       </Modal.Header>
       <Modal.Body className={theme}>
         {divisionReq && (
-          <Form noValidate validated={validated} onSubmit={handleSubmit} className={theme}>
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
+            className={theme}
+          >
             <Container fluid>
               <Row className="justify-content-center">
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="bookNo" className={theme === "dark" ? "bg-dark text-white" : ""}>Book No:</InputGroup.Text>
+                    <InputGroup.Text
+                      id="bookNo"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      Book No:
+                    </InputGroup.Text>
                     <Form.Control
                       placeholder="Requirement Book No."
                       aria-label="bookNo"
@@ -200,7 +245,12 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                 </Col>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="pageNo" className={theme === "dark" ? "bg-dark text-white" : ""}>Page No:</InputGroup.Text>
+                    <InputGroup.Text
+                      id="pageNo"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      Page No:
+                    </InputGroup.Text>
                     <Form.Control
                       placeholder="Requirement Page No."
                       aria-label="pageNo"
@@ -234,7 +284,12 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
               <Row>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="area" className={theme === "dark" ? "bg-dark text-white" : ""}>Area/Teeth</InputGroup.Text>
+                    <InputGroup.Text
+                      id="area"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      Area/Teeth
+                    </InputGroup.Text>
                     <Form.Control
                       placeholder="Tooth/Sextant/Quadrant/Full Mouth/Case"
                       aria-label="area"
@@ -251,7 +306,10 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
               <Row className="justify-content-md-center">
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="requirement-rsu" className={theme === "dark" ? "bg-dark text-white" : ""}>
+                    <InputGroup.Text
+                      id="requirement-rsu"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
                       Requirement (RSU)
                     </InputGroup.Text>
                     <Form.Control
@@ -265,15 +323,23 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       required
                       className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
-                    <InputGroup.Text id="unit-rsu" className={theme === "dark" ? "bg-dark text-white" : ""}>{unitRSU}</InputGroup.Text>
+                    <InputGroup.Text
+                      id="unit-rsu"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      {unitRSU}
+                    </InputGroup.Text>
                   </InputGroup>
                 </Col>
               </Row>
               <Row className="justify-content-md-center">
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="requirement-dc" className={theme === "dark" ? "bg-dark text-white" : ""}>
-                      Requirement (DC)
+                    <InputGroup.Text
+                      id="requirement-dc"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      Requirement (CDA)
                     </InputGroup.Text>
                     <Form.Control
                       placeholder="0"
@@ -286,14 +352,25 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                       required
                       className={theme === "dark" ? "bg-dark text-white" : ""}
                     />
-                    <InputGroup.Text id="unit-dc" className={theme === "dark" ? "bg-dark text-white" : ""}>{unitDC}</InputGroup.Text>
+                    <InputGroup.Text
+                      id="unit-dc"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      {unitDC}
+                    </InputGroup.Text>
                   </InputGroup>
                 </Col>
               </Row>
               <Row className="justify-content-md-center">
                 <Col md={4}>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="HN" style={{ fontSize: "11pt" }} className={theme === "dark" ? "bg-dark text-white" : ""}>HN</InputGroup.Text>
+                    <InputGroup.Text
+                      id="HN"
+                      style={{ fontSize: "11pt" }}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      HN
+                    </InputGroup.Text>
                     <Form.Control
                       placeholder="0000000"
                       aria-label="HN"
@@ -307,7 +384,13 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                 </Col>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="patientName" style={{ fontSize: "11pt" }} className={theme === "dark" ? "bg-dark text-white" : ""}>Pt Name</InputGroup.Text>
+                    <InputGroup.Text
+                      id="patientName"
+                      style={{ fontSize: "11pt" }}
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
+                      Pt Name
+                    </InputGroup.Text>
                     <Form.Control
                       placeholder="Name of Patient"
                       aria-label="patientName"
@@ -323,7 +406,10 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
               </Row>
               <Row>
                 <Col>
-                  <Form.Group controlId="Form.SelectInstructor" className="mb-3">
+                  <Form.Group
+                    controlId="Form.SelectInstructor"
+                    className="mb-3"
+                  >
                     <Form.Select
                       name="instructorEmail"
                       value={selectedInstructor}
@@ -342,7 +428,10 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
               <Row>
                 <Col>
                   <InputGroup className="mb-3">
-                    <InputGroup.Text id="note-label" className={theme === "dark" ? "bg-dark text-white" : ""}>
+                    <InputGroup.Text
+                      id="note-label"
+                      className={theme === "dark" ? "bg-dark text-white" : ""}
+                    >
                       Comment:
                     </InputGroup.Text>
                     <Form.Control
@@ -361,11 +450,29 @@ function ModalUpdateReq({ show, handleClose, divisionReq, division }) {
                 </Col>
               </Row>
               <Row>
-                <div className="d-grid gap-2">
-                  <Button variant="dark" size="lg" type="submit">
-                    Save Changes
-                  </Button>
-                </div>
+                <Col className="mb-3">
+                  <div className="d-grid gap-2">
+                    <Button variant="dark" size="lg" type="submit">
+                      Save Changes
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col className="mb-3">
+                  <div className="d-grid gap-2">
+                    <Button
+                      variant="danger"
+                      size="lg"
+                      onClick={() =>
+                        handleDeleteDivReq(division, divisionReq.id)
+                      }
+                    >
+                      Delete Requirement
+                    </Button>
+                  </div>
+                </Col>
               </Row>
             </Container>
           </Form>

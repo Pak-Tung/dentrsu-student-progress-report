@@ -7,7 +7,6 @@ export const calProsthReq = (rqm, minReq) => {
       ARPD: 0,
       Crown: 0,
       Post_Core_Crown: 0,
-      Bridge_3_units: 0,
       Exam_design_RPD: 0,
       Exam_crown_preparation: 0,
     },
@@ -18,7 +17,6 @@ export const calProsthReq = (rqm, minReq) => {
       ARPD: 0,
       Crown: 0,
       Post_Core_Crown: 0,
-      Bridge_3_units: 0,
     },
   };
 
@@ -55,9 +53,10 @@ export const calProsthReq = (rqm, minReq) => {
         item.extraRSU = "Post Core Crown";
         item.extraCDA = "Post Core Crown";
       } else if (item.type === "Bridge 3 units") {
-        totalReq.RSU.Bridge_3_units += parseFloat(item.req_RSU);
-        totalReq.CDA.Bridge_3_units += parseFloat(item.req_DC);
+        //totalReq.RSU.Bridge_3_units += parseFloat(item.req_RSU);
+        //totalReq.CDA.Bridge_3_units += parseFloat(item.req_DC);
         totalReq.RSU.Crown += 2;
+        totalReq.CDA.Crown += 2;
         item.extraRSU = "Bridge => Crown";
         item.extraCDA = "Bridge => Crown";
       } else if (item.type === "Exam design RPD") {

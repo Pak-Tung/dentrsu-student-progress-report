@@ -7,6 +7,7 @@ export const allMinDivReq = () => {
         Class_III: 2,
         Class_IV: 2,
         Class_V: 5,
+        Class_VI: 0,
         Recall_completed_case: 1,
         Recall_any: 1,
         Exam_Class_II: 1,
@@ -68,7 +69,6 @@ export const allMinDivReq = () => {
         ARPD: 2,
         Crown: 2,
         Post_Core_Crown: 1,
-        Bridge_3_units: 1,
         Exam_design_RPD: 1,
         Exam_crown_preparation: 1,
       },
@@ -79,7 +79,6 @@ export const allMinDivReq = () => {
         ARPD: 2,
         Crown: 2,
         Post_Core_Crown: 1,
-        Bridge_3_units: 1,
       },
     },
     diag: {
