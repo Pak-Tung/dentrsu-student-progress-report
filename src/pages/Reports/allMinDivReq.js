@@ -37,6 +37,7 @@ export const allMinDivReq = () => {
         Case_P: 1,
         Complexities: 7,
         OHI_1st_Exam: 1,
+        SRP_2nd_Exam: 1,
         SRP_1st_Exam: 1,
       },
       CDA: {
@@ -44,7 +45,6 @@ export const allMinDivReq = () => {
         Case_P: 1,
         CDA_Cases: 9,
         OHI_2n_Exam: 1,
-        SRP_2nd_Exam: 1,
       },
     },
     endo: {
