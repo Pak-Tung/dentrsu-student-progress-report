@@ -3,42 +3,16 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calEndoReq } from "./calEndoReq";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
 function ReportEndoReq(endoR) {
   const { theme } = useContext(ThemeContext);
   const [show, setShow] = useState(false);
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
-
   const [calRqm, setCalRqm] = useState([]);
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      RCT_Anterior_or_Premolar: 0,
-      RCT_Molar: 0,
-      Emergency_RCT: 0,
-      Talk_case: 0,
-      Recall_6_months: 0,
-      Exam_RCT: 0,
-    },
-    CDA: {
-      RCT_Anterior_or_Premolar: 0,
-      Exam_RCT: 0,
-    },
-  });
-
-  const [minReq, setMinReq] = useState({
-    RSU: {
-      RCT_Anterior_or_Premolar: 1,
-      RCT_Molar: 1,
-      Emergency_RCT: 1,
-      Talk_case: 1,
-      Recall_6_months: 1,
-      Exam_RCT: 1,
-    },
-    CDA: {
-      RCT_Anterior_or_Premolar: 1,
-      Exam_RCT: 1,
-    },
-  });
+  const [totalReq, setTotalReq] = useState(allTotalDivReq().endo);
+  const minReq = allMinDivReq().endo;
 
   useEffect(() => {
     if (endoR.rqm && endoR.rqm.length > 0) {

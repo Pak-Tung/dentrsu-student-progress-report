@@ -1,24 +1,7 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calProsthReq = (rqm, minReq) => {
-  let totalReq = {
-    RSU: {
-      CD_Upper: 0,
-      CD_Lower: 0,
-      MRPD: 0,
-      ARPD: 0,
-      Crown: 0,
-      Post_Core_Crown: 0,
-      Exam_design_RPD: 0,
-      Exam_crown_preparation: 0,
-    },
-    CDA: {
-      CD_Upper: 0,
-      CD_Lower: 0,
-      MRPD: 0,
-      ARPD: 0,
-      Crown: 0,
-      Post_Core_Crown: 0,
-    },
-  };
+  let totalReq = allTotalDivReq().prosth;
 
   rqm.forEach((item) => {
     if (item.isApproved === 1) {

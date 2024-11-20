@@ -3,6 +3,8 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calProsthReq } from "./calProsthReq";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
 function ReportProsthReq(divisionR) {
   const { theme } = useContext(ThemeContext);
@@ -10,51 +12,8 @@ function ReportProsthReq(divisionR) {
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      CD_Upper: 0,
-      CD_Lower: 0,
-      MRPD: 0,
-      ARPD: 0,
-      Crown: 0,
-      Post_Core_Crown: 0,
-      Bridge_3_units: 0,
-      Exam_design_RPD: 0,
-      Exam_crown_preparation: 0,
-    },
-    CDA: {
-      CD_Upper: 0,
-      CD_Lower: 0,
-      MRPD: 0,
-      ARPD: 0,
-      Crown: 0,
-      Post_Core_Crown: 0,
-      Bridge_3_units: 0,
-    },
-  });
-
-  const [minReq, setMinReq] = useState({
-    RSU: {
-      CD_Upper: 1,
-      CD_Lower: 1,
-      MRPD: 1,
-      ARPD: 2,
-      Crown: 2,
-      Post_Core_Crown: 1,
-      Bridge_3_units: 1,
-      Exam_design_RPD: 1,
-      Exam_crown_preparation: 1,
-    },
-    CDA: {
-      CD_Upper: 1,
-      CD_Lower: 1,
-      MRPD: 1,
-      ARPD: 2,
-      Crown: 2,
-      Post_Core_Crown: 1,
-      Bridge_3_units: 1,
-    },
-  });
+  const [totalReq, setTotalReq] = useState(allTotalDivReq().prosth);
+  const minReq = allMinDivReq().prosth;
 
   useEffect(() => {
     if (divisionR.rqm && divisionR.rqm.length > 0) {

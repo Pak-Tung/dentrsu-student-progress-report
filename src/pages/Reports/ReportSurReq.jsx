@@ -3,6 +3,8 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calSurReq } from "./calSurReq";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
 function ReportSurReq(divisionR) {
   const { theme } = useContext(ThemeContext);
@@ -10,45 +12,8 @@ function ReportSurReq(divisionR) {
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      Aseptic_station: 0,
-      Suture_station: 0,
-      Vital_sign_station: 0,
-      IANB_exam: 0,
-      Impact_in_model: 0,
-      Extraction: 0,
-      Impact: 0,
-      Exam_extraction_RSU: 0,
-      Exam_impact_RSU: 0,
-    },
-    CDA: {
-      Extraction: 0,
-      Impact: 0,
-      Exam_extraction_CDA: 0,
-      Exam_impact_CDA: 0,
-    },
-  });
-
-  const [minReq, setMinReq] = useState({
-    RSU: {
-      Aseptic_station: 1,
-      Suture_station: 1,
-      Vital_sign_station: 1,
-      IANB_exam: 1,
-      Impact_in_model: 1,
-      Extraction: 18,
-      Impact: 1,
-      Exam_extraction_RSU: 1,
-      Exam_impact_RSU: 1,
-    },
-    CDA: {
-      Extraction: 13,
-      Impact: 1,
-      Exam_extraction_CDA: 1,
-      Exam_impact_CDA: 1,
-    },
-  });
+  const [totalReq, setTotalReq] = useState(allTotalDivReq().sur);
+  const minReq = allMinDivReq().sur;
 
   useEffect(() => {
     if (divisionR.rqm && divisionR.rqm.length > 0) {

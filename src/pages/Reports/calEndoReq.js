@@ -1,18 +1,7 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calEndoReq = (rqm, minR) => {
-  let totalReq = {
-    RSU: {
-      RCT_Anterior_or_Premolar: 0,
-      RCT_Molar: 0,
-      Emergency_RCT: 0,
-      Talk_case: 0,
-      Recall_6_months: 0,
-      Exam_RCT: 0,
-    },
-    CDA: {
-      RCT_Anterior_or_Premolar: 0,
-      Exam_RCT: 0,
-    },
-  };
+  let totalReq = allTotalDivReq().endo;
 
   rqm.forEach((item) => {
     if (item.isApproved === 1) {

@@ -3,6 +3,8 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calDiagReq } from "./calDiagReq";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
 function ReportDiagReq(divisionR) {
   const { theme } = useContext(ThemeContext);
@@ -10,36 +12,8 @@ function ReportDiagReq(divisionR) {
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
-  const [minReq, setMinReq] = useState({
-    RSU: {
-      Complete_case_examination: 20,
-      Assistant: 2,
-      CPC_or_Journal_club: 1,
-      Complete_splint: 1,
-      Recall_cases_splint: 2,
-    },
-    CDA: {
-      Complete_case_examination: 10,
-      Chief_complaint_examination: 25,
-      Biopsy_Blood_chemistry_or_soft_tissue_lesion_interpretation: 1,
-      TMDs_case_examination: 1,
-    },
-  });
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      Complete_case_examination: 0,
-      Assistant: 0,
-      CPC_or_Journal_club: 0,
-      Complete_splint: 0,
-      Recall_cases_splint: 0,
-    },
-    CDA: {
-      Complete_case_examination: 0,
-      Chief_complaint_examination: 0,
-      Biopsy_Blood_chemistry_or_soft_tissue_lesion_interpretation: 0,
-      TMDs_case_examination: 0,
-    },
-  });
+  const [totalReq, setTotalReq] = useState(allTotalDivReq().diag);
+  const minReq = allMinDivReq().diag;
 
   useEffect(() => {
     if (divisionR && divisionR.rqm && divisionR.rqm.length > 0) {
@@ -63,7 +37,7 @@ function ReportDiagReq(divisionR) {
         console.error("Error fetching data", error);
       }
     }
-  }, [divisionR, minReq]);
+  }, [divisionR]);
 
   const getApprovalStatus = (rq) => {
     let status = "N/A";

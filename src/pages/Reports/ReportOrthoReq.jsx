@@ -3,86 +3,23 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calOrthoReq } from "./calOrthoReq";
-import { getReqByDivision } from "../../features/apiCalls";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
-function ReportOrthoReq(divisionR, { divisionName = "ortho" }) {
+function ReportOrthoReq(divisionR) {
   const { theme } = useContext(ThemeContext);
   const [show, setShow] = useState(false);
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
-  const [minReq, setMinReq] = useState({
-    RSU: {},
-    CDA: {},
-  });
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      Charting: 0,
-      Photograph_taking: 0,
-      Impression_taking_Upper: 0,
-      Impression_taking_Lower: 0,
-      Removable_appliance: 0,
-      Inserting_removable_appliance: 0,
-      Assisting_adjust_fixed_appliance: 0,
-      Plaster_Pouring: 0,
-      Model_Trimming: 0,
-      Case_analysis: 0,
-    },
-    CDA: {
-      Inserting_removable_appliance: 0,
-      Case_analysis: 0,
-    },
-  });
-
-  useEffect(() => {
-    if (divisionName) {
-      try {
-        const fetchData = async () => {
-          const data = await getReqByDivision(divisionName);
-          //console.log("minReqOfDiv", data);
-          getMinimumReq(data);
-        };
-        fetchData();
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    }
-  }, []);
-
-  const getMinimumReq = (data) => {
-    // Create a new state object to accumulate changes
-    const updatedState = {
-      RSU: { ...minReq.RSU },
-      CDA: { ...minReq.CDA },
-    };
-
-    const updatedTotalReq = {
-      RSU: { ...totalReq.RSU },
-      CDA: { ...totalReq.CDA },
-    };
-
-    data.forEach((item) => {
-      if (item.req_RSU >= 0 && item.unit_RSU) {
-        updatedState.RSU[item.type.replace(/ /g, "_")] = parseInt(item.req_RSU);
-        //updatedTotalReq.RSU[item.type.replace(/ /g, "_")] = 0;
-      }
-      if (item.req_DC >= 0 && item.unit_DC) {
-        updatedState.CDA[item.type.replace(/ /g, "_")] = parseInt(item.req_DC);
-        //updatedTotalReq.CDA[item.type.replace(/ /g, "_")] = 0;
-      }
-    });
-
-    // Update the state with accumulated changes
-    setMinReq(updatedState);
-    //setTotalReq(updatedTotalReq);
-  };
+  const [totalReq, setTotalReq] = useState(allTotalDivReq().ortho);
+  const minReq = allMinDivReq().ortho;
 
   useEffect(() => {
     if (divisionR.rqm && divisionR.rqm.length > 0) {
       try {
         const fetchData = async () => {
           const data = await calOrthoReq(divisionR.rqm, minReq);
-          //console.log("data", data);
           setTotalReq((prevTotalReq) => ({
             RSU: {
               ...prevTotalReq.RSU,

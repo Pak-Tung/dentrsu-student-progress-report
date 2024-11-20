@@ -1,19 +1,7 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calRadioReq = (rqm, minReq)=>{
-    let totalReq = {
-        RSU: {
-          Full_mouth_periapical_radiograph: 0,
-          Periapical_radiograph: 0,
-          Bitewing_radiograph: 0,
-          Extraoral_and_Special_technique_radiograph: 0,
-          Film_interpretation: 0,
-          Journal_club: 0,
-        },
-        CDA: {
-          Exam_periapical_radiograph_anterior_teeth: 0,
-          Exam_periapical_radiograph_posterior_teeth: 0,
-          Exam_bitewing_radiograph: 0,
-        },
-      };
+    let totalReq = allTotalDivReq().radio;
 
       rqm.forEach((item) => {
         if (item.isApproved === 1) {

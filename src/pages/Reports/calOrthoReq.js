@@ -1,22 +1,7 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calOrthoReq = (rqm, minReq) => {
-  let totalReq = {
-    RSU: {
-      Charting: 0,
-      Photograph_taking: 0,
-      Impression_taking_Upper: 0,
-      Impression_taking_Lower: 0,
-      Removable_appliance: 0,
-      Inserting_removable_appliance: 0,
-      Assisting_adjust_fixed_appliance: 0,
-      Plaster_Pouring: 0,
-      Model_Trimming: 0,
-      Case_analysis: 0,
-    },
-    CDA: {
-      Inserting_removable_appliance: 0,
-      Case_analysis: 0,
-    },
-  };
+  let totalReq = allTotalDivReq().ortho;
 
   rqm.forEach((item) => {
     if (item.isApproved === 1) {

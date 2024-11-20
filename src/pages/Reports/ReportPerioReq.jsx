@@ -3,47 +3,17 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calPerioReq } from "./calPerioReq";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
 function ReportPerioReqTest(perioR) {
   //console.log("perioR", perioR);
   const { theme } = useContext(ThemeContext);
   const [show, setShow] = useState(false);
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
-
   const [calRqm, setCalRqm] = useState([]);
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      Case_G: 0,
-      Case_P: 0,
-      Complexities: 0,
-      OHI_1st_Exam: 0,
-      OHI_2n_Exam: 0,
-      SRP_1st_Exam: 0,
-    },
-    CDA: {
-      //Case_G: 0,
-      Case_P: 0,
-      CDA_Cases: 0,
-      SRP_2nd_Exam: 0,
-    },
-  });
-
-  const [minReq, setMinReq] = useState({
-    RSU: {
-      Case_G: 4,
-      Case_P: 1,
-      Complexities: 7,
-      OHI_1st_Exam: 1,
-      OHI_2n_Exam: 1,
-      SRP_1st_Exam: 1,
-    },
-    CDA: {
-      //Case_G: 0,
-      Case_P: 1,
-      CDA_Cases: 9,
-      SRP_2nd_Exam: 1,
-    },
-  });
+  const [totalReq, setTotalReq] = useState(allTotalDivReq().perio);
+  const minReq = allMinDivReq().perio;
 
   useEffect(() => {
     if (perioR.rqm && perioR.rqm.length > 0) {

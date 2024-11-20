@@ -1,20 +1,8 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calDiagReq = (rqm, minReq) => {
   //console.log("rqm1", rqm);
-  let totalReq = {
-    RSU: {
-      Complete_case_examination: 0,
-      Assistant: 0,
-      CPC_or_Journal_club: 0,
-      Complete_splint: 0,
-      Recall_cases_splint: 0,
-    },
-    CDA: {
-      Complete_case_examination: 0,
-      Chief_complaint_examination: 0,
-      Biopsy_Blood_chemistry_or_soft_tissue_lesion_interpretation: 0,
-      TMDs_case_examination: 0,
-    },
-  };
+  let totalReq = allTotalDivReq().diag;
 
   //calculate RSU
   rqm.forEach((item) => {

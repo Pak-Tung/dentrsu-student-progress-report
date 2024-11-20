@@ -3,6 +3,8 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calRadioReq } from "./calRadioReq";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
 function ReportRadioReq(divisionR) {
   const { theme } = useContext(ThemeContext);
@@ -10,37 +12,8 @@ function ReportRadioReq(divisionR) {
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      Full_mouth_periapical_radiograph: 0,
-      Periapical_radiograph: 0,
-      Bitewing_radiograph: 0,
-      Extraoral_and_Special_technique_radiograph: 0,
-      Film_interpretation: 0,
-      Journal_club: 0,
-    },
-    CDA: {
-      Exam_periapical_radiograph_anterior_teeth: 0,
-      Exam_periapical_radiograph_posterior_teeth: 0,
-      Exam_bitewing_radiograph: 0,
-    },
-  });
-
-  const [minReq, setMinReq] = useState({
-    RSU: {
-      Full_mouth_periapical_radiograph: 1,
-      Periapical_radiograph: 30,
-      Bitewing_radiograph: 20,
-      Extraoral_and_Special_technique_radiograph: 10,
-      Film_interpretation: 20,
-      Journal_club: 1,
-    },
-    CDA: {
-      Exam_periapical_radiograph_anterior_teeth: 1,
-      Exam_periapical_radiograph_posterior_teeth: 1,
-      Exam_bitewing_radiograph: 1,
-    },
-  });
+  const [totalReq, setTotalReq] = useState(allTotalDivReq().radio);
+  const minReq = allMinDivReq().radio;
 
   useEffect(() => {
     if (divisionR.rqm && divisionR.rqm.length > 0) {

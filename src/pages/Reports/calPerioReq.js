@@ -1,21 +1,7 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calPerioReq = (rqm, minReq) => {
-  //console.log("rqm", rqm);
-  let totalReq = {
-    RSU: {
-      Case_G: 0,
-      Case_P: 0,
-      Complexities: 0,
-      OHI_1st_Exam: 0,
-      OHI_2n_Exam: 0,
-      SRP_1st_Exam: 0,
-    },
-    CDA: {
-      //Case_G: 0,
-      Case_P: 0,
-      CDA_Cases: 0,
-      SRP_2nd_Exam: 0,
-    },
-  };
+  let totalReq = allTotalDivReq().perio;
 
   //Calculate RSU
   let totalCaseG = 0;

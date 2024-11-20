@@ -3,6 +3,8 @@ import { Row, Col, Badge, ListGroup } from "react-bootstrap";
 import "../../DarkMode.css";
 import { ThemeContext } from "../../ThemeContext";
 import { calPedoReq } from "./calPedoReq";
+import { allMinDivReq } from "./allMinDivReq";
+import { allTotalDivReq } from "./allTotalDivReq";
 
 function ReportPedoReq(divisionR, { divisionName = "pedo" }) {
   const { theme } = useContext(ThemeContext);
@@ -10,60 +12,8 @@ function ReportPedoReq(divisionR, { divisionName = "pedo" }) {
   const listGroupItemClass = theme === "dark" ? "list-group-item-dark" : "";
 
   const [calRqm, setCalRqm] = useState([]);
-  const [minReq, setMinReq] = useState({
-    RSU: {
-      Comprehensive_examination_and_treatment_plan_in_new_patient: 2,
-      Comprehensive_examination_and_treatment_plan_in_recall_patient: 3,
-      Photographs_and_Radiographs: 1,
-      Caries_risk_assessment_and_Management: 5,
-      Sealant: 8,
-      Filling_or_PRR: 6,
-      Primary_molar_class_II_restoration: 2,
-      Stainless_steel_crown_in_posterior_teeth: 1,
-      Pulpectomy_Step_OC_and_LT_or_Pulpotomy: 1,
-      Pulpectomy_Step_MI_and_FRC: 1,
-      Extraction: 2,
-      Miscellaneous_work: 1,
-      Exam_Inferior_alveolar_nerve_block_injection: 1,
-      Exam_Rubber_dam_application: 1,
-    },
-    CDA: {
-      Comprehensive_examination_and_treatment_plan: 5,
-      Caries_risk_assessment_and_Management: 5,
-      Filling_or_PRR: 10,
-      Pulpectomy_or_Pulpotomy: 1,
-      Stainless_steel_crown: 1,
-      Sealant: 5,
-      Extraction: 2,
-    },
-  });
-  const [totalReq, setTotalReq] = useState({
-    RSU: {
-      Comprehensive_examination_and_treatment_plan_in_new_patient: 0,
-      Comprehensive_examination_and_treatment_plan_in_recall_patient: 0,
-      Photographs_and_Radiographs: 0,
-      Caries_risk_assessment_and_Management: 0,
-      Sealant: 0,
-      Filling_or_PRR: 0,
-      Primary_molar_class_II_restoration: 0,
-      Stainless_steel_crown_in_posterior_teeth: 0,
-      Pulpectomy_Step_OC_and_LT_or_Pulpotomy: 0,
-      Pulpectomy_Step_MI_and_FRC: 0,
-      Extraction: 0,
-      Miscellaneous_work: 0,
-      Exam_Inferior_alveolar_nerve_block_injection: 0,
-      Exam_Rubber_dam_application: 0,
-    },
-    CDA: {
-      Comprehensive_examination_and_treatment_plan: 0,
-      Caries_risk_assessment_and_Management: 0,
-      Sealant: 0,
-      Filling_or_PRR: 0,
-      Stainless_steel_crown: 0,
-      Pulpectomy_or_Pulpotomy: 0,
-      Extraction: 0,
-    },
-  });
+  const [totalReq, setTotalReq] = useState(allTotalDivReq()[divisionName]);
+  const minReq = allMinDivReq()[divisionName];
 
   useEffect(() => {
     if (divisionR.rqm && divisionR.rqm.length > 0) {

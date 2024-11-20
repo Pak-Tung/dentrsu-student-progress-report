@@ -1,3 +1,4 @@
+import { allTotalDivReq } from "./allTotalDivReq";
 /**********Calculation criteria **********/
 // RSU:
 //Diastema closure นับเป็น class IV
@@ -11,37 +12,7 @@
 /**********End of criteria **********/
 
 export const calOperReg = (rqm, minReq) => {
-  let totalReq = {
-    RSU: {
-      Class_I: 0,
-      Class_II: 0,
-      Class_III: 0,
-      Class_IV: 0,
-      Class_V: 0,
-      Class_VI: 0,
-      Recall_completed_case: 0,
-      Recall_any: 0,
-      Exam_Class_II: 0,
-      Exam_Class_V: 0,
-      Polishing: 0,
-      Sealant: 0,
-      PRR: 0,
-      Caries_control: 0,
-      Emergency_tx: 0,
-      Inlay: 0,
-      Onlay: 0,
-      Diastema_closure: 0,
-      Veneer: 0,
-      Minimum_total_R: 0,
-    },
-    CDA: {
-      Class_I: 0,
-      Class_II: 0,
-      Class_III_or_IV: 0,
-      Class_V: 0,
-      Any_class: 0,
-    },
-  };
+  let totalReq = allTotalDivReq().oper;
 
   //Calculate RSU
   let totalClassI = 0;

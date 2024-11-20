@@ -1,31 +1,7 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calPedoReq = (rqm, minReq) => {
-    let totalReq = {
-        RSU: {
-            Comprehensive_examination_and_treatment_plan_in_new_patient: 0,
-            Comprehensive_examination_and_treatment_plan_in_recall_patient: 0,
-            Photographs_and_Radiographs: 0,
-            Caries_risk_assessment_and_Management: 0,
-            Sealant: 0,
-            Filling_or_PRR: 0,
-            Primary_molar_class_II_restoration: 0,
-            Stainless_steel_crown_in_posterior_teeth: 0,
-            Pulpectomy_Step_OC_and_LT_or_Pulpotomy: 0,
-            Pulpectomy_Step_MI_and_FRC: 0,
-            Extraction: 0,
-            Miscellaneous_work: 0,
-            Exam_Inferior_alveolar_nerve_block_injection: 0,
-            Exam_Rubber_dam_application: 0,
-        },
-        CDA: {
-            Comprehensive_examination_and_treatment_plan: 0,
-            Caries_risk_assessment_and_Management: 0,
-            Sealant: 0,
-            Filling_or_PRR: 0,
-            Stainless_steel_crown: 0,
-            Pulpectomy_or_Pulpotomy: 0,
-            Extraction: 0,
-        },
-    };
+    let totalReq = allTotalDivReq().pedo;
 
     rqm.forEach((item) => {
         if(item.isApproved === 1){

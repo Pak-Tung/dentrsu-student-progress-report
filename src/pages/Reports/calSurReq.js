@@ -1,23 +1,7 @@
+import { allTotalDivReq } from "./allTotalDivReq";
+
 export const calSurReq = (rqm, minReq) => {
-  let totalReq = {
-    RSU: {
-      Aseptic_station: 0,
-      Suture_station: 0,
-      Vital_sign_station: 0,
-      IANB_exam: 0,
-      Impact_in_model: 0,
-      Extraction: 0,
-      Impact: 0,
-      Exam_extraction_RSU: 0,
-      Exam_impact_RSU: 0,
-    },
-    CDA: {
-      Extraction: 0,
-      Impact: 0,
-      Exam_extraction_CDA: 0,
-      Exam_impact_CDA: 0,
-    },
-  };
+  let totalReq = allTotalDivReq().sur;
 
   rqm.forEach((item) => {
     if (item.isApproved === 1) {
