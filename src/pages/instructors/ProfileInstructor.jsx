@@ -73,7 +73,7 @@ function ProfileInstructor() {
       <NavbarInstructor />
       <div className={`container-fluid mt-5 ${theme === 'dark' ? 'bg-dark' : ''}`} style={{ minHeight: '100vh' }}>
         <div className="d-flex justify-content-center mb-4">
-          <h2 className={theme === 'dark' ? 'text-white' : ''}>Instructor Profile</h2>
+          <h2 className={theme === 'dark' ? 'text-white' : ''}>Instructor</h2>
         </div>
 
         {loading ? (

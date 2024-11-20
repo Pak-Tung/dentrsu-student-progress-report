@@ -24,6 +24,10 @@ function NavbarAdmin() {
     }
   }, []);
 
+  const handleSelectRole = (selectedRole) => {
+    Cookies.set("role", selectedRole);
+  };
+
   return (
     <Navbar
       expand="md"
@@ -67,7 +71,7 @@ function NavbarAdmin() {
             <NavDropdown.Item href="/assignAdvisee">Advisee</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Profile" id="nav-profile" className="flex-fill">
-            <NavDropdown.Item href="/">Select Role</NavDropdown.Item>
+            <NavDropdown.Item href="/profileInstructor" onClick={() => handleSelectRole("instructor")}>Instructor Role</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/">Profile</NavDropdown.Item>
           </NavDropdown>

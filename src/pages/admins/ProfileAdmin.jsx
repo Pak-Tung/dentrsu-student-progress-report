@@ -71,7 +71,7 @@ function ProfileAdmin() {
       <NavbarAdmin />
       <div className="container mt-5">
         <div className="d-flex justify-content-center mb-4">
-          <h2>Admin Profile</h2>
+          <h2>Admin</h2>
         </div>
         {loading ? (
           <LoadingComponent />

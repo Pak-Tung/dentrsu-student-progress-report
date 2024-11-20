@@ -41,6 +41,7 @@ import ProfileSupervisor from "./pages/supervisor/ProfileSupervisor";
 import StudentAllReq from "./pages/supervisor/StudentAllReq";
 import InstructorOverview from "./pages/supervisor/InstructorOverview";
 import UploadPatients from "./pages/root/UploadPatients";
+import ProfileInstructor from "./pages/instructors/ProfileInstructor";
 
 //import SelectRoleAdmin from "./pages/admins/selectRoleAdmin";
 
@@ -92,6 +93,7 @@ function App() {
         <Route path="/profileSupervisor" element={<ProfileSupervisor />} />
         <Route path="/studentAllReq" element={<StudentAllReq />} />
         <Route path="/instructorOverview" element={<InstructorOverview />} />
+        <Route path="/profileInstructor" element={<ProfileInstructor />} />
         
         
         <Route path="/" element={<RoleLogin />} />
