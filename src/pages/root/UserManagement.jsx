@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { getAllUsers } from "../../features/apiCalls";
+import { getAllUsers, insertUser } from "../../features/apiCalls";
 import NavbarRoot from "./NavbarRoot";
 import {
   Container,
@@ -43,6 +43,7 @@ function UserManagement() {
     { id: 3, role: "student" },
     { id: 4, role: "root" },
     { id: 5, role: "supervisor" },
+    { id: 6, role: "ptBank" },
   ];
 
   useEffect(() => {
@@ -83,19 +84,32 @@ function UserManagement() {
     } else {
       setSelectedUserRole("Select User Type"); // Reset dropdown
       setValidated(false); // Reset validation state
-      if (formData.role === "student") {
-        handleShow(); // Assuming this opens the modal
-      } else if (
+      if (formData.role === "student" ||
         formData.role === "instructor" ||
         formData.role === "admin" ||
-        formData.role === "root"
+        formData.role === "root" ||
+        formData.role === "supervisor" ||
+        formData.role === "ptBank"
       ) {
-        handleShowInstructor(); // Assuming this opens the modal
+        await insertUser(formData);
+        alert("Add New Student successfully!");
       } else {
         alert("Something went wrong.");
       }
     }
     setValidated(true);
+  };
+
+  const handleAddInstructor = () => {
+    handleShowInstructor(); // opens the create instructor modal
+  };
+
+  const handleAddStudent = () => {
+    handleShow(); // opens the create student modal
+  };
+
+  const handleAddPtBank = () => {
+    alert("Add Patient Bank Staff");
   };
 
   const [show, setShow] = useState(false);
@@ -162,6 +176,19 @@ function UserManagement() {
                 <Col md={2}>
                   <Button variant="outline-dark" type="submit">
                     Add User
+                  </Button>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={3}>Add user first then add user role&#8658;</Col>
+                <Col md={4}>
+                  <Button variant="outline-dark" onClick={handleAddInstructor}>
+                    Add Instructor/Admin/Supervisor/Patient Bank Staff
+                  </Button>
+                </Col>
+                <Col md={4}>
+                  <Button variant="outline-dark" onClick={handleAddStudent}>
+                    Add Student
                   </Button>
                 </Col>
               </Row>
