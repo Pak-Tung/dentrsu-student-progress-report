@@ -8,6 +8,10 @@ import Navbar from "react-bootstrap/Navbar";
 import "../Navbar.css";
 import "../DarkMode.css";
 import { ThemeContext } from "../ThemeContext";
+import {
+  getDivReqByStudentEmail,
+  getCompcaseReqByStudentEmail,
+} from "../features/apiCalls";
 
 function NavbarStudent() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -16,6 +20,21 @@ function NavbarStudent() {
     const savedUser = Cookies.get("user");
     return savedUser ? JSON.parse(savedUser) : {};
   });
+
+  const [reqs, setReqs] = useState([]);
+  const [cases, setCases] = useState([]);
+
+  const divisions = [
+    "oper",
+    "perio",
+    "endo",
+    "prosth",
+    "diag",
+    "radio",
+    "sur",
+    "ortho",
+    "pedo",
+  ];
 
   useEffect(() => {
     const savedUser = Cookies.get("user");
@@ -26,6 +45,37 @@ function NavbarStudent() {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let reqsData = [];
+        // Loop over each division and fetch data individually
+        for (const division of divisions) {
+          const data = await getDivReqByStudentEmail(user.email, division);
+          reqsData = reqsData.concat(data);
+        }
+
+        const casesData = await getCompcaseReqByStudentEmail(user.email);
+        //console.log(reqsData);
+        //console.log(casesData);
+        setReqs(reqsData);
+        setCases(casesData);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+    if (user.email) {
+      fetchData();
+    }
+  }, [user.email]);
+
+  // Separate checks for rejected requirements and cases
+  const hasRejectedReqs = reqs.some((req) => req.isApproved === -1);
+  const hasRejectedCases = cases.some((caseItem) => caseItem.isApproved === -1);
+
+  // Combined check for the "Approval Status" dropdown
+  const hasRejected = hasRejectedReqs || hasRejectedCases;
+
   return (
     <Navbar
       expand="md"
@@ -34,7 +84,9 @@ function NavbarStudent() {
       <div className="logo-navbar-div">
         <Navbar.Brand href="/">
           <img
-            src={theme === "light"?"/logo_navbar.png":"/logo_navbar_dark.png"}
+            src={
+              theme === "light" ? "/logo_navbar.png" : "/logo_navbar_dark.png"
+            }
             width="30"
             height="30"
             className="d-inline-block align-top"
@@ -50,12 +102,7 @@ function NavbarStudent() {
               All My Patients
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown
-            title="Submission"
-            id="nav-submit"
-            className="flex-fill"
-            //disabled
-          >
+          <NavDropdown title="Submission" id="nav-submit" className="flex-fill">
             <NavDropdown.Item href="/reqSubmit">Requirements</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compSubmit">
@@ -65,29 +112,30 @@ function NavbarStudent() {
           <NavDropdown
             title="Approval Status"
             id="nav-status"
-            className="flex-fill"
-            //disabled
+            className={`flex-fill ${hasRejected ? "border border-danger" : ""}`}
           >
-            <NavDropdown.Item href="/reqStatus">
+            <NavDropdown.Item
+              href="/reqStatus"
+              className={hasRejectedReqs ? "border border-danger" : ""}
+            >
               Requirements
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/compReport">
+            <NavDropdown.Item
+              href="/compReport"
+              className={hasRejectedCases ? "border border-danger" : ""}
+            >
               Completed Cases
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Overview" id="nav-overview" className="flex-fill">
-            <NavDropdown.Item href="/overview">
-              Requirements
-            </NavDropdown.Item>
+            <NavDropdown.Item href="/overview">Requirements</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/compOverview">
               Completed Cases
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/checkStatus">
-              Radar Chart
-            </NavDropdown.Item>
+            <NavDropdown.Item href="/checkStatus">Radar Chart</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Profile" id="nav-profile" className="flex-fill">
             <NavDropdown.Item href="/">Profile</NavDropdown.Item>
