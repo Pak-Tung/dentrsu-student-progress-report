@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const apiClient = axios.create({
-  baseURL: "http://dentrsuconnect.synology.me:5002"//,//"http://dentrsuconnect.synology.me:3001",//"http://localhost:3001", //"http://192.168.1.100:5002",//"https://dentrsuconnect.synology.me:5002",//"https://dentrsuconnect.synology.me:5443",// "https://dentrsuconnect.synology.me:5443",// ,
+  baseURL: "https://dentrsuconnect.synology.me:5052"//,//"https://dentrsuconnect.synology.me:3001",//"http://localhost:3001", //"http://192.168.1.100:5002",//"https://dentrsuconnect.synology.me:5002",//"https://dentrsuconnect.synology.me:5443",// "https://dentrsuconnect.synology.me:5443",// ,
 });
 
 // Request Interceptor
